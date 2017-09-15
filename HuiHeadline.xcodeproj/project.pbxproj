@@ -1,0 +1,739 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		020E797F076AA4664EFD0C4A /* libPods-HuiHeadline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F36D9046F1A2D32655D12AE /* libPods-HuiHeadline.a */; };
+		5BA5EB481F6779FC0066A06A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BA5EB461F6779FC0066A06A /* Main.storyboard */; };
+		5BA5EB4D1F6779FC0066A06A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BA5EB4B1F6779FC0066A06A /* LaunchScreen.storyboard */; };
+		5BA5EB591F677ADA0066A06A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EB551F677ADA0066A06A /* AppDelegate.m */; };
+		5BA5EB5A1F677ADA0066A06A /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BA5EB561F677ADA0066A06A /* Info.plist */; };
+		5BA5EB5D1F677B1B0066A06A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EB5C1F677B1B0066A06A /* main.m */; };
+		5BA5EB7C1F6780100066A06A /* HHRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EB7B1F6780100066A06A /* HHRootViewController.m */; };
+		5BA5EB821F6782300066A06A /* HHConst.h in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EB811F6780EC0066A06A /* HHConst.h */; };
+		5BA5EB871F6791320066A06A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BA5EB861F6791320066A06A /* Assets.xcassets */; };
+		5BA5EB8A1F6791AF0066A06A /* HHHeadlineNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EB891F6791AF0066A06A /* HHHeadlineNavController.m */; };
+		5BA5EB931F67AF8A0066A06A /* HHHeadlineTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EB921F67AF8A0066A06A /* HHHeadlineTimer.m */; };
+		5BA5EB961F67AF9E0066A06A /* HHHeadlineNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EB951F67AF9E0066A06A /* HHHeadlineNetwork.m */; };
+		5BA5EB991F67AFC10066A06A /* HHHeadlineEncrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EB981F67AFC10066A06A /* HHHeadlineEncrypt.m */; };
+		5BA5EB9C1F68D11C0066A06A /* HHJSONToDictionaty.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EB9B1F68D11C0066A06A /* HHJSONToDictionaty.m */; };
+		5BA5EB9F1F691FF80066A06A /* HHHeadlineSegmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EB9E1F691FF80066A06A /* HHHeadlineSegmentViewController.m */; };
+		5BA5EBA21F69259C0066A06A /* HHHeadlineDetaiklViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBA11F69259C0066A06A /* HHHeadlineDetaiklViewController.m */; };
+		5BA5EBA61F6A59F00066A06A /* HHHeadlineChannelListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBA51F6A59F00066A06A /* HHHeadlineChannelListViewController.m */; };
+		5BA5EBAC1F6A626F0066A06A /* HHHeadlineSegmentViewController+TableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBAB1F6A626F0066A06A /* HHHeadlineSegmentViewController+TableView.m */; };
+		5BA5EBB71F6A6F740066A06A /* BMTodayHeadlinesDragCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBB51F6A6F740066A06A /* BMTodayHeadlinesDragCell.m */; };
+		5BA5EBB81F6A6F740066A06A /* BMTodayHeadlinesDragCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BA5EBB61F6A6F740066A06A /* BMTodayHeadlinesDragCell.xib */; };
+		5BA5EBBE1F6B6C710066A06A /* HHHeadlineChannelListViewController+Delegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBBD1F6B6C710066A06A /* HHHeadlineChannelListViewController+Delegate.m */; };
+		5BA5EBC21F6B70310066A06A /* HHHeadlineChannelListHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBC01F6B70310066A06A /* HHHeadlineChannelListHeaderView.m */; };
+		5BA5EBC31F6B70310066A06A /* HHHeadlineChannelListHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BA5EBC11F6B70310066A06A /* HHHeadlineChannelListHeaderView.xib */; };
+		5BA5EBCA1F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBC81F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.m */; };
+		5BA5EBCB1F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BA5EBC91F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		467FE8C64BBED65DA92A958F /* Pods-HuiHeadline.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HuiHeadline.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HuiHeadline/Pods-HuiHeadline.debug.xcconfig"; sourceTree = "<group>"; };
+		5BA5EB3A1F6779FC0066A06A /* HuiHeadline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HuiHeadline.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5BA5EB471F6779FC0066A06A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5BA5EB4C1F6779FC0066A06A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5BA5EB541F677ADA0066A06A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = "Supporting Files/AppDelegate.h"; sourceTree = "<group>"; };
+		5BA5EB551F677ADA0066A06A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = "Supporting Files/AppDelegate.m"; sourceTree = "<group>"; };
+		5BA5EB561F677ADA0066A06A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Supporting Files/Info.plist"; sourceTree = "<group>"; };
+		5BA5EB5C1F677B1B0066A06A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Supporting Files/main.m"; sourceTree = "<group>"; };
+		5BA5EB791F677F740066A06A /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PrefixHeader.pch; path = "Supporting Files/PrefixHeader.pch"; sourceTree = "<group>"; };
+		5BA5EB7A1F6780100066A06A /* HHRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHRootViewController.h; sourceTree = "<group>"; };
+		5BA5EB7B1F6780100066A06A /* HHRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHRootViewController.m; sourceTree = "<group>"; };
+		5BA5EB811F6780EC0066A06A /* HHConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHConst.h; sourceTree = "<group>"; };
+		5BA5EB861F6791320066A06A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5BA5EB881F6791AF0066A06A /* HHHeadlineNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHHeadlineNavController.h; sourceTree = "<group>"; };
+		5BA5EB891F6791AF0066A06A /* HHHeadlineNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineNavController.m; sourceTree = "<group>"; };
+		5BA5EB911F67AF8A0066A06A /* HHHeadlineTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHHeadlineTimer.h; sourceTree = "<group>"; };
+		5BA5EB921F67AF8A0066A06A /* HHHeadlineTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineTimer.m; sourceTree = "<group>"; };
+		5BA5EB941F67AF9E0066A06A /* HHHeadlineNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHHeadlineNetwork.h; sourceTree = "<group>"; };
+		5BA5EB951F67AF9E0066A06A /* HHHeadlineNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineNetwork.m; sourceTree = "<group>"; };
+		5BA5EB971F67AFC10066A06A /* HHHeadlineEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHHeadlineEncrypt.h; sourceTree = "<group>"; };
+		5BA5EB981F67AFC10066A06A /* HHHeadlineEncrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineEncrypt.m; sourceTree = "<group>"; };
+		5BA5EB9A1F68D11C0066A06A /* HHJSONToDictionaty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHJSONToDictionaty.h; sourceTree = "<group>"; };
+		5BA5EB9B1F68D11C0066A06A /* HHJSONToDictionaty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHJSONToDictionaty.m; sourceTree = "<group>"; };
+		5BA5EB9D1F691FF80066A06A /* HHHeadlineSegmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHHeadlineSegmentViewController.h; sourceTree = "<group>"; };
+		5BA5EB9E1F691FF80066A06A /* HHHeadlineSegmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineSegmentViewController.m; sourceTree = "<group>"; };
+		5BA5EBA01F69259C0066A06A /* HHHeadlineDetaiklViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHHeadlineDetaiklViewController.h; sourceTree = "<group>"; };
+		5BA5EBA11F69259C0066A06A /* HHHeadlineDetaiklViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineDetaiklViewController.m; sourceTree = "<group>"; };
+		5BA5EBA41F6A59F00066A06A /* HHHeadlineChannelListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHHeadlineChannelListViewController.h; sourceTree = "<group>"; };
+		5BA5EBA51F6A59F00066A06A /* HHHeadlineChannelListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineChannelListViewController.m; sourceTree = "<group>"; };
+		5BA5EBAA1F6A626F0066A06A /* HHHeadlineSegmentViewController+TableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HHHeadlineSegmentViewController+TableView.h"; sourceTree = "<group>"; };
+		5BA5EBAB1F6A626F0066A06A /* HHHeadlineSegmentViewController+TableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HHHeadlineSegmentViewController+TableView.m"; sourceTree = "<group>"; };
+		5BA5EBB41F6A6F740066A06A /* BMTodayHeadlinesDragCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMTodayHeadlinesDragCell.h; sourceTree = "<group>"; };
+		5BA5EBB51F6A6F740066A06A /* BMTodayHeadlinesDragCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMTodayHeadlinesDragCell.m; sourceTree = "<group>"; };
+		5BA5EBB61F6A6F740066A06A /* BMTodayHeadlinesDragCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BMTodayHeadlinesDragCell.xib; sourceTree = "<group>"; };
+		5BA5EBBC1F6B6C710066A06A /* HHHeadlineChannelListViewController+Delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HHHeadlineChannelListViewController+Delegate.h"; sourceTree = "<group>"; };
+		5BA5EBBD1F6B6C710066A06A /* HHHeadlineChannelListViewController+Delegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HHHeadlineChannelListViewController+Delegate.m"; sourceTree = "<group>"; };
+		5BA5EBBF1F6B70310066A06A /* HHHeadlineChannelListHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHHeadlineChannelListHeaderView.h; sourceTree = "<group>"; };
+		5BA5EBC01F6B70310066A06A /* HHHeadlineChannelListHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineChannelListHeaderView.m; sourceTree = "<group>"; };
+		5BA5EBC11F6B70310066A06A /* HHHeadlineChannelListHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HHHeadlineChannelListHeaderView.xib; sourceTree = "<group>"; };
+		5BA5EBC71F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HHHeadlineChannelListSecondHeaderView.h; sourceTree = "<group>"; };
+		5BA5EBC81F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineChannelListSecondHeaderView.m; sourceTree = "<group>"; };
+		5BA5EBC91F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HHHeadlineChannelListSecondHeaderView.xib; sourceTree = "<group>"; };
+		8F36D9046F1A2D32655D12AE /* libPods-HuiHeadline.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HuiHeadline.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6535857CB5A26462A9A493F /* Pods-HuiHeadline.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HuiHeadline.release.xcconfig"; path = "Pods/Target Support Files/Pods-HuiHeadline/Pods-HuiHeadline.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5BA5EB371F6779FC0066A06A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				020E797F076AA4664EFD0C4A /* libPods-HuiHeadline.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0E49F4CD0D93C95E1D33DF8C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				467FE8C64BBED65DA92A958F /* Pods-HuiHeadline.debug.xcconfig */,
+				C6535857CB5A26462A9A493F /* Pods-HuiHeadline.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		5BA5EB311F6779FC0066A06A = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB3C1F6779FC0066A06A /* HuiHeadline */,
+				5BA5EB3B1F6779FC0066A06A /* Products */,
+				0E49F4CD0D93C95E1D33DF8C /* Pods */,
+				DE7FBC2191A10164CCCA2F47 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		5BA5EB3B1F6779FC0066A06A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB3A1F6779FC0066A06A /* HuiHeadline.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5BA5EB3C1F6779FC0066A06A /* HuiHeadline */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB5E1F677D270066A06A /* Classes */,
+				5BA5EB731F677D270066A06A /* Config */,
+				5BA5EB741F677D270066A06A /* Libs */,
+				5BA5EB751F677D270066A06A /* Managers */,
+				5BA5EB761F677D270066A06A /* Resources */,
+				5BA5EB3D1F6779FC0066A06A /* Supporting Files */,
+			);
+			path = HuiHeadline;
+			sourceTree = "<group>";
+		};
+		5BA5EB3D1F6779FC0066A06A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB791F677F740066A06A /* PrefixHeader.pch */,
+				5BA5EB5C1F677B1B0066A06A /* main.m */,
+				5BA5EB461F6779FC0066A06A /* Main.storyboard */,
+				5BA5EB4B1F6779FC0066A06A /* LaunchScreen.storyboard */,
+				5BA5EB541F677ADA0066A06A /* AppDelegate.h */,
+				5BA5EB551F677ADA0066A06A /* AppDelegate.m */,
+				5BA5EB561F677ADA0066A06A /* Info.plist */,
+				5BA5EB861F6791320066A06A /* Assets.xcassets */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5BA5EB5E1F677D270066A06A /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB6B1F677D270066A06A /* Root */,
+				5BA5EB5F1F677D270066A06A /* Headline */,
+				5BA5EB6F1F677D270066A06A /* Video */,
+				5BA5EB631F677D270066A06A /* Invitation */,
+				5BA5EB671F677D270066A06A /* Mine */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		5BA5EB5F1F677D270066A06A /* Headline */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EBB31F6A6F740066A06A /* View */,
+				5BA5EB601F677D270066A06A /* Model */,
+				5BA5EB611F677D270066A06A /* ViewController */,
+				5BA5EB621F677D270066A06A /* ViewModel */,
+			);
+			path = Headline;
+			sourceTree = "<group>";
+		};
+		5BA5EB601F677D270066A06A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5BA5EB611F677D270066A06A /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB881F6791AF0066A06A /* HHHeadlineNavController.h */,
+				5BA5EB891F6791AF0066A06A /* HHHeadlineNavController.m */,
+				5BA5EB9D1F691FF80066A06A /* HHHeadlineSegmentViewController.h */,
+				5BA5EB9E1F691FF80066A06A /* HHHeadlineSegmentViewController.m */,
+				5BA5EBAA1F6A626F0066A06A /* HHHeadlineSegmentViewController+TableView.h */,
+				5BA5EBAB1F6A626F0066A06A /* HHHeadlineSegmentViewController+TableView.m */,
+				5BA5EBA41F6A59F00066A06A /* HHHeadlineChannelListViewController.h */,
+				5BA5EBA51F6A59F00066A06A /* HHHeadlineChannelListViewController.m */,
+				5BA5EBBC1F6B6C710066A06A /* HHHeadlineChannelListViewController+Delegate.h */,
+				5BA5EBBD1F6B6C710066A06A /* HHHeadlineChannelListViewController+Delegate.m */,
+				5BA5EBA01F69259C0066A06A /* HHHeadlineDetaiklViewController.h */,
+				5BA5EBA11F69259C0066A06A /* HHHeadlineDetaiklViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		5BA5EB621F677D270066A06A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB911F67AF8A0066A06A /* HHHeadlineTimer.h */,
+				5BA5EB921F67AF8A0066A06A /* HHHeadlineTimer.m */,
+				5BA5EB941F67AF9E0066A06A /* HHHeadlineNetwork.h */,
+				5BA5EB951F67AF9E0066A06A /* HHHeadlineNetwork.m */,
+				5BA5EB971F67AFC10066A06A /* HHHeadlineEncrypt.h */,
+				5BA5EB981F67AFC10066A06A /* HHHeadlineEncrypt.m */,
+				5BA5EB9A1F68D11C0066A06A /* HHJSONToDictionaty.h */,
+				5BA5EB9B1F68D11C0066A06A /* HHJSONToDictionaty.m */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		5BA5EB631F677D270066A06A /* Invitation */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB641F677D270066A06A /* Model */,
+				5BA5EB651F677D270066A06A /* ViewController */,
+				5BA5EB661F677D270066A06A /* ViewModel */,
+			);
+			path = Invitation;
+			sourceTree = "<group>";
+		};
+		5BA5EB641F677D270066A06A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5BA5EB651F677D270066A06A /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		5BA5EB661F677D270066A06A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		5BA5EB671F677D270066A06A /* Mine */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB681F677D270066A06A /* Model */,
+				5BA5EB691F677D270066A06A /* ViewController */,
+				5BA5EB6A1F677D270066A06A /* ViewModel */,
+			);
+			path = Mine;
+			sourceTree = "<group>";
+		};
+		5BA5EB681F677D270066A06A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5BA5EB691F677D270066A06A /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		5BA5EB6A1F677D270066A06A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		5BA5EB6B1F677D270066A06A /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB6C1F677D270066A06A /* Model */,
+				5BA5EB6D1F677D270066A06A /* ViewController */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
+		5BA5EB6C1F677D270066A06A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5BA5EB6D1F677D270066A06A /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB7A1F6780100066A06A /* HHRootViewController.h */,
+				5BA5EB7B1F6780100066A06A /* HHRootViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		5BA5EB6F1F677D270066A06A /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB701F677D270066A06A /* Model */,
+				5BA5EB711F677D270066A06A /* ViewController */,
+				5BA5EB721F677D270066A06A /* ViewModel */,
+			);
+			path = Video;
+			sourceTree = "<group>";
+		};
+		5BA5EB701F677D270066A06A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5BA5EB711F677D270066A06A /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		5BA5EB721F677D270066A06A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		5BA5EB731F677D270066A06A /* Config */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		5BA5EB741F677D270066A06A /* Libs */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB7D1F6780D10066A06A /* Category */,
+				5BA5EB7E1F6780D10066A06A /* Define */,
+				5BA5EB7F1F6780D10066A06A /* Other */,
+				5BA5EB801F6780D10066A06A /* ThirdParty */,
+			);
+			path = Libs;
+			sourceTree = "<group>";
+		};
+		5BA5EB751F677D270066A06A /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		5BA5EB761F677D270066A06A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		5BA5EB7D1F6780D10066A06A /* Category */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		5BA5EB7E1F6780D10066A06A /* Define */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EB811F6780EC0066A06A /* HHConst.h */,
+			);
+			path = Define;
+			sourceTree = "<group>";
+		};
+		5BA5EB7F1F6780D10066A06A /* Other */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		5BA5EB801F6780D10066A06A /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		5BA5EBB31F6A6F740066A06A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5BA5EBB41F6A6F740066A06A /* BMTodayHeadlinesDragCell.h */,
+				5BA5EBB51F6A6F740066A06A /* BMTodayHeadlinesDragCell.m */,
+				5BA5EBB61F6A6F740066A06A /* BMTodayHeadlinesDragCell.xib */,
+				5BA5EBBF1F6B70310066A06A /* HHHeadlineChannelListHeaderView.h */,
+				5BA5EBC01F6B70310066A06A /* HHHeadlineChannelListHeaderView.m */,
+				5BA5EBC11F6B70310066A06A /* HHHeadlineChannelListHeaderView.xib */,
+				5BA5EBC71F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.h */,
+				5BA5EBC81F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.m */,
+				5BA5EBC91F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DE7FBC2191A10164CCCA2F47 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8F36D9046F1A2D32655D12AE /* libPods-HuiHeadline.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5BA5EB391F6779FC0066A06A /* HuiHeadline */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5BA5EB511F6779FC0066A06A /* Build configuration list for PBXNativeTarget "HuiHeadline" */;
+			buildPhases = (
+				8C1C3B8BCF88DF4B29D138F2 /* [CP] Check Pods Manifest.lock */,
+				5BA5EB361F6779FC0066A06A /* Sources */,
+				5BA5EB371F6779FC0066A06A /* Frameworks */,
+				5BA5EB381F6779FC0066A06A /* Resources */,
+				FCA03E83ED33CBFC46073EAC /* [CP] Embed Pods Frameworks */,
+				1884831900BEE4A2DC250051 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HuiHeadline;
+			productName = HuiHeadline;
+			productReference = 5BA5EB3A1F6779FC0066A06A /* HuiHeadline.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5BA5EB321F6779FC0066A06A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = eyuxin;
+				TargetAttributes = {
+					5BA5EB391F6779FC0066A06A = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = A9SSU4DP78;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5BA5EB351F6779FC0066A06A /* Build configuration list for PBXProject "HuiHeadline" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5BA5EB311F6779FC0066A06A;
+			productRefGroup = 5BA5EB3B1F6779FC0066A06A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5BA5EB391F6779FC0066A06A /* HuiHeadline */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5BA5EB381F6779FC0066A06A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BA5EBB81F6A6F740066A06A /* BMTodayHeadlinesDragCell.xib in Resources */,
+				5BA5EBC31F6B70310066A06A /* HHHeadlineChannelListHeaderView.xib in Resources */,
+				5BA5EB5A1F677ADA0066A06A /* Info.plist in Resources */,
+				5BA5EBCB1F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.xib in Resources */,
+				5BA5EB4D1F6779FC0066A06A /* LaunchScreen.storyboard in Resources */,
+				5BA5EB871F6791320066A06A /* Assets.xcassets in Resources */,
+				5BA5EB481F6779FC0066A06A /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1884831900BEE4A2DC250051 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-HuiHeadline/Pods-HuiHeadline-resources.sh",
+				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HuiHeadline/Pods-HuiHeadline-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8C1C3B8BCF88DF4B29D138F2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HuiHeadline-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FCA03E83ED33CBFC46073EAC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HuiHeadline/Pods-HuiHeadline-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5BA5EB361F6779FC0066A06A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BA5EB9C1F68D11C0066A06A /* HHJSONToDictionaty.m in Sources */,
+				5BA5EBA21F69259C0066A06A /* HHHeadlineDetaiklViewController.m in Sources */,
+				5BA5EBCA1F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.m in Sources */,
+				5BA5EBA61F6A59F00066A06A /* HHHeadlineChannelListViewController.m in Sources */,
+				5BA5EB8A1F6791AF0066A06A /* HHHeadlineNavController.m in Sources */,
+				5BA5EB821F6782300066A06A /* HHConst.h in Sources */,
+				5BA5EBAC1F6A626F0066A06A /* HHHeadlineSegmentViewController+TableView.m in Sources */,
+				5BA5EB7C1F6780100066A06A /* HHRootViewController.m in Sources */,
+				5BA5EB931F67AF8A0066A06A /* HHHeadlineTimer.m in Sources */,
+				5BA5EB961F67AF9E0066A06A /* HHHeadlineNetwork.m in Sources */,
+				5BA5EB9F1F691FF80066A06A /* HHHeadlineSegmentViewController.m in Sources */,
+				5BA5EBBE1F6B6C710066A06A /* HHHeadlineChannelListViewController+Delegate.m in Sources */,
+				5BA5EB991F67AFC10066A06A /* HHHeadlineEncrypt.m in Sources */,
+				5BA5EBB71F6A6F740066A06A /* BMTodayHeadlinesDragCell.m in Sources */,
+				5BA5EBC21F6B70310066A06A /* HHHeadlineChannelListHeaderView.m in Sources */,
+				5BA5EB5D1F677B1B0066A06A /* main.m in Sources */,
+				5BA5EB591F677ADA0066A06A /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5BA5EB461F6779FC0066A06A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5BA5EB471F6779FC0066A06A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5BA5EB4B1F6779FC0066A06A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5BA5EB4C1F6779FC0066A06A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5BA5EB4F1F6779FC0066A06A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5BA5EB501F6779FC0066A06A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5BA5EB521F6779FC0066A06A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 467FE8C64BBED65DA92A958F /* Pods-HuiHeadline.debug.xcconfig */;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				DEVELOPMENT_TEAM = A9SSU4DP78;
+				GCC_PREFIX_HEADER = "HuiHeadline/Supporting Files/PrefixHeader.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/HuiHeadline/Supporting Files/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cashtoutiao;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5BA5EB531F6779FC0066A06A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C6535857CB5A26462A9A493F /* Pods-HuiHeadline.release.xcconfig */;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				DEVELOPMENT_TEAM = A9SSU4DP78;
+				GCC_PREFIX_HEADER = "HuiHeadline/Supporting Files/PrefixHeader.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/HuiHeadline/Supporting Files/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cashtoutiao;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5BA5EB351F6779FC0066A06A /* Build configuration list for PBXProject "HuiHeadline" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5BA5EB4F1F6779FC0066A06A /* Debug */,
+				5BA5EB501F6779FC0066A06A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5BA5EB511F6779FC0066A06A /* Build configuration list for PBXNativeTarget "HuiHeadline" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5BA5EB521F6779FC0066A06A /* Debug */,
+				5BA5EB531F6779FC0066A06A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5BA5EB321F6779FC0066A06A /* Project object */;
+}

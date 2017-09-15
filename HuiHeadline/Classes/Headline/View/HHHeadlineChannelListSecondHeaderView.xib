@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="U6b-Vx-4bR" customClass="HHHeadlineChannelListSecondHeaderView">
+            <rect key="frame" x="0.0" y="0.0" width="390" height="152"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="我的频道" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UeT-K9-NlO">
+                    <rect key="frame" x="0.0" y="0.0" width="70" height="152"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="zC3-7f-dbZ"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="点击添加" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sEr-fW-Q5O">
+                    <rect key="frame" x="70" y="8" width="100" height="136"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="0Bf-J6-LPY"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <constraints>
+                <constraint firstItem="UeT-K9-NlO" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" id="9I1-VD-poU"/>
+                <constraint firstItem="sEr-fW-Q5O" firstAttribute="leading" secondItem="UeT-K9-NlO" secondAttribute="trailing" id="ElO-5g-Itg"/>
+                <constraint firstAttribute="bottom" secondItem="UeT-K9-NlO" secondAttribute="bottom" id="GEh-DJ-lcp"/>
+                <constraint firstItem="sEr-fW-Q5O" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="topMargin" id="Mbb-Hv-Ta7"/>
+                <constraint firstAttribute="bottomMargin" secondItem="sEr-fW-Q5O" secondAttribute="bottom" id="Smp-Re-OE4"/>
+                <constraint firstItem="UeT-K9-NlO" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" id="qkC-yA-NIL"/>
+            </constraints>
+            <connections>
+                <outlet property="addClick" destination="sEr-fW-Q5O" id="cga-Ye-Fq5"/>
+                <outlet property="myChannel" destination="UeT-K9-NlO" id="bOP-RS-4Py"/>
+            </connections>
+            <point key="canvasLocation" x="60" y="103"/>
+        </collectionReusableView>
+    </objects>
+</document>

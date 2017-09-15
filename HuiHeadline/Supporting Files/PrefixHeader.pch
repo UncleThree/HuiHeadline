@@ -1,0 +1,36 @@
+//
+//  PrefixHeader.pch
+//  HuiHeadline
+//
+//  Created by eyuxin on 2017/9/12.
+//  Copyright © 2017年 eyuxin. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "AppDelegate.h"
+
+@import AVKit;
+@import AVFoundation;
+
+#import <AFNetworking.h>
+#import <MJRefresh.h>
+#import <MJExtension.h>
+#import <MBProgressHUD.h>
+//纯代码书写AutoLayout的第三方类库（链式语法）
+#import <Masonry.h>
+#import <CYLTabBarController.h>
+#import <WMPageController.h>
+
+#import "HHConst.h"
+#import "BMDragCellCollectionView.h"
+
+
+
+
+#endif /* PrefixHeader_pch */
