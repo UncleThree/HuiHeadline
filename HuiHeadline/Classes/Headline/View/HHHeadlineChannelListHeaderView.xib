@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="U6b-Vx-4bR" customClass="HHHeadlineChannelListHeaderView">
+            <rect key="frame" x="0.0" y="0.0" width="417" height="108"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="我的频道" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5yG-3Y-m1w">
+                    <rect key="frame" x="12" y="0.0" width="69.5" height="108"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="9OX-Wl-SCT"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="长按拖动排序" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Bb-nj-wtj">
+                    <rect key="frame" x="92.5" y="0.0" width="80" height="108"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="JFd-Ru-3ZW"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FgI-7r-gBn">
+                    <rect key="frame" x="357" y="42" width="50" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="25" id="IhH-5W-g6S"/>
+                        <constraint firstAttribute="width" constant="50" id="dFD-1w-9aL"/>
+                    </constraints>
+                    <state key="normal" title="编辑">
+                        <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="3Bb-nj-wtj" secondAttribute="bottom" id="10Q-Zb-PI2"/>
+                <constraint firstAttribute="trailing" secondItem="FgI-7r-gBn" secondAttribute="trailing" constant="10" id="4RO-4q-OJs"/>
+                <constraint firstItem="5yG-3Y-m1w" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" id="GDS-EQ-9nF"/>
+                <constraint firstItem="5yG-3Y-m1w" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" constant="12" id="LCw-SO-Tvp"/>
+                <constraint firstItem="3Bb-nj-wtj" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" id="T4n-N6-acv"/>
+                <constraint firstItem="3Bb-nj-wtj" firstAttribute="leading" secondItem="5yG-3Y-m1w" secondAttribute="trailing" constant="11" id="YNT-yr-MdA"/>
+                <constraint firstAttribute="bottom" secondItem="5yG-3Y-m1w" secondAttribute="bottom" id="oYH-O5-anw"/>
+                <constraint firstItem="FgI-7r-gBn" firstAttribute="centerY" secondItem="3Bb-nj-wtj" secondAttribute="centerY" id="zlZ-HC-6MT"/>
+            </constraints>
+            <connections>
+                <outlet property="dragLabel" destination="3Bb-nj-wtj" id="l1O-hb-tbS"/>
+                <outlet property="editButton" destination="FgI-7r-gBn" id="g5z-Nd-EXa"/>
+                <outlet property="myChannelLabel" destination="5yG-3Y-m1w" id="Axm-Rz-gT8"/>
+            </connections>
+            <point key="canvasLocation" x="353" y="70"/>
+        </collectionReusableView>
+    </objects>
+</document>
