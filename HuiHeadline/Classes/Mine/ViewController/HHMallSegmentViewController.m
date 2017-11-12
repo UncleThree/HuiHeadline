@@ -10,6 +10,7 @@
 #import "HHMallViewController.h"
 #import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 #import "HHMallBindAliViewController.h"
+#import "HHMallBindWechatViewController.h"
 
 @interface HHMallSegmentViewController () <UIScrollViewDelegate,HHMallTableViewDelegate>
 
@@ -100,6 +101,7 @@
 - (void)initWechatView {
     
     self.wechatVC = [HHMallViewController new];
+    self.wechatVC.delegate = self;
     [self addChildViewController:self.wechatVC];
     self.wechatVC.view.frame = CGRectMake(KWIDTH, 0, KWIDTH, H(self.view));
     [self.scrollView addSubview:self.wechatVC.view];
@@ -118,13 +120,22 @@
 - (void)initNavigation {
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+//    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithWhite:0.2 alpha:1.0];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[[UIImage imageNamed:@"btn_back_without_bg"] scaleToSize:CGSizeMake(15, 15)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(goBack)];
+    
+}
+
+- (void)goBack {
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)initSegment {
+    
     for (UIView *subView in self.navigationController.navigationBar.subviews) {
         if ([subView isKindOfClass:[UISegmentedControl class]]) {
             [subView removeFromSuperview];
@@ -132,13 +143,14 @@
     }
     self.segment = [[UISegmentedControl alloc] initWithItems:@[@"支付宝",@"微信钱包"]];
     CGFloat width = 200;
+    
     self.segment.frame = CGRectMake((KWIDTH - width) / 2 , (H(self.navigationController.navigationBar) - H(self.segment)) / 2, width, 30);
     self.segment.apportionsSegmentWidthsByContent = YES;
     self.segment.tintColor = [UIColor clearColor];
     self.segment.selectedSegmentIndex = 0;
     [self.segment addTarget:self action:@selector(segmentAction:) forControlEvents:(UIControlEventValueChanged)];
-    [self.segment setTitleTextAttributes:@{KEY_FONT:Font(16),KEY_COLOR:[UIColor colorWithWhite:0.5 alpha:1.0]} forState:(UIControlStateNormal)];
-    [self.segment setTitleTextAttributes:@{KEY_FONT:Font(16),KEY_COLOR:[UIColor colorWithWhite:1.0 alpha:1.0]} forState:(UIControlStateSelected)];
+    [self.segment setTitleTextAttributes:@{KEY_FONT:Font(17),KEY_COLOR:[UIColor colorWithWhite:0.5 alpha:1.0]} forState:(UIControlStateNormal)];
+    [self.segment setTitleTextAttributes:@{KEY_FONT:Font(19),KEY_COLOR:[UIColor colorWithWhite:1.0 alpha:1.0]} forState:(UIControlStateSelected)];
     [self.navigationController.navigationBar addSubview:self.segment];
     
 }
@@ -167,10 +179,22 @@
         HHMallBindAliViewController *bindAliVC = [[HHMallBindAliViewController alloc] init];
         bindAliVC.alipayAccount = [HHUserManager sharedInstance].alipayAccount;
         self.hidesBottomBarWhenPushed = YES;
-        bindAliVC.callback = ^{
+        bindAliVC.callback = ^(NSString *msg){
+            [HHHeadlineAwardHUD showMessage:msg animated:YES duration:2];
             [self initScrollView];
         };
         [self.navigationController pushViewController:bindAliVC animated:YES];
+    } else if (category == wechat_category) {
+        
+        HHMallBindWechatViewController *bindWxVC = [HHMallBindWechatViewController new];
+        bindWxVC.weixinAccount = [HHUserManager sharedInstance].weixinAccount;
+        self.hidesBottomBarWhenPushed = YES;
+        bindWxVC.callback = ^(NSString *msg){
+            [HHHeadlineAwardHUD showMessage:msg animated:YES duration:2];
+            [self initScrollView];
+            [self.scrollView setContentOffset:CGPointMake(KWIDTH, 0) animated:NO];
+        };
+        [self.navigationController pushViewController:bindWxVC animated:YES];
     }
     
     

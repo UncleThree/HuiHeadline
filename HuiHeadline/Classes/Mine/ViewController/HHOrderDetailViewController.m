@@ -8,6 +8,7 @@
 
 #import "HHOrderDetailViewController.h"
 #import "HHMyOrderWarmReminderTableViewCell.h"
+#import "HHUserDeliveryAddress.h"
 
 @interface HHOrderDetailViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -29,7 +30,9 @@ static NSString *orderAddress = @"ORDER_ADDRESS_CELL_ID";
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    self.tabBarController.tabBar.hidden = YES;
+//    self.tabBarController.tabBar.hidden = YES;
+    
+    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     
 }
 
@@ -65,8 +68,8 @@ static NSString *orderAddress = @"ORDER_ADDRESS_CELL_ID";
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:(UITableViewStyleGrouped)];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.bounces = NO;
     [self.view addSubview:self.tableView];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.sectionHeaderHeight = 0;
     _tableView.sectionFooterHeight = 10;
     _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0.0f,0.0f,_tableView.bounds.size.width,0.01f)];
@@ -88,13 +91,15 @@ static NSString *orderAddress = @"ORDER_ADDRESS_CELL_ID";
     
     [HHHeadlineAwardHUD showHUDWithText:@"" animated:1];
     [HHMineNetwork getOrderDetailInfo:self.orderId callback:^(id error, HHOrderInfo *orderInfo) {
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (error) {
             NSLog(@"%@",error);
         } else {
             self.detailOrderInfo = orderInfo;
+            self.detailOrderInfo.isDetail = YES;
             [self.tableView reloadData];
         }
-        [HHHeadlineAwardHUD hideHUDAnimated:YES];
+        
     }];
 }
 
@@ -116,17 +121,26 @@ static NSString *orderAddress = @"ORDER_ADDRESS_CELL_ID";
     }
 }
 
+kRemoveCellSeparator
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
         if (indexPath.row == 1) {
             return 120;
+        } else if (indexPath.row == 3) {
+            
+            return [HHFontManager sizeWithText:[self addressString] font:Font(17) maxSize:CGSizeMake(KWIDTH - 24, CGFLOAT_MAX)].height + 20;
         }
     } else if (indexPath.section == 1) {
+        
         if (self.detailOrderInfo.feedback) {
+            
             CGFloat titleWidth = [HHFontManager sizeWithText:@"温馨提示：" font:Font(15) maxSize:CGSizeMake(CGFLOAT_MAX, 20)].width;
             return [HHFontManager sizeWithText:self.detailOrderInfo.feedback font:Font(15) maxSize:CGSizeMake(KWIDTH - 40 - titleWidth - 5, CGFLOAT_MAX)].height + 20;
+            
         } else {
+            
             return 0;
         }
     }
@@ -154,10 +168,11 @@ static NSString *orderAddress = @"ORDER_ADDRESS_CELL_ID";
             return cell;
             
         } else if (indexPath.row == 2) {
+
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:stateName forIndexPath:indexPath];
             cell.textLabel.text = self.detailOrderInfo.stateName;
             cell.textLabel.textColor = BLACK_51;
-            cell.textLabel.font = Font(15);
+            cell.textLabel.font = Font(17);
             cell.textLabel.text = [NSString stringWithFormat:@"订单号：%zd", self.detailOrderInfo.orderId];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
@@ -165,8 +180,9 @@ static NSString *orderAddress = @"ORDER_ADDRESS_CELL_ID";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:orderAddress forIndexPath:indexPath];
             cell.textLabel.text = self.detailOrderInfo.stateName;
             cell.textLabel.textColor = BLACK_51;
-            cell.textLabel.font = Font(15);
+            cell.textLabel.font = Font(17);
             cell.textLabel.text = [self addressString];
+            cell.textLabel.numberOfLines = 0;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
         } else if (indexPath.row == 4) {
@@ -209,8 +225,14 @@ static NSString *orderAddress = @"ORDER_ADDRESS_CELL_ID";
             NSString *phone = [self.detailOrderInfo.address mj_JSONObject][@"phone"];
             NSString *realName = [self.detailOrderInfo.address mj_JSONObject][@"realName"];
             dstr = [[phone stringByAppendingString:@" "] stringByAppendingString:realName];
+        } else if (self.detailOrderInfo.productCategory == REAL_CAREFULLY_CHOSEN_DAILY_NECCESSARY) {
+            tstr = @"收货人：";
+            HHUserDeliveryAddress *address = [HHUserDeliveryAddress mj_objectWithKeyValues:[self.detailOrderInfo.address mj_JSONObject]];
+            dstr = [NSString stringWithFormat:@" %@\n%@%@%@%@",address.userPhone,address.addressProvince,address.addressCity,address.addressZone, address.addressStreet];
+            
         } else {
-            //待处理
+            
+            
         }
         return [tstr stringByAppendingString:dstr];
         

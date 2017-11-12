@@ -12,6 +12,8 @@
 
 @property (nonatomic, strong)UIView *navigationView;
 
+@property (nonatomic, strong)UIView *whiteBackView;
+
 @property (nonatomic, strong)UITextField *nickTextField;
 
 @property (nonatomic, strong)UILabel *nickLabel;
@@ -51,6 +53,12 @@
     
     
     self.view.backgroundColor = RGB(241, 241, 241);
+    
+    
+    self.whiteBackView = [[UIView alloc] initWithFrame:CGRectMake(0, MaxY(self.navigationView) + 20, KWIDTH, 80)];
+    self.whiteBackView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.whiteBackView];
+    
     self.nickTextField  = [[UITextField alloc] initWithFrame:CGRectZero];
     self.nickTextField.placeholder = @"请输入您的新昵称";
     self.nickTextField.font = Font(15);
@@ -60,6 +68,7 @@
     self.nickTextField.tintColor = BLACK_153;
     self.nickTextField.text = self.nickName;
     [self.view addSubview:self.nickTextField];
+    
     
     self.nickLabel = [[UILabel alloc] initWithFrame:(CGRectZero)];
     self.nickLabel.text = @"取个好名字可以让生活都变的棒棒哒哦...";
@@ -76,6 +85,8 @@
     [self.submitButton addTarget:self action:@selector(submit) forControlEvents:(UIControlEventTouchUpInside)];
     [self.view addSubview:self.submitButton];
     
+    
+    
     [self layout];
     
     
@@ -91,8 +102,19 @@
         make.height.mas_equalTo(25);
     }];
     
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectZero];
+    line.backgroundColor = RGB(180, 180, 180);
+    [self.view addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.nickTextField.mas_bottom).with.offset(1);
+        make.left.and.right.equalTo(self.view);
+        make.height.mas_equalTo(0.5);
+    }];
+    
+    
     [self.nickLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.nickTextField.mas_bottom).with.offset(10);
+        make.top.equalTo(line.mas_bottom).with.offset(10);
         make.left.equalTo(self.nickTextField);
         make.width.and.height.equalTo(self.nickTextField);
     }];
@@ -117,7 +139,26 @@
         
     }   else {
         
-        [HHMineNetwork updateNickName:self.nickTextField.text];
+        [HHHeadlineAwardHUD showHUDWithText:@"正在提交..." animated:YES];
+        [HHMineNetwork updateNickName:self.nickTextField.text callback:^(id error, HHResponse *response) {
+            [HHHeadlineAwardHUD hideHUDAnimated:YES];
+            if (response && response.statusCode == 200) {
+                
+                [HHHeadlineAwardHUD hideHUDAnimated:YES];
+                [self.navigationController popViewControllerAnimated:YES];
+                self.callback(self.nickTextField.text);
+                
+            }  else if (response) {
+                
+                [HHHeadlineAwardHUD showMessage:response.msg animated:YES duration:2];
+                
+            } else {
+                
+                NSLog(@"%@",error);
+            }
+            
+            
+        }];
         
     }
     

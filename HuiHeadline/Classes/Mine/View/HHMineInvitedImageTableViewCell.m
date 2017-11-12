@@ -14,19 +14,17 @@
 @property (nonatomic, strong)UIImageView *imgV2;
 @property (nonatomic, strong)UIImageView *imgV3;
 
-@property (nonatomic, strong)UIButton *fillCodeButton;
-@property (nonatomic, strong)UIButton *stButton;
+
 
 @end
 
 @implementation HHMineInvitedImageTableViewCell
 
 
-
-
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
         [self initUI];
     }
     return self;
@@ -50,23 +48,12 @@
     self.imgV3.contentMode = UIViewContentModeScaleAspectFill;
     self.imgV3.clipsToBounds = YES;
     
-    self.fillCodeButton = [[UIButton alloc] initWithFrame:CGRectZero];
-    self.fillCodeButton.backgroundColor = RGB(254, 217, 216);
-    self.fillCodeButton.layer.cornerRadius = 5;
-    [self.fillCodeButton setTitle:@"填写师傅邀请码" forState:(UIControlStateNormal)];
-    self.fillCodeButton.titleLabel.font = Font(15);
-    [self.fillCodeButton setTitleColor:RGB(247, 43, 59) forState:(UIControlStateNormal)];
-    [self.contentView addSubview:self.fillCodeButton];
     
-    self.stButton = [[UIButton alloc] initWithFrame:CGRectZero];
-    self.stButton.backgroundColor = RGB(56, 163, 226);
-    self.stButton.layer.cornerRadius = 5;
-    [self.stButton setTitle:@"立即收徒" forState:(UIControlStateNormal)];
-    self.stButton.titleLabel.font = Font(15);
-    [self.contentView addSubview:self.stButton];
     
     
 }
+
+
 
 - (void)setModels:(NSMutableArray<HHInvitedItem *> *)models {
     
@@ -99,19 +86,6 @@
         
         self.imgV1.frame = CGRectMake(0, 0, KWIDTH, image.size.height / image.size.width * KWIDTH);
         self.imgV1.image = image;
-        if (buttonNumber == 1) {
-            CGFloat buttonHeight = 35;
-            self.stButton.frame = CGRectMake(12, MaxY(self.imgV1) - 15 - buttonHeight, KWIDTH - 2 * 12, buttonHeight);
-        } else if (buttonNumber == 2) {
-            CGFloat buttonHeight = 35;
-            CGFloat width = (KWIDTH - 3 * 12) / 2;
-            self.fillCodeButton.frame = CGRectMake(12, MaxY(self.imgV1) - 15 - buttonHeight, width, buttonHeight);
-            self.stButton.frame = CGRectMake(MaxX(self.fillCodeButton) + 12, Y(self.fillCodeButton), width, buttonHeight);
-            
-        } else {
-            [self.stButton removeFromSuperview];
-            [self.fillCodeButton removeFromSuperview];
-        }
         if (callback) {
             callback();
         }

@@ -15,6 +15,10 @@
 
 @property(nonatomic, strong)UILabel *timeLabel;
 
+@property (nonatomic ,strong)UIImageView *alarmImgv;
+
+@property (nonatomic ,strong)UIImageView *titleImgV;
+
 - (void)checkHourAward;
 
 @end

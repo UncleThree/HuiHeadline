@@ -32,11 +32,42 @@
 }
 
 
+#define LAST_RUN_VERSION_KEY @"last_run_version_of_application"
 
-- (void)loadAppWithLaunchAD:(BOOL)launchAD   {
+
+- (BOOL)firstLoad {
+    
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]){
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
+        return YES;
     }
+    return NO;
+}
+
+- (BOOL)isFirstLoadOrUpdate {
+    
+    
+    NSString *currentVersion = [[[NSBundle mainBundle] infoDictionary]
+                                objectForKey:@"CFBundleShortVersionString"];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *lastRunVersion = [defaults objectForKey:LAST_RUN_VERSION_KEY];
+    
+    if (!lastRunVersion) {
+        [defaults setObject:currentVersion forKey:LAST_RUN_VERSION_KEY];
+        return YES;
+    }
+    else if (![lastRunVersion isEqualToString:currentVersion]) {
+        [defaults setObject:currentVersion forKey:LAST_RUN_VERSION_KEY];
+        return YES;
+    }
+    return NO;
+}
+
+
+- (void)loadAppWithLaunchAD:(BOOL)launchAD   {
+    
     
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     [self.window makeKeyAndVisible];
@@ -46,41 +77,54 @@
         self.window.rootViewController = [[UINavigationController alloc] init];
         [XHLaunchAdManager shareManager];
         [NSNotificationCenter.defaultCenter removeObserver:self];
-        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(checkLogin) name:@"ADPAGE_BACK" object:nil];
-        [self checkLogin];
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(adOver) name:@"ADPAGE_BACK" object:nil];
+        [self checkLogin:2];
+        
+        
     } else {
-        [self checkLogin];
+        
+        [self checkLogin:2];
+        
     }
     
 }
 
-
-- (void)checkLogin {
+- (void)adOver {
     
+    
+}
+
+
+- (void)checkLogin:(int)retry {
+    
+    __block int re = retry;
     if ([HHUserManager sharedInstance].currentUser) {
         
         [HHLoginNetwork checkLogin:^(id error, id result) {
-            if (error && [error isKindOfClass:[NSString class]] && [error isEqualToString:@"unauthorized"]) {
-                
-                self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[HHLoginViewController new]];
-                //重新登录
-            } else if (result) {
+            if (result) {
                 
                 G.$.rootVC = [HHRootViewController new];
                 self.window.rootViewController =  G.$.rootVC;
                 
             } else {
-                
+                if ([[(NSError *)error description] containsString:@"service unavailable"]) {
+                    
+                    re--;
+                    if (re != 0) {
+                        [self checkLogin:re];
+                        return;
+                    }
+                }
                 NSLog(@"%@",error);
+                self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[HHLoginViewController new]];
             }
         }];
         
         
     } else {
-        
         self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[HHLoginViewController new]];
-        
     }
+    
     
     
 }

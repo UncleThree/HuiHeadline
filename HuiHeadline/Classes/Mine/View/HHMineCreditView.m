@@ -90,7 +90,7 @@
         self.creditNumLabel.text = [HHUtils insertComma:text1];
         [self addSubview:self.creditNumLabel];
         
-        self.creditLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height / 2, W(self.creditNumLabel), frame.size.height / 2 - 10)];
+        self.creditLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height / 2 + 3, W(self.creditNumLabel), frame.size.height / 2 - 10)];
         self.creditLabel.textColor = [UIColor whiteColor];
         self.creditLabel.font = Font(15);
         self.creditLabel.textAlignment = 1;

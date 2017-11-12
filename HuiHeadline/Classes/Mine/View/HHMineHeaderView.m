@@ -97,6 +97,9 @@
     self.backImgV = [[UIImageView alloc] initWithFrame:*frame];
     self.backImgV.image = [UIImage imageNamed:@"mine_back"];
     [self addSubview:self.backImgV];
+    
+    self.backImgV.userInteractionEnabled = YES;
+    [self.backImgV addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mineHeaderViewclick)] ];
 }
 
 - (void)initHeaderImageView:(HHUserModel *)user {

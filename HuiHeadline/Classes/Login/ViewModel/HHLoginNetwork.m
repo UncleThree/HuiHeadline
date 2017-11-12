@@ -20,16 +20,17 @@
 @implementation HHLoginNetwork
 
 
-+ (void)checkLogin:(void(^)(id error , id result))callback {
++ (void)checkLogin:(void(^)(id error , NSString * result))callback {
     
-    [HHNetworkManager postRequestWithUrl:k_account_check_login parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_account_check_state parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES,@"CheckLogin":@YES} handler:^(NSString *respondsStr, NSError *error) {
        
         if (error && [error.description containsString:@"unauthorized"]) {
             callback(@"unauthorized",nil);
         } else if (error) {
             callback(error,nil);
         } else {
-            callback(error, respondsStr);
+            HHResponse *response = [HHResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+            callback(error, response.msg);
         }
     }];
     
@@ -45,6 +46,7 @@
 {
     NSString *uuid = [UIDevice currentDevice].identifierForVendor.UUIDString;
     
+    uuid = @"9083B8EC-0DDC-42A7-B613-DEF1B43459EE";
     NSDictionary *parameter = @{
                                 @"phone":phone,
                                 @"password":password,
@@ -74,8 +76,76 @@
     
 }
 
++ (void)registWithPhone:(NSString *)phone
+               password:(NSString *)password
+             verifyCode:(NSString *)verifyCode
+             inviteCode:(NSString *)inviteCode
+                handler:(void(^)(id error, NSString *response))handler {
+    
+    NSString *uuid = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    
+
+    NSDictionary *parameter = @{
+                                @"phone":phone,
+                                @"password":password,
+                                @"verifyCode":verifyCode,
+                                @"inviteCode":inviteCode,
+                                @"deviceId":uuid,
+                                @"deviceExtra":[NSNull null],
+                                @"appExtra":[NSNull null]
+                                };
+    [HHNetworkManager postRequestWithUrl:k_register_url parameters:parameter isEncryptedJson:YES otherArg:nil handler:^(NSString *respondsStr, NSError *error) {
+        if (respondsStr) {
+            
+            NSDictionary *dict = [respondsStr mj_JSONObject];
+            HHUserModel *user = [HHUserModel mj_objectWithKeyValues:dict];
+            
+            if (user.statusCode == 200) {
+                [HHUserManager sharedInstance].currentUser  = user;
+                handler(nil,user.msg);
+            } else {
+                handler(user.msg,nil);
+            }
+        } else {
+            handler(error,nil);
+        }
+        
+    }];
+    
+}
+
++ (void)changePasswordWithOldPas:(NSString *)oldPassword
+                    newPassword:(NSString *)newPassword
+                         handler:(void(^)(id error, NSString *response))handler {
+    
+    NSDictionary *parameter = @{
+                                @"oldPassword":oldPassword,
+                                @"newPassword":newPassword,
+                                };
+    
+    [HHNetworkManager postRequestWithUrl:k_update_password parameters:parameter isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+        if (respondsStr) {
+            
+            NSDictionary *dict = [respondsStr mj_JSONObject];
+            HHResponse *response = [HHResponse mj_objectWithKeyValues:dict];
+            
+            if (response.statusCode == 200) {
+                
+                handler(nil,response.msg);
+            } else {
+                handler(response.msg,nil);
+            }
+        } else {
+            handler(error,nil);
+        }
+        
+    }];
+    
+}
+
+
 + (void)authorizeWeixinWithCode:(NSString *)code
-                       callback:(void(^)(id error , id result))callback{
+                       callback:(void(^)(id error , HHWeixinAccount *account))callback{
     NSDictionary *parameters = @{
                                  @"code":code
                                  };
@@ -85,11 +155,14 @@
             NSLog(@"%@",error);
             callback(error,nil);
         } else {
-            HHResponse *response = [HHResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+            HHWeixinAuthorizedResponse *response = [HHWeixinAuthorizedResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+
+            
             if (response.statusCode == 200) {
-                callback(nil, response.msg);
+                HHWeixinAccount *weixinAccount = [HHWeixinAccount mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+                callback(nil, weixinAccount);
             } else {
-                callback(response.msg, nil);
+                callback(response.msg,nil);
             }
             
         }

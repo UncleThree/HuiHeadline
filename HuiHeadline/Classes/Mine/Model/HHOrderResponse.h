@@ -44,7 +44,7 @@
 
 @property (nonatomic, strong)NSString *message;
 
-
+@property (nonatomic, assign)BOOL isDetail;
 
 @end
 

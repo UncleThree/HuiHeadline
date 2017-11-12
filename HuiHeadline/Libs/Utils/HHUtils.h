@@ -13,6 +13,8 @@
 ///每隔三位插入一个逗号
 + (NSString *)insertComma:(NSString *)num;
 
++ (NSString *)phone_sec:(NSString *)phone;
+
 + (BOOL)isMobileNumber:(NSString *)str;
 
 + (BOOL)isEmailAddress:(NSString *)str;

@@ -14,6 +14,7 @@
 
 - (void)clickFold;
 
+- (void)clickProgressView;
 
 @end
 

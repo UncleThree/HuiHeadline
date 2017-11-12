@@ -37,20 +37,23 @@
     
 }
 
++ (NSString *)phone_sec:(NSString *)phone {
+    
+    if (phone.length >= 7) {
+        return [phone stringByReplacingCharactersInRange:(NSMakeRange(3, 4)) withString:@"****"];
+    }
+    return nil;
+        
+    
+}
+
 
 //手机号有效性
 + (BOOL)isMobileNumber:(NSString *)str {
-       /**
-        65      *  手机号以13、15、18、170开头，8个 \d 数字字符
-        66      *  小灵通 区号：010,020,021,022,023,024,025,027,028,029 还有未设置的新区号xxx
-        67      */
-       NSString *mobileNoRegex = @"^1((3\\d|5[0-35-9]|8[025-9])\\d|70[059])\\d{7}$";//除4以外的所有个位整数，不能使用[^4,\\d]匹配，这里是否iOS Bug?
-       NSString *phsRegex =@"^0(10|2[0-57-9]|\\d{3})\\d{7,8}$";
-  
-       BOOL ret = [self isValidateByRegex:mobileNoRegex string:str];
-       BOOL ret1 = [self isValidateByRegex:phsRegex string:str];
-  
-       return (ret || ret1);
+    
+    NSString *MOBILE = @"^1(3[0-9]|4[57]|5[0-35-9]|8[0-9]|7[0678])\\d{8}$";
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    return [regextestmobile evaluateWithObject:str];
 }
 
  //邮箱
@@ -173,29 +176,34 @@
 + (void)clearFile:(void(^)(NSString *cache))callback
 {
     
-    NSString *cacheString = [self getSDCacheSize];
-    
-    
-    NSString * cachePath = [NSSearchPathForDirectoriesInDomains (NSCachesDirectory , NSUserDomainMask , YES ) firstObject];
-    NSArray * files = [[NSFileManager defaultManager ] subpathsAtPath :cachePath];
-    //NSLog ( @"cachpath = %@" , cachePath);
-    for ( NSString * p in files) {
-        
-        NSError * error = nil ;
-        //获取文件全路径
-        NSString * fileAbsolutePath = [cachePath stringByAppendingPathComponent :p];
-        
-        if ([[NSFileManager defaultManager ] fileExistsAtPath :fileAbsolutePath]) {
-            [[NSFileManager defaultManager ] removeItemAtPath :fileAbsolutePath error :&error];
-        }
-    }
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         
+        NSString *cacheString = [self getSDCacheSize];
+        NSString * cachePath = [NSSearchPathForDirectoriesInDomains (NSCachesDirectory , NSUserDomainMask , YES ) firstObject];
+        NSArray * files = [[NSFileManager defaultManager ] subpathsAtPath :cachePath];
+        //NSLog ( @"cachpath = %@" , cachePath);
+        for ( NSString * p in files) {
+            
+            NSError * error = nil ;
+            //获取文件全路径
+            NSString * fileAbsolutePath = [cachePath stringByAppendingPathComponent :p];
+            
+            if ([[NSFileManager defaultManager ] fileExistsAtPath :fileAbsolutePath]) {
+                [[NSFileManager defaultManager ] removeItemAtPath :fileAbsolutePath error :&error];
+            }
+        }
+        
+        [[SDImageCache sharedImageCache] clearMemory];
         [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
-            callback(cacheString);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                callback(cacheString);
+            });
+            
         }];
+        
     });
+
 }
 
 

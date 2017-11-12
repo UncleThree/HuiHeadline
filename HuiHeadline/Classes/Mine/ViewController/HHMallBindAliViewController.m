@@ -104,12 +104,35 @@
             view.hidden = YES;
         }
     }
+    
+    if (self.manager) {
+        [self requstDefaultAliAccount];
+    }
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [self initNav];
+    
+    
+}
+
+
+- (void)requstDefaultAliAccount {
+    
+    [HHMineNetwork getDefaultAlipay:^(id error, HHAlipayAccountResponse *response) {
+        if (error) {
+            //暂无绑定支付宝信息
+            
+        } else {
+            [HHUserManager sharedInstance].alipayAccount = response.alipayAccount;
+            [self setAlipayAccount:response.alipayAccount];
+        }
+        [self.tableView reloadData];
+    }];
+    
 }
 
 - (void)initNav {
@@ -141,16 +164,19 @@
             
         }   else {
             [HHHeadlineAwardHUD showHUDWithText:@"正在保存 请稍后" animated:YES];
+            HHAlipayAccount *aliAccount = [HHAlipayAccount mj_objectWithKeyValues:@{
+                                                                                    @"account":self.accountTF.text,
+                                                                                    @"name":self.nameTF.text
+            }];
             
-            [HHMineNetwork updateAliAccount:self.accountTF.text name:self.nameTF.text callback:^(id error, HHResponse *response) {
-                
+            [HHMineNetwork updateAliAccount:aliAccount  callback:^(id error, HHResponse *response) {
+                [HHHeadlineAwardHUD hideHUDAnimated:YES];
                 if (error) {
                     [HHHeadlineAwardHUD showMessage:error animated:YES duration:2];
                 } else {
                     [HHUserManager sharedInstance].alipayAccount = [HHAlipayAccount mj_objectWithKeyValues:@{@"account":self.accountTF.text,@"name":self.nameTF.text}];
-                    [HHHeadlineAwardHUD showMessage:response.msg animated:YES duration:2];
                     [self.navigationController popViewControllerAnimated:YES];
-                    self.callback();
+                    self.callback(response.msg);
                 }
             }];
             

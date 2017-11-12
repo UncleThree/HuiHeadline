@@ -12,6 +12,8 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+- (BOOL)firstLoad;
+- (BOOL)isFirstLoadOrUpdate;
 
 @end
 

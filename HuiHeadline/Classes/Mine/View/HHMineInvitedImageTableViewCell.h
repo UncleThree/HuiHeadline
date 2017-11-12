@@ -14,7 +14,9 @@
 
 @interface HHMineInvitedImageTableViewCell : UITableViewCell
 
+
 @property (nonatomic, strong)NSArray<HHInvitedItem *> *models;
+
 
 @end
 

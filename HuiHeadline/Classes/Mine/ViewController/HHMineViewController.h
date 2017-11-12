@@ -20,7 +20,7 @@
 
 + (instancetype)defaultMineVC;
 
-- (void)realoadHeaderData;
+- (void)realoadHeaderData:(BOOL)requst;
 
 
 

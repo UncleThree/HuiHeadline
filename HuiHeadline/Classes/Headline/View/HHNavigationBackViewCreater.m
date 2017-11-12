@@ -24,7 +24,8 @@
                              action:(nullable SEL)action
                                text:(NSString *)text {
    
-    CGFloat backWidth = [HHFontManager sizeWithText:text font:[UIFont systemFontOfSize:17] maxSize:CGSizeMake(CGFLOAT_MAX, 40)].width;
+    UIFont *font = [UIFont systemFontOfSize:18];
+    CGFloat backWidth = [HHFontManager sizeWithText:text font:font maxSize:CGSizeMake(CGFLOAT_MAX, 40)].width + 2;
     UIView *backView = [[UIView alloc] init];
     backView.frame = CGRectMake(0, 0, 15 + 6 + backWidth, 40);
     backView.userInteractionEnabled = YES;
@@ -36,7 +37,7 @@
     [backView addSubview:backImgV];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(MaxX(backImgV)+ 6, 0, backWidth, 40)];
     label.text = text;
-    label.font = [UIFont systemFontOfSize:17];
+    label.font = font;
     [backView addSubview:label];
     return backView;
 }
@@ -56,6 +57,11 @@
     view.frame = CGRectMake(12, statusBarHeight, W(view), navigationBarHeight);
     view.center = CGPointMake(view.center.x, statusBarHeight + navigationBarHeight / 2);
     [navigationView addSubview:view];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, MaxY(navigationView) - 0.5, KWIDTH, 0.5)];
+    line.backgroundColor = BLACK_153;
+    [navigationView addSubview:line];
+    
     return navigationView;
     
 }

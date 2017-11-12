@@ -17,6 +17,8 @@
 
 @property (nonatomic, strong)HHTextFieldAndLineView *verifyTF;
 
+@property (nonatomic, strong)HHTextFieldAndLineView *passwordTF;
+
 @property (nonatomic, strong)UILabel *verifyLabel;
 
 @property (nonatomic, strong)UIButton *bindPhoneButton;
@@ -39,12 +41,13 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    
+    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
 }
 
 - (void)initNavigation {
+    
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationView = [HHNavigationBackViewCreater customNavigationWithTarget:self action:@selector(back) text:@" 重新绑定手机号"];
+    self.navigationView = [HHNavigationBackViewCreater customNavigationWithTarget:self action:@selector(back) text:@" 绑定手机号"];
     [self.view addSubview:self.navigationView];
     
 }
@@ -77,6 +80,15 @@
     self.verifyTF.textField.delegate = self;
     [self.view addSubview:self.verifyTF];
     
+    self.passwordTF = [[HHTextFieldAndLineView alloc] initWithFrame:(CGRectMake(leftPad, MaxY(self.verifyTF) + 20, KWIDTH - 2 * leftPad, 40))];
+    self.passwordTF.textField.placeholder = @"输入密码";
+    self.passwordTF.textField.tintColor = BLACK_153;
+    self.passwordTF.textField.font = font;
+    self.passwordTF.textField.returnKeyType = UIReturnKeyDone;
+    self.passwordTF.textField.keyboardType = UIKeyboardTypeNumberPad;
+    self.passwordTF.textField.delegate = self;
+    [self.view addSubview:self.passwordTF];
+    
     CGFloat labelWidth = 100;
     self.verifyLabel = [[UILabel alloc] initWithFrame:CGRectMake(MaxX(self.phoneTF) - labelWidth, Y(self.phoneTF), labelWidth, 20)];
     self.verifyLabel.center = CGPointMake(self.verifyLabel.center.x, self.phoneTF.center.y);
@@ -92,9 +104,9 @@
     [self.view addSubview:self.verifyLabel];
     
     
-    self.bindPhoneButton = [[UIButton alloc] initWithFrame:CGRectMake(leftPad, MaxY(self.verifyTF) + CGFLOAT(30), W(self.phoneTF), 40)];
+    self.bindPhoneButton = [[UIButton alloc] initWithFrame:CGRectMake(leftPad, MaxY(self.passwordTF) + CGFLOAT(30), W(self.phoneTF), 40)];
     self.bindPhoneButton.backgroundColor = HUIRED;
-    [self.bindPhoneButton setTitle:@"重新绑定手机号" forState:(UIControlStateNormal)];
+    [self.bindPhoneButton setTitle:@"绑定手机号" forState:(UIControlStateNormal)];
     self.bindPhoneButton.layer.cornerRadius = 8;
     self.bindPhoneButton.tintColor = [UIColor whiteColor];
     [self.bindPhoneButton addTarget:self action:@selector(bindPhoneAgainAction) forControlEvents:(UIControlEventTouchUpInside)];
@@ -104,26 +116,49 @@
 }
 
 - (void)bindPhoneAgainAction {
-    if (!self.verifyTF.textField.text) {
+    
+    if (!self.phoneTF.textField.text || [self.phoneTF.textField.text isEqualToString:@""]) {
+        [HHHeadlineAwardHUD showMessage:@"请输入手机号!" animated:YES duration:2.0];
+    } else if (![HHUtils isMobileNumber:self.phoneTF.textField.text]) {
+        
+        [HHHeadlineAwardHUD showMessage:@"请输入正确的手机号!" animated:YES duration:2.0];
+        
+    }
+    else if (!self.verifyTF.textField.text || [self.verifyTF.textField.text isEqualToString:@""]) {
+        
         [HHHeadlineAwardHUD showMessage:@"请输入验证码!" animated:YES duration:2.0];
+        
+    } else if (!self.passwordTF.textField.text) {
+        [HHHeadlineAwardHUD showMessage:@"请输入密码!" animated:YES duration:2.0];
     } else {
         
-        [self reBindPhone:self.verifyTF.textField.text verifyCode:self.verifyTF.textField.text];
+        [HHHeadlineAwardHUD showHUDWithText:@"正在绑定" animated:YES];
+        
+        [HHMineNetwork bindPhone:self.phoneTF.textField.text password:self.passwordTF.textField.text verifyCode:self.verifyTF.textField.text callback:^(id error, HHBindPhoneResponse *response) {
+            [HHHeadlineAwardHUD hideHUDAnimated:YES];
+            if (error) {
+                NSLog(@"%@",error);
+                [HHHeadlineAwardHUD showMessage:error animated:YES duration:2];
+            } else if (response.statusCode == 200) {
+                [HHHeadlineAwardHUD showMessage:response.msg ?:@"绑定成功！" animated:YES duration:2];
+                
+                [self.navigationController popViewControllerAnimated:YES];
+                self.callback(response.phone);
+                
+            } else {
+                [HHHeadlineAwardHUD showMessage:response.msg animated:YES duration:2];
+            }
+            
+        }];
+       
     }
     
 }
 
-- (void)reBindPhone:(NSString *)phone
-         verifyCode:(NSString *)code {
-    
-    [HHMineNetwork rebindPhone:phone verifyCode:code callback:^{
-        
-    }];
-    
-}
 
 
 - (void)verifyLabelEnabled:(BOOL)enabled {
+    
     if (enabled) {
         self.verifyLabel.text = @"获取验证码";
         self.verifyLabel.textColor = HUIRED;
@@ -138,8 +173,15 @@
 - (void)getVerifyCode {
     
     if (self.phoneTF.textField.text.length == 0) {
+        
         [HHHeadlineAwardHUD showMessage:@"请输入手机号码" animated:YES duration:2.0];
+        
+    } else if (![HHUtils isMobileNumber:self.phoneTF.textField.text]) {
+        
+        [HHHeadlineAwardHUD showMessage:@"请输入正确的手机号码" animated:YES duration:2.0];
+        
     } else {
+        
         self.verifyLabel.userInteractionEnabled = NO;
         [self sendSms:self.phoneTF.textField.text];
         
@@ -149,7 +191,7 @@
 
 - (void)sendSms:(NSString *)phone {
     
-    [HHLoginNetwork sendSms:phone type:(SendSmsTypeBIND_PHONE_AGAIN) handler:^(NSString *msg, id error) {
+    [HHLoginNetwork sendSms:phone type:(SendSmsTypeBIND_PHONE) handler:^(NSString *msg, id error) {
         self.verifyLabel.userInteractionEnabled = YES;
         if (error) {
             Log(error);
@@ -201,8 +243,10 @@
     
     [self.phoneTF resignFirstResponder];
     [self.verifyTF resignFirstResponder];
+    [self.passwordTF resignFirstResponder];
 }
 
 
 
 @end
+

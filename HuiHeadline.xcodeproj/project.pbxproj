@@ -29,7 +29,7 @@
 		5B047E641F99AFE4008E2CEC /* HHUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B047E631F99AFE4008E2CEC /* HHUtils.m */; };
 		5B047E671F99F1DD008E2CEC /* HHTopNewsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B047E661F99F1DD008E2CEC /* HHTopNewsModel.m */; };
 		5B047E691F9A0337008E2CEC /* place_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B047E681F9A0321008E2CEC /* place_image.png */; };
-		5B047E6C1F9ED613008E2CEC /* HHMineBindPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B047E6B1F9ED613008E2CEC /* HHMineBindPhoneViewController.m */; };
+		5B047E6C1F9ED613008E2CEC /* HHMineRebindPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B047E6B1F9ED613008E2CEC /* HHMineRebindPhoneViewController.m */; };
 		5B047E6F1F9ED6C7008E2CEC /* HHTextFieldAndLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B047E6E1F9ED6C7008E2CEC /* HHTextFieldAndLineView.m */; };
 		5B0DFDD11FA02411003C3771 /* HHTaskCenterSignView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0DFDD01FA02411003C3771 /* HHTaskCenterSignView.m */; };
 		5B0DFDD51FA02680003C3771 /* sign_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0DFDD41FA0267F003C3771 /* sign_bg.png */; };
@@ -57,12 +57,33 @@
 		5B2E45301F9058AF00361485 /* HHReadSychDurationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2E452F1F9058AF00361485 /* HHReadSychDurationResponse.m */; };
 		5B2E45331F90AE1500361485 /* HHVideoDetailBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2E45321F90AE1500361485 /* HHVideoDetailBottomView.m */; };
 		5B2E45351F90CC9D00361485 /* slide_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B2E45341F90CAFB00361485 /* slide_icon.png */; };
+		5B3B97A81FB0423700BC1500 /* HHWXAuthorizeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97A71FB0423700BC1500 /* HHWXAuthorizeTableViewCell.m */; };
+		5B3B97AB1FB0650500BC1500 /* HHInvitedConstributionSummaryResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97AA1FB0650500BC1500 /* HHInvitedConstributionSummaryResponse.m */; };
+		5B3B97AE1FB067FA00BC1500 /* HHMineInvitedCreditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97AD1FB067FA00BC1500 /* HHMineInvitedCreditViewController.m */; };
+		5B3B97B11FB0725500BC1500 /* HHMineChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97B01FB0725500BC1500 /* HHMineChangePasswordViewController.m */; };
+		5B3B97B41FB1836D00BC1500 /* HHMineFillInvitedCodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97B31FB1836D00BC1500 /* HHMineFillInvitedCodeView.m */; };
+		5B3B97B61FB1842D00BC1500 /* icon_qr_code_scan.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B97B51FB1842C00BC1500 /* icon_qr_code_scan.png */; };
+		5B3B97B91FB19AA900BC1500 /* QRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97B71FB19AA800BC1500 /* QRViewController.m */; };
+		5B3B97BC1FB19B8C00BC1500 /* qr_scan_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B97BA1FB19B8C00BC1500 /* qr_scan_line.png */; };
+		5B3B97BF1FB19EEF00BC1500 /* btn_back_without_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B97BE1FB19EEF00BC1500 /* btn_back_without_bg.png */; };
+		5B3B97C21FB19FB400BC1500 /* 闪光灯-关.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B97C01FB19FB400BC1500 /* 闪光灯-关.png */; };
+		5B3B97C31FB19FB400BC1500 /* 闪光灯-开.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B97C11FB19FB400BC1500 /* 闪光灯-开.png */; };
+		5B3B97C61FB1B16500BC1500 /* HHMineInvitedOneImageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97C51FB1B16500BC1500 /* HHMineInvitedOneImageTableViewCell.m */; };
+		5B3B97C91FB3F5E200BC1500 /* HHUserDeliveryAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97C81FB3F5E200BC1500 /* HHUserDeliveryAddress.m */; };
+		5B3B97CD1FB5504A00BC1500 /* UITabBar+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97CC1FB5504A00BC1500 /* UITabBar+Badge.m */; };
+		5B3B97D01FB55FA100BC1500 /* HHInvitedCreditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97CF1FB55FA100BC1500 /* HHInvitedCreditTableViewCell.m */; };
+		5B3B97D31FB583C000BC1500 /* HHMineInvitedPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97D21FB583C000BC1500 /* HHMineInvitedPersonViewController.m */; };
+		5B3B97D61FB5867100BC1500 /* HHInvitedSummaryResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97D51FB5867100BC1500 /* HHInvitedSummaryResponse.m */; };
+		5B3B97D91FB596BE00BC1500 /* HHRetrievePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97D81FB596BE00BC1500 /* HHRetrievePasswordViewController.m */; };
+		5B3B97DC1FB5999400BC1500 /* HHStateResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97DB1FB5999400BC1500 /* HHStateResponse.m */; };
+		5B3B97DE1FB5AEA700BC1500 /* tp_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B97DD1FB5AEA700BC1500 /* tp_bg.png */; };
 		5B56BA101F7A5CB300830EF5 /* HHVideoSegmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B56BA0F1F7A5CB200830EF5 /* HHVideoSegmentViewController.m */; };
 		5B7BFEB51F8B116700A615F9 /* HHAdModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFEB41F8B116700A615F9 /* HHAdModel.m */; };
 		5B7BFEB81F8B5A6600A615F9 /* HHBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFEB71F8B5A6600A615F9 /* HHBaseModel.m */; };
 		5B7BFEBB1F8C61C200A615F9 /* HHHeadlineNewsBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFEBA1F8C61C200A615F9 /* HHHeadlineNewsBaseTableViewCell.m */; };
 		5B8DF64B1F9F23A1004DB0F6 /* HHMineUpdateGenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B8DF64A1F9F23A1004DB0F6 /* HHMineUpdateGenderView.m */; };
 		5B8DF64D1F9F2AB6004DB0F6 /* xuanze.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8DF64C1F9F2AB6004DB0F6 /* xuanze.png */; };
+		5B8F591A1FB000AA0098C0D5 /* HHBindPhoneResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B8F59191FB000AA0098C0D5 /* HHBindPhoneResponse.m */; };
 		5B8F89871F7B562D001EAA9F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8F89861F7B562D001EAA9F /* MobileCoreServices.framework */; };
 		5B8F898A1F7B782E001EAA9F /* HHAdRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B8F89891F7B782E001EAA9F /* HHAdRequest.m */; };
 		5B8F89941F7BB2DE001EAA9F /* HHVideoListWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B8F89931F7BB2DE001EAA9F /* HHVideoListWebViewController.m */; };
@@ -144,6 +165,7 @@
 		5BCF732E1F7DE44F00936567 /* HHHeadlineShareCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF732D1F7DE44F00936567 /* HHHeadlineShareCollectionView.m */; };
 		5BCF73311F7DFACD00936567 /* HHAdStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF73301F7DFACD00936567 /* HHAdStrategy.m */; };
 		5BCF73351F7E013D00936567 /* AdStrategyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF73341F7E013D00936567 /* AdStrategyManager.m */; };
+		5BDE30761FB00B9C00C52A9C /* HHMineBindPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDE30751FB00B9C00C52A9C /* HHMineBindPhoneViewController.m */; };
 		5BDEB6641F78AFF9005B931C /* HHNewsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B338DB61F78A42C00E26CB6 /* HHNewsModel.m */; };
 		5BDEB6691F78B4D6005B931C /* EntryNeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDEB6681F78B4D6005B931C /* EntryNeed.m */; };
 		5BDEB66F1F79F402005B931C /* HHHeadlineNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDEB66E1F79F402005B931C /* HHHeadlineNetwork.m */; };
@@ -259,8 +281,8 @@
 		5B047E651F99F1DD008E2CEC /* HHTopNewsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHTopNewsModel.h; sourceTree = "<group>"; };
 		5B047E661F99F1DD008E2CEC /* HHTopNewsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHTopNewsModel.m; sourceTree = "<group>"; };
 		5B047E681F9A0321008E2CEC /* place_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = place_image.png; sourceTree = "<group>"; };
-		5B047E6A1F9ED613008E2CEC /* HHMineBindPhoneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHMineBindPhoneViewController.h; sourceTree = "<group>"; };
-		5B047E6B1F9ED613008E2CEC /* HHMineBindPhoneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHMineBindPhoneViewController.m; sourceTree = "<group>"; };
+		5B047E6A1F9ED613008E2CEC /* HHMineRebindPhoneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHMineRebindPhoneViewController.h; sourceTree = "<group>"; };
+		5B047E6B1F9ED613008E2CEC /* HHMineRebindPhoneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHMineRebindPhoneViewController.m; sourceTree = "<group>"; };
 		5B047E6D1F9ED6C7008E2CEC /* HHTextFieldAndLineView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHTextFieldAndLineView.h; sourceTree = "<group>"; };
 		5B047E6E1F9ED6C7008E2CEC /* HHTextFieldAndLineView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHTextFieldAndLineView.m; sourceTree = "<group>"; };
 		5B0DFDCF1FA02411003C3771 /* HHTaskCenterSignView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHTaskCenterSignView.h; sourceTree = "<group>"; };
@@ -308,6 +330,40 @@
 		5B2E45341F90CAFB00361485 /* slide_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slide_icon.png; sourceTree = "<group>"; };
 		5B338DB51F78A42C00E26CB6 /* HHNewsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHNewsModel.h; sourceTree = "<group>"; };
 		5B338DB61F78A42C00E26CB6 /* HHNewsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHNewsModel.m; sourceTree = "<group>"; };
+		5B3B97A61FB0423700BC1500 /* HHWXAuthorizeTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHWXAuthorizeTableViewCell.h; sourceTree = "<group>"; };
+		5B3B97A71FB0423700BC1500 /* HHWXAuthorizeTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHWXAuthorizeTableViewCell.m; sourceTree = "<group>"; };
+		5B3B97A91FB0650500BC1500 /* HHInvitedConstributionSummaryResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHInvitedConstributionSummaryResponse.h; sourceTree = "<group>"; };
+		5B3B97AA1FB0650500BC1500 /* HHInvitedConstributionSummaryResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHInvitedConstributionSummaryResponse.m; sourceTree = "<group>"; };
+		5B3B97AC1FB067FA00BC1500 /* HHMineInvitedCreditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHMineInvitedCreditViewController.h; sourceTree = "<group>"; };
+		5B3B97AD1FB067FA00BC1500 /* HHMineInvitedCreditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHMineInvitedCreditViewController.m; sourceTree = "<group>"; };
+		5B3B97AF1FB0725500BC1500 /* HHMineChangePasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHMineChangePasswordViewController.h; sourceTree = "<group>"; };
+		5B3B97B01FB0725500BC1500 /* HHMineChangePasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHMineChangePasswordViewController.m; sourceTree = "<group>"; };
+		5B3B97B21FB1836D00BC1500 /* HHMineFillInvitedCodeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHMineFillInvitedCodeView.h; sourceTree = "<group>"; };
+		5B3B97B31FB1836D00BC1500 /* HHMineFillInvitedCodeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHMineFillInvitedCodeView.m; sourceTree = "<group>"; };
+		5B3B97B51FB1842C00BC1500 /* icon_qr_code_scan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_qr_code_scan.png; sourceTree = "<group>"; };
+		5B3B97B71FB19AA800BC1500 /* QRViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRViewController.m; sourceTree = "<group>"; };
+		5B3B97B81FB19AA900BC1500 /* QRViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRViewController.h; sourceTree = "<group>"; };
+		5B3B97BA1FB19B8C00BC1500 /* qr_scan_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qr_scan_line.png; sourceTree = "<group>"; };
+		5B3B97BE1FB19EEF00BC1500 /* btn_back_without_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_back_without_bg.png; sourceTree = "<group>"; };
+		5B3B97C01FB19FB400BC1500 /* 闪光灯-关.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "闪光灯-关.png"; sourceTree = "<group>"; };
+		5B3B97C11FB19FB400BC1500 /* 闪光灯-开.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "闪光灯-开.png"; sourceTree = "<group>"; };
+		5B3B97C41FB1B16500BC1500 /* HHMineInvitedOneImageTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHMineInvitedOneImageTableViewCell.h; sourceTree = "<group>"; };
+		5B3B97C51FB1B16500BC1500 /* HHMineInvitedOneImageTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHMineInvitedOneImageTableViewCell.m; sourceTree = "<group>"; };
+		5B3B97C71FB3F5E200BC1500 /* HHUserDeliveryAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHUserDeliveryAddress.h; sourceTree = "<group>"; };
+		5B3B97C81FB3F5E200BC1500 /* HHUserDeliveryAddress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHUserDeliveryAddress.m; sourceTree = "<group>"; };
+		5B3B97CB1FB5504A00BC1500 /* UITabBar+Badge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITabBar+Badge.h"; sourceTree = "<group>"; };
+		5B3B97CC1FB5504A00BC1500 /* UITabBar+Badge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITabBar+Badge.m"; sourceTree = "<group>"; };
+		5B3B97CE1FB55FA100BC1500 /* HHInvitedCreditTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHInvitedCreditTableViewCell.h; sourceTree = "<group>"; };
+		5B3B97CF1FB55FA100BC1500 /* HHInvitedCreditTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHInvitedCreditTableViewCell.m; sourceTree = "<group>"; };
+		5B3B97D11FB583C000BC1500 /* HHMineInvitedPersonViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHMineInvitedPersonViewController.h; sourceTree = "<group>"; };
+		5B3B97D21FB583C000BC1500 /* HHMineInvitedPersonViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHMineInvitedPersonViewController.m; sourceTree = "<group>"; };
+		5B3B97D41FB5867100BC1500 /* HHInvitedSummaryResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHInvitedSummaryResponse.h; sourceTree = "<group>"; };
+		5B3B97D51FB5867100BC1500 /* HHInvitedSummaryResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHInvitedSummaryResponse.m; sourceTree = "<group>"; };
+		5B3B97D71FB596BE00BC1500 /* HHRetrievePasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHRetrievePasswordViewController.h; sourceTree = "<group>"; };
+		5B3B97D81FB596BE00BC1500 /* HHRetrievePasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHRetrievePasswordViewController.m; sourceTree = "<group>"; };
+		5B3B97DA1FB5999400BC1500 /* HHStateResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHStateResponse.h; sourceTree = "<group>"; };
+		5B3B97DB1FB5999400BC1500 /* HHStateResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHStateResponse.m; sourceTree = "<group>"; };
+		5B3B97DD1FB5AEA700BC1500 /* tp_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tp_bg.png; sourceTree = "<group>"; };
 		5B56BA0E1F7A5CB200830EF5 /* HHVideoSegmentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHVideoSegmentViewController.h; sourceTree = "<group>"; };
 		5B56BA0F1F7A5CB200830EF5 /* HHVideoSegmentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHVideoSegmentViewController.m; sourceTree = "<group>"; };
 		5B7BFEB31F8B116700A615F9 /* HHAdModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHAdModel.h; sourceTree = "<group>"; };
@@ -319,6 +375,8 @@
 		5B8DF6491F9F23A1004DB0F6 /* HHMineUpdateGenderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHMineUpdateGenderView.h; sourceTree = "<group>"; };
 		5B8DF64A1F9F23A1004DB0F6 /* HHMineUpdateGenderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHMineUpdateGenderView.m; sourceTree = "<group>"; };
 		5B8DF64C1F9F2AB6004DB0F6 /* xuanze.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xuanze.png; sourceTree = "<group>"; };
+		5B8F59181FB000AA0098C0D5 /* HHBindPhoneResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHBindPhoneResponse.h; sourceTree = "<group>"; };
+		5B8F59191FB000AA0098C0D5 /* HHBindPhoneResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHBindPhoneResponse.m; sourceTree = "<group>"; };
 		5B8F89861F7B562D001EAA9F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		5B8F89881F7B782E001EAA9F /* HHAdRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHAdRequest.h; sourceTree = "<group>"; };
 		5B8F89891F7B782E001EAA9F /* HHAdRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHAdRequest.m; sourceTree = "<group>"; };
@@ -469,6 +527,8 @@
 		5BCF73301F7DFACD00936567 /* HHAdStrategy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHAdStrategy.m; sourceTree = "<group>"; };
 		5BCF73331F7E013D00936567 /* AdStrategyManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdStrategyManager.h; sourceTree = "<group>"; };
 		5BCF73341F7E013D00936567 /* AdStrategyManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdStrategyManager.m; sourceTree = "<group>"; };
+		5BDE30741FB00B9C00C52A9C /* HHMineBindPhoneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHMineBindPhoneViewController.h; sourceTree = "<group>"; };
+		5BDE30751FB00B9C00C52A9C /* HHMineBindPhoneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHMineBindPhoneViewController.m; sourceTree = "<group>"; };
 		5BDEB6671F78B4D6005B931C /* EntryNeed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EntryNeed.h; sourceTree = "<group>"; };
 		5BDEB6681F78B4D6005B931C /* EntryNeed.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EntryNeed.m; sourceTree = "<group>"; };
 		5BDEB66D1F79F402005B931C /* HHHeadlineNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHHeadlineNetwork.h; sourceTree = "<group>"; };
@@ -680,6 +740,16 @@
 			);
 			path = Model;
 			sourceTree = "<group>";
+		};
+		5B3B97CA1FB5502B00BC1500 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				5B3B97CB1FB5504A00BC1500 /* UITabBar+Badge.h */,
+				5B3B97CC1FB5504A00BC1500 /* UITabBar+Badge.m */,
+			);
+			name = Category;
+			path = HuiHeadline/Libs/Category;
+			sourceTree = SOURCE_ROOT;
 		};
 		5B56BA0A1F7A5BE300830EF5 /* Video */ = {
 			isa = PBXGroup;
@@ -973,7 +1043,6 @@
 				5B0DFDF41FA071FB003C3771 /* Common */,
 				5B8F89951F7C9AD9001EAA9F /* Utils */,
 				5B8F898E1F7B9EBC001EAA9F /* ThirdParty */,
-				5BA5EB7D1F6780D10066A06A /* Category */,
 				5BA5EB7E1F6780D10066A06A /* Define */,
 				5BA5EB7F1F6780D10066A06A /* Other */,
 			);
@@ -983,6 +1052,7 @@
 		5BA5EB751F677D270066A06A /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				5B3B97CA1FB5502B00BC1500 /* Category */,
 				5BF3A4A01FA190A900B6E542 /* Global */,
 				5BCF73321F7E00F900936567 /* AdStrategy */,
 				5BB574071F74E671002A1EF2 /* User */,
@@ -997,6 +1067,12 @@
 		5BA5EB761F677D270066A06A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5B3B97DD1FB5AEA700BC1500 /* tp_bg.png */,
+				5B3B97C01FB19FB400BC1500 /* 闪光灯-关.png */,
+				5B3B97C11FB19FB400BC1500 /* 闪光灯-开.png */,
+				5B3B97BE1FB19EEF00BC1500 /* btn_back_without_bg.png */,
+				5B3B97BA1FB19B8C00BC1500 /* qr_scan_line.png */,
+				5B3B97B51FB1842C00BC1500 /* icon_qr_code_scan.png */,
 				5BE9876C1FA9CDFA00710AA1 /* icon_debit.png */,
 				5BE9876D1FA9CDFA00710AA1 /* icon_expenditure.png */,
 				5BE9876E1FA9CDFB00710AA1 /* icon_income.png */,
@@ -1025,13 +1101,6 @@
 				5BA5EBEE1F6F83260066A06A /* LaunchVideoAd.json */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		5BA5EB7D1F6780D10066A06A /* Category */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Category;
 			sourceTree = "<group>";
 		};
 		5BA5EB7E1F6780D10066A06A /* Define */ = {
@@ -1169,6 +1238,8 @@
 				5BB573E31F74B8BC002A1EF2 /* HHLoginViewController.xib */,
 				5BB573E41F74B8BC002A1EF2 /* HHRegistViewController.h */,
 				5BB573E51F74B8BC002A1EF2 /* HHRegistViewController.m */,
+				5B3B97D71FB596BE00BC1500 /* HHRetrievePasswordViewController.h */,
+				5B3B97D81FB596BE00BC1500 /* HHRetrievePasswordViewController.m */,
 			);
 			name = ViewController;
 			path = Login/ViewController;
@@ -1332,12 +1403,20 @@
 				5BAA9D4E1FA305A30033041B /* HHInvitedJsonModel.m */,
 				5BAA9D591FA31CDD0033041B /* HHMineItemCellModel.h */,
 				5BAA9D5A1FA31CDD0033041B /* HHMineItemCellModel.m */,
+				5B3B97DA1FB5999400BC1500 /* HHStateResponse.h */,
+				5B3B97DB1FB5999400BC1500 /* HHStateResponse.m */,
 				5BAA9D5C1FA322DD0033041B /* HHInvitedFetchSummaryResponse.h */,
 				5BAA9D5D1FA322DD0033041B /* HHInvitedFetchSummaryResponse.m */,
+				5B3B97A91FB0650500BC1500 /* HHInvitedConstributionSummaryResponse.h */,
+				5B3B97AA1FB0650500BC1500 /* HHInvitedConstributionSummaryResponse.m */,
+				5B3B97D41FB5867100BC1500 /* HHInvitedSummaryResponse.h */,
+				5B3B97D51FB5867100BC1500 /* HHInvitedSummaryResponse.m */,
 				5BAA9D7B1FA45D690033041B /* HHProductIndoResponse.h */,
 				5BAA9D7C1FA45D690033041B /* HHProductIndoResponse.m */,
 				5BE987771FAAFC6700710AA1 /* HHProductResponse.h */,
 				5BE987781FAAFC6700710AA1 /* HHProductResponse.m */,
+				5B3B97C71FB3F5E200BC1500 /* HHUserDeliveryAddress.h */,
+				5B3B97C81FB3F5E200BC1500 /* HHUserDeliveryAddress.m */,
 				5BE987411FA70AD600710AA1 /* HHAlipayAccountResponse.h */,
 				5BE987421FA70AD600710AA1 /* HHAlipayAccountResponse.m */,
 				5BE987471FA72E7900710AA1 /* HHWeixinAccountResponse.h */,
@@ -1348,6 +1427,8 @@
 				5BE9877B1FAB02ED00710AA1 /* HHPurchaseResponse.m */,
 				5BE987691FA9BECD00710AA1 /* HHIncomDetailResponse.h */,
 				5BE9876A1FA9BECD00710AA1 /* HHIncomDetailResponse.m */,
+				5B8F59181FB000AA0098C0D5 /* HHBindPhoneResponse.h */,
+				5B8F59191FB000AA0098C0D5 /* HHBindPhoneResponse.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1375,10 +1456,16 @@
 				5B8DF64A1F9F23A1004DB0F6 /* HHMineUpdateGenderView.m */,
 				5BAA9D531FA309EE0033041B /* HHMineInvitedImageTableViewCell.h */,
 				5BAA9D541FA309EE0033041B /* HHMineInvitedImageTableViewCell.m */,
+				5B3B97C41FB1B16500BC1500 /* HHMineInvitedOneImageTableViewCell.h */,
+				5B3B97C51FB1B16500BC1500 /* HHMineInvitedOneImageTableViewCell.m */,
+				5B3B97B21FB1836D00BC1500 /* HHMineFillInvitedCodeView.h */,
+				5B3B97B31FB1836D00BC1500 /* HHMineFillInvitedCodeView.m */,
 				5BAA9D561FA31A410033041B /* HHMineItemTableViewCell.h */,
 				5BAA9D571FA31A410033041B /* HHMineItemTableViewCell.m */,
 				5BAA9D5F1FA3477F0033041B /* HHMineMyInvitedCodeTableViewCell.h */,
 				5BAA9D601FA3477F0033041B /* HHMineMyInvitedCodeTableViewCell.m */,
+				5B3B97CE1FB55FA100BC1500 /* HHInvitedCreditTableViewCell.h */,
+				5B3B97CF1FB55FA100BC1500 /* HHInvitedCreditTableViewCell.m */,
 				5BAA9D751FA433D70033041B /* HHMineBigQRCodeView.h */,
 				5BAA9D761FA433D70033041B /* HHMineBigQRCodeView.m */,
 				5BAA9D811FA473220033041B /* HHMallBindTableViewCell.h */,
@@ -1389,6 +1476,8 @@
 				5BB821A01FA6BEE9005C4442 /* HHMallProductPurchaseView.m */,
 				5BE9873E1FA6FC5900710AA1 /* HHLabelAndTextFieldTableViewCell.h */,
 				5BE9873F1FA6FC5900710AA1 /* HHLabelAndTextFieldTableViewCell.m */,
+				5B3B97A61FB0423700BC1500 /* HHWXAuthorizeTableViewCell.h */,
+				5B3B97A71FB0423700BC1500 /* HHWXAuthorizeTableViewCell.m */,
 				5BE987551FA8296700710AA1 /* HHMyOrderTitleTableViewCell.h */,
 				5BE987561FA8296700710AA1 /* HHMyOrderTitleTableViewCell.m */,
 				5BE987501FA828F800710AA1 /* HHMyOrderTableViewCell.h */,
@@ -1417,8 +1506,12 @@
 				5B047E591F98A3BE008E2CEC /* HHMineUserheadPortraitViewController.m */,
 				5B047E5F1F99A0E0008E2CEC /* HHMineUserNickViewController.h */,
 				5B047E601F99A0E0008E2CEC /* HHMineUserNickViewController.m */,
-				5B047E6A1F9ED613008E2CEC /* HHMineBindPhoneViewController.h */,
-				5B047E6B1F9ED613008E2CEC /* HHMineBindPhoneViewController.m */,
+				5BDE30741FB00B9C00C52A9C /* HHMineBindPhoneViewController.h */,
+				5BDE30751FB00B9C00C52A9C /* HHMineBindPhoneViewController.m */,
+				5B047E6A1F9ED613008E2CEC /* HHMineRebindPhoneViewController.h */,
+				5B047E6B1F9ED613008E2CEC /* HHMineRebindPhoneViewController.m */,
+				5B3B97AF1FB0725500BC1500 /* HHMineChangePasswordViewController.h */,
+				5B3B97B01FB0725500BC1500 /* HHMineChangePasswordViewController.m */,
 				5BAA9D7E1FA461400033041B /* HHMallSegmentViewController.h */,
 				5BAA9D7F1FA461400033041B /* HHMallSegmentViewController.m */,
 				5BAA9D781FA4552D0033041B /* HHMallViewController.h */,
@@ -1435,10 +1528,16 @@
 				5BE9875E1FA86BD300710AA1 /* HHOrderDetailViewController.m */,
 				5BAA9D501FA307530033041B /* HHMineInvitedViewController.h */,
 				5BAA9D511FA307530033041B /* HHMineInvitedViewController.m */,
+				5B3B97AC1FB067FA00BC1500 /* HHMineInvitedCreditViewController.h */,
+				5B3B97AD1FB067FA00BC1500 /* HHMineInvitedCreditViewController.m */,
+				5B3B97D11FB583C000BC1500 /* HHMineInvitedPersonViewController.h */,
+				5B3B97D21FB583C000BC1500 /* HHMineInvitedPersonViewController.m */,
 				5BE987661FA9B60F00710AA1 /* HHIncomeDetailViewController.h */,
 				5BE987671FA9B60F00710AA1 /* HHIncomeDetailViewController.m */,
 				5BB774AA1FADBC7700FE0C97 /* HHAboutHHViewController.h */,
 				5BB774AB1FADBC7700FE0C97 /* HHAboutHHViewController.m */,
+				5B3B97B81FB19AA900BC1500 /* QRViewController.h */,
+				5B3B97B71FB19AA800BC1500 /* QRViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1535,6 +1634,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B3B97B61FB1842D00BC1500 /* icon_qr_code_scan.png in Resources */,
 				5BE987731FA9CDFB00710AA1 /* icon_return.png in Resources */,
 				5BE987721FA9CDFB00710AA1 /* icon_income.png in Resources */,
 				5BE987711FA9CDFB00710AA1 /* icon_expenditure.png in Resources */,
@@ -1546,6 +1646,7 @@
 				5BAA9D671FA41AB50033041B /* news_version_code.png in Resources */,
 				5B0DFE161FA099D5003C3771 /* red_packet.png in Resources */,
 				5B0DFE0C1FA08A09003C3771 /* item_view_right_arrow.png in Resources */,
+				5B3B97BF1FB19EEF00BC1500 /* btn_back_without_bg.png in Resources */,
 				5B0DFE0E1FA08A71003C3771 /* open_down.png in Resources */,
 				5B0DFE071FA083AC003C3771 /* indicator_1.png in Resources */,
 				5B0DFDF21FA05F0C003C3771 /* task_sign.png in Resources */,
@@ -1555,6 +1656,7 @@
 				5B0DFDD51FA02680003C3771 /* sign_bg.png in Resources */,
 				5B8DF64D1F9F2AB6004DB0F6 /* xuanze.png in Resources */,
 				5B047E691F9A0337008E2CEC /* place_image.png in Resources */,
+				5B3B97C31FB19FB400BC1500 /* 闪光灯-开.png in Resources */,
 				5B047E5E1F98AB01008E2CEC /* activity_default_bg.png in Resources */,
 				5B047E5C1F98A6EF008E2CEC /* menu_icon_more.png in Resources */,
 				5BFAFB011F959BC80002E258 /* income_abbrev.png in Resources */,
@@ -1567,11 +1669,14 @@
 				5BA5EC241F7108230066A06A /* HHHeadlineNewsLeftRightTableViewCell.xib in Resources */,
 				5BA5EBF61F6F83260066A06A /* LaunchImageAd.json in Resources */,
 				5BA5EB4D1F6779FC0066A06A /* LaunchScreen.storyboard in Resources */,
+				5B3B97BC1FB19B8C00BC1500 /* qr_scan_line.png in Resources */,
 				5BA5EBF51F6F83260066A06A /* image12.gif in Resources */,
 				5BF3A4AD1FA1E39B00B6E542 /* 计时奖励.png in Resources */,
 				5BA5EBF71F6F83260066A06A /* LaunchVideoAd.json in Resources */,
 				5BA5EC0A1F6FBEB10066A06A /* HHHeadlineNewsThreePicTableViewCell.xib in Resources */,
 				5BA5EB481F6779FC0066A06A /* Main.storyboard in Resources */,
+				5B3B97DE1FB5AEA700BC1500 /* tp_bg.png in Resources */,
+				5B3B97C21FB19FB400BC1500 /* 闪光灯-关.png in Resources */,
 				5BF7A34E1F8DF65900D0DEF9 /* HHHeadlineReadAwardTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1644,16 +1749,19 @@
 				5BAA9D621FA3477F0033041B /* HHMineMyInvitedCodeTableViewCell.m in Sources */,
 				5B047E331F96F8E8008E2CEC /* HHJSONToDictionaty.m in Sources */,
 				5BAA9D521FA307530033041B /* HHMineInvitedViewController.m in Sources */,
+				5B3B97AE1FB067FA00BC1500 /* HHMineInvitedCreditViewController.m in Sources */,
 				5B047E351F96F8E8008E2CEC /* HHStatusBarUtil.m in Sources */,
 				5B047E371F96F8E8008E2CEC /* UIImage+Scale.m in Sources */,
 				5B2E45331F90AE1500361485 /* HHVideoDetailBottomView.m in Sources */,
 				5BE987581FA8296700710AA1 /* HHMyOrderTitleTableViewCell.m in Sources */,
+				5B8F591A1FB000AA0098C0D5 /* HHBindPhoneResponse.m in Sources */,
 				5BE987461FA72C0600710AA1 /* HHMallBindWechatViewController.m in Sources */,
 				5BAA9D7A1FA4552D0033041B /* HHMallViewController.m in Sources */,
 				5B047E3D1F9723D8008E2CEC /* HHCreditSummaryResponse.m in Sources */,
 				5BDEB6641F78AFF9005B931C /* HHNewsModel.m in Sources */,
 				5BE9875F1FA86BD300710AA1 /* HHOrderDetailViewController.m in Sources */,
-				5B047E6C1F9ED613008E2CEC /* HHMineBindPhoneViewController.m in Sources */,
+				5B047E6C1F9ED613008E2CEC /* HHMineRebindPhoneViewController.m in Sources */,
+				5B3B97D31FB583C000BC1500 /* HHMineInvitedPersonViewController.m in Sources */,
 				5BDEB66F1F79F402005B931C /* HHHeadlineNetwork.m in Sources */,
 				5BA5EBA21F69259C0066A06A /* HHHeadlineListViewController.m in Sources */,
 				5B0DFE0A1FA084E0003C3771 /* HHTaskSectionHeaderModel.m in Sources */,
@@ -1665,18 +1773,22 @@
 				5B0DFDFA1FA0725D003C3771 /* HHSignResponse.m in Sources */,
 				5BE987C01FAC11CB00710AA1 /* AlipayService.m in Sources */,
 				5BA5EBA61F6A59F00066A06A /* HHHeadlineChannelListViewController.m in Sources */,
+				5B3B97A81FB0423700BC1500 /* HHWXAuthorizeTableViewCell.m in Sources */,
 				5BAA9D721FA42A930033041B /* CGQRCodeUtil.m in Sources */,
+				5B3B97B41FB1836D00BC1500 /* HHMineFillInvitedCodeView.m in Sources */,
 				5BAA9D7D1FA45D690033041B /* HHProductIndoResponse.m in Sources */,
 				5B0DFDF71FA07206003C3771 /* HHResponse.m in Sources */,
 				5BE987651FA9A7A400710AA1 /* HHMyOrderWarmReminderTableViewCell.m in Sources */,
 				5BAA9D771FA433D70033041B /* HHMineBigQRCodeView.m in Sources */,
 				5BA5EB8A1F6791AF0066A06A /* HHHeadlineNavController.m in Sources */,
+				5B3B97D01FB55FA100BC1500 /* HHInvitedCreditTableViewCell.m in Sources */,
 				5BA5EBAC1F6A626F0066A06A /* HHHeadlineSegmentViewController+TableView.m in Sources */,
 				5BA5EB7C1F6780100066A06A /* HHRootViewController.m in Sources */,
 				5BA5EBDB1F6F80380066A06A /* HHAdNetwork.m in Sources */,
 				5BE9877C1FAB02ED00710AA1 /* HHPurchaseResponse.m in Sources */,
 				5BA5EB931F67AF8A0066A06A /* HHHeadlineTimer.m in Sources */,
 				5BA5EB9F1F691FF80066A06A /* HHHeadlineSegmentViewController.m in Sources */,
+				5B3B97C61FB1B16500BC1500 /* HHMineInvitedOneImageTableViewCell.m in Sources */,
 				5BB774AD1FADBC7700FE0C97 /* HHAboutHHViewController.m in Sources */,
 				5B047E5A1F98A3BE008E2CEC /* HHMineUserheadPortraitViewController.m in Sources */,
 				5BE987491FA72E7900710AA1 /* HHWeixinAccountResponse.m in Sources */,
@@ -1711,6 +1823,8 @@
 				5BB821A11FA6BEE9005C4442 /* HHMallProductPurchaseView.m in Sources */,
 				5BFAFB101F95E8D60002E258 /* HHMineHeaderView.m in Sources */,
 				5BA5EC231F7108230066A06A /* HHHeadlineNewsLeftRightTableViewCell.m in Sources */,
+				5B3B97B91FB19AA900BC1500 /* QRViewController.m in Sources */,
+				5B3B97D91FB596BE00BC1500 /* HHRetrievePasswordViewController.m in Sources */,
 				5BF7A33D1F8CD48E00D0DEF9 /* HHHeadlineReadAwardFirstTableViewCell.m in Sources */,
 				5BDEB6721F79FC6C005B931C /* HHHeadlineListWebViewController.m in Sources */,
 				5B7BFEBB1F8C61C200A615F9 /* HHHeadlineNewsBaseTableViewCell.m in Sources */,
@@ -1725,6 +1839,7 @@
 				5B0DFE191FA09B52003C3771 /* HHTaskCellModel.m in Sources */,
 				5BF7A34D1F8DF65900D0DEF9 /* HHHeadlineReadAwardTableViewCell.m in Sources */,
 				5BCF732B1F7DE19C00936567 /* CollectionReusableView.m in Sources */,
+				5B3B97AB1FB0650500BC1500 /* HHInvitedConstributionSummaryResponse.m in Sources */,
 				5BAA9D831FA473220033041B /* HHMallBindTableViewCell.m in Sources */,
 				5B0DFE041FA08302003C3771 /* HHTaskTableViewSectionHeaderView.m in Sources */,
 				5BF3A4B31FA1E6BE00B6E542 /* HHTaskTableViewHeaderView.m in Sources */,
@@ -1750,10 +1865,12 @@
 				5B8DF64B1F9F23A1004DB0F6 /* HHMineUpdateGenderView.m in Sources */,
 				5B2E452D1F9057C500361485 /* HHReadSychDurationRequest.m in Sources */,
 				5BA5EC301F7119420066A06A /* HHHeadlineNewsBigImgTableViewCell.m in Sources */,
+				5B3B97CD1FB5504A00BC1500 /* UITabBar+Badge.m in Sources */,
 				5BE9876B1FA9BECD00710AA1 /* HHIncomDetailResponse.m in Sources */,
 				5BA5EBC21F6B70310066A06A /* HHHeadlineChannelListHeaderView.m in Sources */,
 				5B2E45301F9058AF00361485 /* HHReadSychDurationResponse.m in Sources */,
 				5BAA9D491FA2D0970033041B /* HHActivityTaskDetailWebViewController.m in Sources */,
+				5B3B97D61FB5867100BC1500 /* HHInvitedSummaryResponse.m in Sources */,
 				5BB573E71F74B8BC002A1EF2 /* HHLoginViewController.m in Sources */,
 				5B047E4A1F985218008E2CEC /* HHMineAdTableViewCell.m in Sources */,
 				5BB5741A1F7501CD002A1EF2 /* HHUserModel.m in Sources */,
@@ -1766,6 +1883,7 @@
 				5B7BFEB81F8B5A6600A615F9 /* HHBaseModel.m in Sources */,
 				5BE987791FAAFC6700710AA1 /* HHProductResponse.m in Sources */,
 				5BFAFAFF1F945F950002E258 /* HHAwardPerHourResponse.m in Sources */,
+				5BDE30761FB00B9C00C52A9C /* HHMineBindPhoneViewController.m in Sources */,
 				5BE987BD1FAC0DAD00710AA1 /* WechatService.m in Sources */,
 				5BA5EB591F677ADA0066A06A /* AppDelegate.m in Sources */,
 				5BAA9D801FA461400033041B /* HHMallSegmentViewController.m in Sources */,
@@ -1778,16 +1896,19 @@
 				5BAA9D4F1FA305A30033041B /* HHInvitedJsonModel.m in Sources */,
 				5BA5EC1C1F71006C0066A06A /* HHeadlineAwardView.m in Sources */,
 				5B047E461F975968008E2CEC /* HHMineNormalCellModel.m in Sources */,
+				5B3B97C91FB3F5E200BC1500 /* HHUserDeliveryAddress.m in Sources */,
 				5BB573E91F74B8BC002A1EF2 /* HHRegistViewController.m in Sources */,
 				5B0DFDE91FA04AB3003C3771 /* HHTaskCenterSignCollectionViewCell.m in Sources */,
 				5B0DFE141FA095AE003C3771 /* HHTaskTableViewCell.m in Sources */,
 				5BFAFB131F95EB3F0002E258 /* HHMineNetwork.m in Sources */,
+				5B3B97DC1FB5999400BC1500 /* HHStateResponse.m in Sources */,
 				5B047E541F987CE1008E2CEC /* HHMineSettingTableViewCell.m in Sources */,
 				5B0DFDFD1FA07BFB003C3771 /* HHUserNewbieTaskResponse.m in Sources */,
 				5BCF73281F7CFE5400936567 /* HHHeadlineShareCell.m in Sources */,
 				5BFAFB191F95F0850002E258 /* HHMineCreditView.m in Sources */,
 				5B047E401F973C6A008E2CEC /* HHMineTableViewCell.m in Sources */,
 				5BF3A4A31FA190C700B6E542 /* G.m in Sources */,
+				5B3B97B11FB0725500BC1500 /* HHMineChangePasswordViewController.m in Sources */,
 				5BF7A3431F8DED5000D0DEF9 /* HHReadConfigResponse.m in Sources */,
 				5BF7A3461F8DF20D00D0DEF9 /* HHReadConfigRuleResponse.m in Sources */,
 				5BBD65F91F7F6D09006A3C0C /* HHNavigationBackViewCreater.m in Sources */,

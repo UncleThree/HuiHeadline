@@ -59,8 +59,16 @@ static NSString *identifier = @"VIDEO_AD_CELL";
         make.top.equalTo(self.mas_bottom).with.offset(- PROGRESS_KWIDTH);
         make.width.height.mas_equalTo(PROGRESS_KWIDTH);
     }];
+    self.progressView.userInteractionEnabled = YES;
+    [self.progressView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickProgress)]];
     
     
+}
+
+- (void)clickProgress {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(clickProgressView)]) {
+        [self.delegate clickProgressView];
+    }
 }
 
 

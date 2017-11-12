@@ -29,5 +29,10 @@ static G *$ = nil;
     return _taskCenterCache;
 }
 
+- (void)setRootVC:(HHRootViewController *)rootVC {
+    [HHHeadlineAwardHUD hideLoginErrorView];
+    _rootVC = rootVC;
+}
+
 
 @end

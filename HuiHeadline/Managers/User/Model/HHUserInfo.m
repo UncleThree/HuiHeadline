@@ -23,12 +23,12 @@
 }
 
 - (NSString *)phone_sec {
-    if (!_phone) {
-        return @"";
-    } else {
+    
+    if (_phone.length >= 7) {
         return [_phone stringByReplacingCharactersInRange:(NSMakeRange(3, 4)) withString:@"****"];
     }
-    
+    return nil;
+
 }
 
 - (NSString *)genderString {

@@ -35,7 +35,7 @@
                         callback:(Block)callback;
 ///同步视频时长
 + (void)sychVideoDurationWithDuration:(int)duration
-                             callback:(Block)callback;
+                             callback:(void(^)(id error , HHReadSychDurationResponse *response))callback;
 
 
 

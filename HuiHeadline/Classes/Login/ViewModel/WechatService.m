@@ -12,9 +12,7 @@
 @interface WechatService () <UIApplicationDelegate,WXApiDelegate>
 
 
-typedef void (^WechatHandler)(id error,id result);
 
-@property (nonatomic,copy)WechatHandler handler;
 
 ///0 login 1 bind 2 authorize
 @property (nonatomic, assign)NSInteger type;
@@ -57,13 +55,14 @@ static WechatService *wechat = nil;
     [self getWechatCodeWithCallback:callback];
 }
 
-- (void)authorizeToWechat:(WechatHandler)callback {
+- (void)authorizeToWechat:(void(^)(id error, HHWeixinAccount *account))callback {
     
     self.type = 2;
     [self getWechatCodeWithCallback:callback];
 }
 
 - (void)getWechatCodeWithCallback:(WechatHandler)callback {
+    
     self.handler = callback;
     if ([WXApi isWXAppInstalled]) {
         SendAuthReq *req = [[SendAuthReq alloc] init];

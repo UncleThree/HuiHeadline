@@ -22,6 +22,7 @@
  */
 @interface HHUserModel : NSObject
 
+///状态 0正常
 @property (nonatomic, assign)short state;
 
 @property (nonatomic, assign)short statusCode;

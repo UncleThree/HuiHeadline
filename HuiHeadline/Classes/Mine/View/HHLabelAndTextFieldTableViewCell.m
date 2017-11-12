@@ -45,7 +45,7 @@
     self.label.textColor = BLACK_153;
     [self.contentView addSubview:self.label];
     
-    self.textField = [[UITextField alloc] initWithFrame:CGRectMake(MaxX(self.label) , 0, KWIDTH - 24 - W(self.label), cell_height)];
+    self.textField = [[UITextField alloc] initWithFrame:CGRectMake(MaxX(self.label) , 0, KWIDTH - 40 - W(self.label), cell_height)];
     self.textField.font = Font(15);
     [self.contentView addSubview:self.textField];
     

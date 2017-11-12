@@ -10,11 +10,12 @@
 
 @interface HHMallBindWechatViewController : UIViewController
 
-typedef void(^Callbck)(void);
+typedef void(^Callbck)(NSString *msg);
 
 @property (nonatomic, copy)Callbck callback;
 
 @property (nonatomic, strong)HHWeixinAccount *weixinAccount;
 
+@property (nonatomic, assign)BOOL manager;
 
 @end

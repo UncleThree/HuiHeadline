@@ -48,6 +48,12 @@
 
 #define k_login_url  $(@"/login/by/phone")
 
+#define k_register_url $(@"/register/by/phone")
+
+#define k_update_password $(@"/phone/password/update")
+
+#define k_retrieve_password $(@"/phone/password/retrieve")
+
 //ali wechat
 
 #define k_login_ali_secret $(@"/login/ali/fetch/secret")
@@ -71,7 +77,7 @@
 #define k_topnews_url @"http://api.media.huadongmedia.com/frontend/pull/self"
 
 //ad request paramater
-#define k_getAdStrategy @"http://ad.proxy.huisuoping.com/cash/v1/ad/strategy"
+#define k_getAdStrategy @"http://ad.proxy.huisuoping.com/cash/v1/ad/strategy/ios"
 #define k_getBannerAdStrategy @"http://ad.proxy.huisuoping.com//cash/v1/banner/ad/strategy"
 
 //ad list
@@ -104,7 +110,15 @@
 
 #define k_account_update_nickName $(@"/account/update/nick/name")
 
-#define k_account_check_login $(@"/account/check/state")
+#define k_account_update_gender $(@"/account/update/gender")
+
+#define k_account_update_birthday $(@"/account/update/birthday")
+
+
+#define k_account_check_state $(@"/account/check/state")
+
+
+#define k_retrieve_password    $(@"/phone/password/retrieve")
 
 //验证码
 #define k_verify_send $(@"/verify/send/sms")
@@ -139,7 +153,13 @@
 
 #define k_invite_ui   @"http://cashtoutiao-all-file.oss-cn-shanghai.aliyuncs.com/app/entry/invited_get_money.json"
 
-#define k_invite_init  $(@"/invite/init") 
+#define k_invite_constribution_detail  $(@"/invite/contribution/detail")
+
+#define k_invite_constribution_summary  $(@"/invite/contribution/summary")
+
+
+
+#define k_invite_init  $(@"/invite/init")
 
 #define k_invite_fetch_summary  $(@"/invite/fetch/summary")
 
@@ -147,12 +167,19 @@
 
 #define k_invite_contribution_summary  $(@"/invite/contribution/summary")
 
+#define k_invite  $(@"/invite") 
+
 #define k_appstore_link @"http://a.app.qq.com/o/simple.jsp?pkgname=com.cashtoutiao&ckey=CK1371494628908"
+
+#define k_android_link @"http://website.cashtoutiao.com/qr/index.html"
+
 //product
 
 #define alipy_category 1002001
 
 #define wechat_category 1002002
+
+#define REAL_CAREFULLY_CHOSEN_DAILY_NECCESSARY 2001001
 
 #define k_product_list $(@"/product/list/by/category")
 

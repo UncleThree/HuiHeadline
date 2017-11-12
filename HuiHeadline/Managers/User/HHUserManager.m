@@ -24,7 +24,9 @@ static HHUserManager *userManager = nil;
 @synthesize readTime = _readTime;
 @synthesize lastPerHourAwardTime = _lastPerHourAwardTime;
 @synthesize creditSummary = _creditSummary;
-
+@synthesize alipayAccount = _alipayAccount;
+@synthesize weixinAccount = _weixinAccount;
+@synthesize today = _today;
 
 + (instancetype)sharedInstance {
     
@@ -75,11 +77,37 @@ static HHUserManager *userManager = nil;
 
 - (HHUserModel *)currentUser {
     NSDictionary *user_dict = [self objectForKeyInUserDefaults:@"CURRENT_USER"];
-    if (!user_dict) {
-        return nil;
-    }
     _currentUser = [HHUserModel mj_objectWithKeyValues:user_dict];
     return _currentUser;
+}
+
+#pragma  mark Ali And Wechat
+
+- (void)setAlipayAccount:(HHAlipayAccount *)alipayAccount {
+    
+    _alipayAccount = alipayAccount;
+    [self saveToUserDefaultsWithKey:@"ALIACCOUNT" object:[_alipayAccount mj_JSONObject]];
+}
+
+- (HHAlipayAccount *)alipayAccount {
+    
+    NSDictionary *dict  = [self objectForBindedKeyInUserDefaults:@"ALIACCOUNT"];
+    _alipayAccount = [HHAlipayAccount mj_objectWithKeyValues:dict];
+    return _alipayAccount;
+}
+
+- (void)setWeixinAccount:(HHWeixinAccount *)weixinAccount {
+    
+    _weixinAccount = weixinAccount;
+    [self saveToUserDefaultsWithKey:@"WEIXINACCOUNT" object:[_weixinAccount mj_JSONObject]];
+}
+
+- (HHWeixinAccount *)weixinAccount {
+    
+    NSDictionary *dict  = [self objectForBindedKeyInUserDefaults:@"WEIXINACCOUNT"];
+    _weixinAccount = [HHWeixinAccount mj_objectWithKeyValues:dict];
+    return _weixinAccount;
+    
 }
 
 
@@ -104,6 +132,7 @@ static HHUserManager *userManager = nil;
 #pragma mark user
 
 - (long)userId {
+    
     if (self.currentUser && self.currentUser.userInfo) {
         return self.currentUser.userInfo.user_id;
     }
@@ -180,8 +209,6 @@ static HHUserManager *userManager = nil;
 
 
 
-
-
 #pragma mark channels
 
 - (void)setChannels:(NSMutableArray<NSString *> *)channels {
@@ -238,6 +265,25 @@ static HHUserManager *userManager = nil;
     return _vodeo_allChannels;
     
 }
+
+#pragma mark today
+
+- (void)setToday:(NSString *)today {
+    
+    _today = today;
+    [self saveWithKey:@"TODAY" object:[HHDateUtil today]];
+    
+}
+
+- (NSString *)today {
+    
+    _today = [self objectForKeyInUserDefaults:@"TODAY"];
+    return _today;
+}
+
+
+
+
 
 #pragma mark Util
 

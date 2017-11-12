@@ -50,7 +50,7 @@
     
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         
-        make.bottom.equalTo(self.subLabel.mas_top);
+        make.bottom.lessThanOrEqualTo(self.subLabel.mas_top);
     }];
     
     self.subLabel.adjustsFontSizeToFitWidth = YES;

@@ -15,7 +15,6 @@
         self.channel = [HHUserManager sharedInstance].currentUser.channel;
         self.token = [HHUserManager sharedInstance].sychDurationResponse.token;
         self.virifyCode = [HHUserManager sharedInstance].sychDurationResponse.virifyCode;
-        
     }
     return self;
     

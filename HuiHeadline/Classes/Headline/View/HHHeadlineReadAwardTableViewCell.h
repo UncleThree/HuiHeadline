@@ -13,4 +13,5 @@
 
 @property (nonatomic, strong)HHReadIncomDetailRecord * model;
 
+
 @end

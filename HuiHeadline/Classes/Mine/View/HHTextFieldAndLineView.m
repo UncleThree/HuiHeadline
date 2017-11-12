@@ -29,7 +29,7 @@
     [self addSubview:self.textField];
     
     self.line = [[UIView alloc] initWithFrame:CGRectMake(0, MaxY(self.textField), W(self.textField), 0.5)];
-    self.line.backgroundColor = [UIColor grayColor];
+    self.line.backgroundColor = RGB(180, 180, 180);
     [self addSubview:self.line];
 }
 

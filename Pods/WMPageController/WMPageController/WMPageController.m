@@ -7,6 +7,7 @@
 //
 
 #import "WMPageController.h"
+#import <Masonry/Masonry.h>
 
 #define segmentHeight 44.0f
 
@@ -425,6 +426,9 @@ static NSInteger const kWMControllerCountUndefined = -1;
     } else {
         CGFloat originY = (self.showOnNavigationBar && self.navigationController.navigationBar) ? CGRectGetMaxY(self.navigationController.navigationBar.frame) : CGRectGetMaxY(_menuViewFrame);
         CGFloat tabBarHeight = self.tabBarController.tabBar && !self.tabBarController.tabBar.hidden ? self.tabBarController.tabBar.frame.size.height : 0;
+        if (!self.tabBarController.tabBar.translucent && !self.tabBarController.tabBar.hidden) {
+            tabBarHeight = 0;
+        }
         CGFloat sizeHeight = self.view.frame.size.height - tabBarHeight - originY;
         _contentViewFrame = CGRectMake(0, originY, self.view.frame.size.width, sizeHeight);
     }
@@ -700,6 +704,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     CGFloat oldContentOffsetX = self.scrollView.contentOffset.x;
     CGFloat contentWidth = self.scrollView.contentSize.width;
     self.scrollView.frame = _contentViewFrame;
+    
     self.scrollView.contentSize = CGSizeMake(self.childControllersCount * _contentViewFrame.size.width, 0);
     CGFloat xContentOffset = contentWidth == 0 ? self.selectIndex * _contentViewFrame.size.width : oldContentOffsetX / contentWidth * self.childControllersCount * _contentViewFrame.size.width;
     [self.scrollView setContentOffset:CGPointMake(xContentOffset, 0)];

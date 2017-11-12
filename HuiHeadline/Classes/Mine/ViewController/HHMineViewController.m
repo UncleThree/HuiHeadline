@@ -88,10 +88,9 @@ static HHMineViewController *mineVC = nil;
     [self.tableView reloadData];
 }
 
-///已经登陆过 请求一次 否则 不请求
-- (void)realoadHeaderData {
+- (void)realoadHeaderData:(BOOL)requst {
     
-    if (![HHUserManager sharedInstance].loginId) {
+    if (!requst) {
         
         [self initHeaderView];
     } else {
@@ -102,7 +101,9 @@ static HHMineViewController *mineVC = nil;
 
 - (void)requstCreditSummaryAndInitHeaderView {
     
+    
     [HHMineNetwork requestCreditSummary:^(id error, HHUserCreditSummary *summary) {
+        
         if (error) {
             NSLog(@"requestCreditSummary:%@",error);
         } else {
@@ -110,6 +111,7 @@ static HHMineViewController *mineVC = nil;
             [HHUserManager sharedInstance].creditSummary = summary;
         }
         [self initHeaderView];
+        
     }];
 }
 
@@ -124,33 +126,36 @@ static HHMineViewController *mineVC = nil;
     
     [HHStatusBarUtil changeStatusBarColor:RGB(196, 57, 53)];
     
+    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    ///每加载这个页面 请求一次金币数
-    [self realoadHeaderData];
+    
     
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-//    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     
     [super viewDidAppear:animated];
     
+    [self realoadHeaderData:YES];
+    
 }
 
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self initTableView];
     
-    [self realoadHeaderData];
+    [self realoadHeaderData:NO];
     
-    [self requestBannerAd];
+//    [self requestBannerAd];
 }
 
 - (void)requestBannerAd {
@@ -187,7 +192,11 @@ static HHMineViewController *mineVC = nil;
 
 - (void)mineHeaderViewDidClick {
     
+    
     HHMineSettingViewController *settingVC = [[HHMineSettingViewController alloc] init];
+    settingVC.callback = ^{
+        [self realoadHeaderData:NO];
+    };
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:settingVC animated:YES];
     self.hidesBottomBarWhenPushed = NO;

@@ -39,6 +39,7 @@
 @property (nonatomic, copy) NSString *phone_sec;
 //头像
 @property (nonatomic, copy) NSString *headPortrait;
+//1男2女
 @property (nonatomic, assign) short gender;
 @property (nonatomic, copy) NSString *genderString;
 @property (nonatomic, copy) NSString *city;

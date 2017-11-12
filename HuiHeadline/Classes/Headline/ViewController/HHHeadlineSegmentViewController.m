@@ -38,7 +38,6 @@ static HHHeadlineSegmentViewController *vc = nil;
     [super viewDidLoad];
     
     [self reloadSegment];
-    [self addBackView];
     
     
 }
@@ -52,7 +51,6 @@ static HHHeadlineSegmentViewController *vc = nil;
         UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(KWIDTH * i + width , 0, width, height)];
         imgV.image = [UIImage imageNamed:@"才是头条"];
         imgV.center = CGPointMake(imgV.center.x, vc.scrollView.center.y - CGFLOAT(60));
-//        NSLog(@"%f", );
         [vc.scrollView insertSubview:imgV atIndex:0];
     }
 }
@@ -61,6 +59,7 @@ static HHHeadlineSegmentViewController *vc = nil;
     
     vc.itemNames = HHUserManager.sharedInstance.channels;
     [vc reloadData];
+    [self addBackView];
     
 }
 
@@ -94,11 +93,9 @@ static HHHeadlineSegmentViewController *vc = nil;
     };
     [self.navigationController pushViewController:channelListVC animated:YES];
     self.hidesBottomBarWhenPushed = NO;
-    for (UIView *view in self.navigationController.navigationBar.subviews) {
-        if ([view isKindOfClass:[UIImageView class]] || [view isKindOfClass:[UILabel class]]) {
-            view.hidden = YES;
-        }
-    }
+    [[(HHHeadlineNavController *)self.navigationController timeLabel] setHidden:YES];
+    [[(HHHeadlineNavController *)self.navigationController alarmImgv] setHidden:YES];
+    [[(HHHeadlineNavController *)self.navigationController titleImgV] setHidden:YES];
     
 }
 

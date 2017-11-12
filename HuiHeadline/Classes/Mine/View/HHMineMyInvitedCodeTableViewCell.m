@@ -29,7 +29,7 @@
 
 @implementation HHMineMyInvitedCodeTableViewCell
 
-#define HEIGHT 150
+#define HEIGHT CGFLOAT(150)
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
@@ -45,7 +45,7 @@
     self.qrImage = nil;
     
     CGFloat pad = 20;
-    CGFloat topPad = 30;
+    CGFloat topPad = 20;
     
     CGFloat qrImgWidth = HEIGHT - topPad * 2;
     self.qrcodeImgV = [[UIImageView alloc] initWithFrame:CGRectMake(pad, topPad, qrImgWidth, qrImgWidth)];
@@ -60,8 +60,8 @@
     
     
     
-    CGFloat copyImgHeight = 30;
-    CGFloat copyBottom = 20;
+    CGFloat copyImgHeight = CGFLOAT(28);
+    CGFloat copyBottom = 15;
     UIImage *copyImg = [UIImage imageNamed:@"copy_invite_code_bg"];
     CGFloat copeImgWidth = copyImg.size.width / copyImg.size.height * copyImgHeight;
     self.copInImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, HEIGHT - topPad - copyBottom  - copyImgHeight, copeImgWidth, copyImgHeight)];
@@ -72,10 +72,9 @@
     [self.contentView addSubview:self.copInImgV];
     
     
-    CGFloat myInLabelTop = 20;
     CGFloat myInLabelHeight = 15;
     NSString *text = @"我的邀请码";
-    self.myInLabel = [[UILabel alloc] initWithFrame:CGRectMake(X(self.copInImgV),Y(self.backImgV) + myInLabelTop, [HHFontManager sizeWithText:text font:Font(14) maxSize:CGSizeMake(MAXFLOAT, myInLabelHeight)].width, myInLabelHeight)];
+    self.myInLabel = [[UILabel alloc] initWithFrame:CGRectMake(X(self.copInImgV), Y(self.copInImgV) - 5 - myInLabelHeight, [HHFontManager sizeWithText:text font:Font(14) maxSize:CGSizeMake(MAXFLOAT, myInLabelHeight)].width, myInLabelHeight)];
     self.myInLabel.text = text;
     self.myInLabel.font = Font(14);
     self.myInLabel.textColor = BLACK_153;
@@ -86,6 +85,8 @@
     self.codeLabel.font = Font(18);
     self.codeLabel.textAlignment = 2;
     [self.contentView addSubview:self.codeLabel];
+    
+    
     
     
 }

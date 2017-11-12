@@ -38,7 +38,7 @@
     
     [self.contentView addSubview:self.imgView];
     
-    CGFloat scale = 0.52;
+    CGFloat scale = 0.43;
     CGFloat imgHeight = frame.size.width;
     self.coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, imgHeight * scale, imgHeight, 20)];
     self.coinsLabel.font = Font(11);

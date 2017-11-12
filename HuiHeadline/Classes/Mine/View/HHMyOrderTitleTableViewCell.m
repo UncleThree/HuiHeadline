@@ -31,21 +31,25 @@
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 100, cell_height)];
     self.titleLabel.textColor = BLACK_153;
-    self.titleLabel.font =  Font(15);
+    self.titleLabel.font =  Font(17);
     [self.contentView addSubview:self.titleLabel];
     
     CGFloat width = 150;
     self.stateNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(KWIDTH - 12 -width, 0, width, cell_height)];
-    self.stateNameLabel.font = Font(15);
+    self.stateNameLabel.font = Font(17);
     self.stateNameLabel.textColor = RGB(230, 53, 40);
     self.stateNameLabel.textAlignment = 2;
     [self.contentView addSubview:self.stateNameLabel];
     
 }
 
+- (void)setTitleName:(NSString *)titleName {
+    
+    self.titleLabel.text = titleName;
+}
+
 - (void)setStateName:(NSString *)stateName {
     
-    self.titleLabel.text = @"商城兑换";
     self.stateNameLabel.text = stateName;
 }
 

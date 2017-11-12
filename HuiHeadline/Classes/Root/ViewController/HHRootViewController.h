@@ -6,7 +6,7 @@
 //  Copyright © 2017年 eyuxin. All rights reserved.
 //
 
-
-@interface HHRootViewController : UITabBarController
+#import <CYLTabBarController/CYLTabBarController.h>
+@interface HHRootViewController : CYLTabBarController
 
 @end

@@ -42,6 +42,7 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
    
     [self initTableView];
@@ -84,7 +85,7 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
             
             [HHMineNetwork getDefaultAlipay:^(id error, HHAlipayAccountResponse *response) {
                 if (error) {
-                    NSLog(@"%@",error);
+                    //暂无绑定支付宝信息
                     [self defaultAli];
                 } else {
                     [HHUserManager sharedInstance].alipayAccount = response.alipayAccount;
@@ -98,7 +99,8 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
         }
     } else if (category == wechat_category) {
         
-        if ([HHUserManager sharedInstance].weixinAccount) {
+        HHWeixinAccount *weixinAccount = HHUserManager.sharedInstance.weixinAccount;
+        if (weixinAccount && weixinAccount.realName && weixinAccount.phone) {
             
             self.firModel = [HHMineNormalCellModel new];
             self.firModel.imgName = @"icon_weixin";
@@ -108,7 +110,7 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
         } else {
             [HHMineNetwork getDefaultWechat:^(id error, HHWeixinAccountResponse *response) {
                 if (error) {
-                    NSLog(@"%@",error);
+                    //暂无绑定微信信息！
                     [self defaultWechat];
                 } else {
                     [HHUserManager sharedInstance].weixinAccount = response.weixinAccount;
@@ -190,6 +192,8 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
     self.tableView.delegate = self;
     self.tableView.bounces = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    self.tableView.sectionHeaderHeight = 10;
+    self.tableView.sectionFooterHeight = 15;
     [self.tableView registerClass:[HHMallBindTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMallBindTableViewCell class])];
     [self.tableView registerClass:[HHMallProductTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMallProductTableViewCell class])];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:currentCredit];
@@ -198,7 +202,7 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
 
 - (void)initPurchaseView {
     
-    CGFloat height = 70.0f;
+    CGFloat height = CGFLOAT(70);
     
     CGFloat navHeight = STATUSBAR_HEIGHT + H(self.navigationController.navigationBar);
     self.purchaseView = [[HHMallProductPurchaseView alloc] initWithFrame:CGRectMake(0, KHEIGHT - height - navHeight, KWIDTH, height)];
@@ -243,6 +247,14 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
     return 60;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if (section == 0) {
+        return 15;
+    }
+    return 0;
+    
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
@@ -266,7 +278,7 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
         return cell;
     } else if (indexPath.section == 3) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:arrive_identifier forIndexPath:indexPath];
-        NSString *labelText = @"到账时间:\n正常最慢3天内到，请耐心等待，体谅一下客服妹子呦~";
+        NSString *labelText = @"到账时间:\n正常最慢3天内到账，请耐心等待，体谅一下客服妹子呦~";
         
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:labelText];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -316,7 +328,8 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
         address = HHUserManager.sharedInstance.alipayAccount.mj_JSONString;
         
     } else if (self.category == wechat_category) {
-        if (!HHUserManager.sharedInstance.weixinAccount) {
+        if (!HHUserManager.sharedInstance.weixinAccount || !HHUserManager.sharedInstance.weixinAccount.realName || !HHUserManager.sharedInstance.weixinAccount.phone ) {
+            
             [HHHeadlineAwardHUD showMessage:@"请设置您的微信账户" hideTouch:YES animated:YES duration:2];
             return;
         }

@@ -56,9 +56,10 @@ static int timerInterval = 0;
             [self award_sychDuration:nil];
         }];
     } else {
-        self.circleProgress.progressView.progress = (float)HHUserManager.sharedInstance.readTime / (float)self.totalTime;
+        
         timerInterval++;
         HHUserManager.sharedInstance.readTime++;
+        self.circleProgress.progressView.progress = (float)HHUserManager.sharedInstance.readTime / (float)self.totalTime;
         
         if (timerInterval == 5) {
             
@@ -71,6 +72,7 @@ static int timerInterval = 0;
 }
 
 
+
 - (void)award_sychDuration:(void (^)(void))callback {
     
     [self sychDuration:^(NSError *error, HHReadSychDurationResponse *response) {
@@ -80,7 +82,7 @@ static int timerInterval = 0;
             //成功
             [self submitIncomeWithCoins:response.incCredit];
         
-            [self startTimerWithTimerInterval:timerInterval - 1];
+            [self startTimerWithTimerInterval:timerInterval];
             
         } else if (response.state == 10) {
             NSLog(@"失败");
@@ -88,7 +90,7 @@ static int timerInterval = 0;
                 callback();
             }
         } else if (response.state == 1) {
-            NSLog(@"提醒用户超出最大时长");
+            [HHHeadlineAwardHUD showMessage:@"今日阅读收益已达上限！" animated:YES duration:2];
         }
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.sychLock = NO;
@@ -102,9 +104,10 @@ static int timerInterval = 0;
     
     //提交之后再清0
     self.circleProgress.progressView.progress = 0;
+    HHUserManager.sharedInstance.readTime = 0;
     CGPoint center = CGPointMake(PROGRESS_KWIDTH / 2, Y(self.circleProgress) + PROGRESS_KWIDTH / 2);
     [HHHeadlineAwardHUD showImageView:@"计时奖励" coins:coins animation:YES originCenter:center addToView:self.view duration:1.0];
-    HHUserManager.sharedInstance.readTime = 0;
+    
     
 
 }
@@ -137,6 +140,9 @@ static int timerInterval = 0;
     
     decisionHandler(WKNavigationActionPolicyAllow);
     
+    if ([navigationAction.request.URL.absoluteString containsString:@"openapp"]) {
+        [[UIApplication sharedApplication] openURL:navigationAction.request.URL]; 
+    }
     
     if ([self.webView canGoBack]) {
         

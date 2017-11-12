@@ -25,7 +25,7 @@
 
 ///当前用户
 @property (nonatomic, strong)HHUserModel *currentUser;
-///当前奖励规则 每次登陆重新获取
+///当前奖励规则 每次启动程序重新获取
 @property (nonatomic, strong)HHReadConfigResponse *readConfig;
 ///同步阅读时长 用来记录每次的token和virifyCode
 @property (nonatomic, strong)HHReadSychDurationResponse *sychDurationResponse;
@@ -44,8 +44,11 @@
 ///weixinAccount
 @property (nonatomic, strong)HHWeixinAccount *weixinAccount;
 
-///全局定时器
+@property (nonatomic, strong)NSString *today;
+
 @property (nonatomic, strong)NSTimer *timer;
+
+@property (nonatomic, strong)NSTimer *videoTimer;
 
 @property (nonatomic, assign)int lastPerHourAwardTime;
 

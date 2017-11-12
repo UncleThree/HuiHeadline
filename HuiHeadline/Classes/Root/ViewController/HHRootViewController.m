@@ -13,6 +13,7 @@
 #import "HHMineViewController.h"
 #import "HHTaskCenterViewController.h"
 #import "HHLoginViewController.h"
+#import "UITabBar+Badge.h"
 
 @interface HHRootViewController ()
 
@@ -33,11 +34,14 @@
         UINavigationController *navi2 = [[UINavigationController alloc] initWithRootViewController:[HHTaskCenterViewController defaultTaskCenterVC]];
         UINavigationController *navi3 = [[UINavigationController alloc] initWithRootViewController:[HHMineViewController defaultMineVC]];
         
-        CYLTabBarController *tbc = [CYLTabBarController new];
+        CYLTabBarController *tbc = [[CYLTabBarController alloc] init];
         [self customTabBarForController:tbc];
         [tbc setViewControllers:@[navi0,navi1,navi2,navi3]];
-        self = (HHRootViewController *)tbc;
-        self.tabBar.tintColor = [UIColor redColor];
+        self = (id)tbc;
+        self.tabBar.tintColor = HUIRED;
+        self.tabBar.translucent = NO;
+        
+        
     }
     return self;
 }
@@ -45,23 +49,34 @@
 
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
-    [self initAppAfterCheckLogin];
+    [HHLoginNetwork checkLogin:^(id error, id result) {
+        
+        if (result) {
+            [self initAppAfterCheckLogin];
+        }
+    }];
+  
+    
     
 }
+
 
 - (void)initAppAfterCheckLogin {
     
     ///请求阅读规则
     [HHLoginNetwork requestReadConfig];
-    ///检查时段奖励
-    [[HHHeadlineSegmentViewController defaultSegmentVC] checkHourAward];
     ///刷新我的信息页面
-    [[HHMineViewController defaultMineVC] realoadHeaderData];
+//    [[HHMineViewController defaultMineVC] realoadHeaderData:YES];
     ///刷新签到配置
     [[HHTaskCenterViewController defaultTaskCenterVC] reloadHeader:YES];
+    ///小红点
+
+    
 }
+
 
 
 /** 配置导航栏 */
@@ -71,6 +86,9 @@
     bar.translucent = NO;
 //    [bar setTitleTextAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Lato-Bold" size:20], NSForegroundColorAttributeName:[UIColor whiteColor]}];
     
+  
+   
+   
 
 }
 
@@ -79,12 +97,17 @@
     NSArray *titles = @[@"头条", @"视频", @"任务中心", @"我的"];
     NSMutableArray *tabBarItemsAttributes = [NSMutableArray array];
     for (NSString *title in titles) {
-        NSDictionary *dict =  @{CYLTabBarItemTitle:title,
+        NSDictionary *dict =  @{
+                              CYLTabBarItemTitle:title,
                               CYLTabBarItemImage:title,
-                              CYLTabBarItemSelectedImage:[title stringByAppendingString:@"_点击"]};
+                              CYLTabBarItemSelectedImage:[title stringByAppendingString:@"_点击"],
+                              };
         [tabBarItemsAttributes addObject:dict];
     }
     tbc.tabBarItemsAttributes = tabBarItemsAttributes.copy;
+    
+    
+    
     
 }
 

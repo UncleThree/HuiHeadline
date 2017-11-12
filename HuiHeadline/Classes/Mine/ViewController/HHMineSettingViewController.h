@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^Callback)(void);
+
+
 @interface HHMineSettingViewController : UIViewController
+
+@property (nonatomic, copy)Callback callback;
 
 @end

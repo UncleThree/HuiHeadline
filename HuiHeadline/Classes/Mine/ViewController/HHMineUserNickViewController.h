@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^NickCallback)(NSString *nickName);
+
+
 @interface HHMineUserNickViewController : UIViewController
 
 @property (nonatomic, copy)NSString *nickName;
+
+@property (nonatomic, copy)NickCallback callback;
 
 @end

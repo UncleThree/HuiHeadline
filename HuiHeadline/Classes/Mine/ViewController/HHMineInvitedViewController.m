@@ -11,8 +11,14 @@
 #import "HHMineItemTableViewCell.h"
 #import "HHMineMyInvitedCodeTableViewCell.h"
 #import "HHMineBigQRCodeView.h"
+#import "HHMineFillInvitedCodeView.h"
+#import "QRViewController.h"
+#import "HHMineInvitedOneImageTableViewCell.h"
+#import "HHMineInvitedCreditViewController.h"
+#import "HHMineInvitedPersonViewController.h"
+#import "HHActivityTaskDetailWebViewController.h"
 
-@interface HHMineInvitedViewController () <UITableViewDataSource, UITableViewDelegate, MyInVitedCodeCellDelegate>
+@interface HHMineInvitedViewController () <UITableViewDataSource, UITableViewDelegate, MyInVitedCodeCellDelegate, HHMineInvitedImageTableViewCellDelegate>
 
 @property (nonatomic, strong)UIView *navigationView;
 
@@ -24,7 +30,11 @@
 
 @property (nonatomic, strong)UIView *bigQRView;
 
+@property (nonatomic, strong)UIView *fillCodeView;
 
+@property (nonatomic, strong)HHMineFillInvitedCodeView *codeView;
+
+@property (nonatomic, strong)UITextField *codeTF;
 @end
 
 @implementation HHMineInvitedViewController
@@ -54,6 +64,7 @@
     
     __weak typeof(self) weakSelf = self;
     [HHMineNetwork requestInviteJson:^(id error, HHInvitedJsonModel *model) {
+        
         if (error) {
             NSLog(@"%@",error);
         }
@@ -62,8 +73,10 @@
                 NSLog(@"%@",error);
             }
             [self setResponse:response];
+            model.headerItem.isInvited = response.beInvited;
             [self setModel:model callback:^{
                 [weakSelf.tableView reloadData];
+                weakSelf.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
                 [HHHeadlineAwardHUD hideHUDAnimated:YES];
             }];
             
@@ -83,7 +96,10 @@
             [self checkCache:model.ruleItems[0].imgUrl callback:^{
                 [self checkCache:model.ruleItems[1].imgUrl callback:^{
                     [self checkCache:model.ruleItems[2].imgUrl callback:^{
-                        callback();
+                        [self checkCache:model.bottomItems[0].imgUrl callback:^{
+                            callback();
+                        }];
+                        
                     }];
                 }];
             }];
@@ -97,7 +113,14 @@
     
     if (![[SDImageCache sharedImageCache] imageFromCacheForKey:url]) {
         [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:URL(url) options:(SDWebImageDownloaderHighPriority) progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-                callback();
+        
+            if (image && finished) {
+                ///写入缓存
+                [[SDImageCache sharedImageCache] storeImage:image forKey:url completion:^{
+                    callback();
+                }];
+            }
+            
         }];
     } else {
         callback();
@@ -123,7 +146,6 @@
     [self.itemCellModels addObject:countModel];
     [self.itemCellModels addObject:model];
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [self.tableView reloadData];
 }
 
@@ -147,10 +169,14 @@
     self.tableView.bounces = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
+    self.tableView.sectionFooterHeight = 10;
     
     [self.tableView registerClass:[HHMineInvitedImageTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMineInvitedImageTableViewCell class])];
     [self.tableView registerClass:[HHMineItemTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMineItemTableViewCell class])];
     [self.tableView registerClass:[HHMineMyInvitedCodeTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMineMyInvitedCodeTableViewCell class])];
+    [self.tableView registerClass:[HHMineInvitedOneImageTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMineInvitedOneImageTableViewCell class])];
+    
+    [self.tableView registerClass:[HHMineInvitedOneImageTableViewCell class] forCellReuseIdentifier:@"BANNER"];
     
 }
 
@@ -159,7 +185,9 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
     if (self.model) {
-        return 4;
+        
+        return 4 + (self.model.bottomItems.count > 3);
+        
     } else {
         return 0;
     }
@@ -168,6 +196,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     return section == 1 ? self.itemCellModels.count : 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if (section == 2 && self.model.bottomItems.count > 3) {
+        return 0;
+    }
+    return 10;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -185,20 +220,41 @@
     } else if (indexPath.section == 1) {
         
         return self.itemCellModels[indexPath.row] ? 50 : 0;
+        
     }  else if (indexPath.section == 2) {
-        if (!self.model.ruleItems) {
-            return 0;
-        }
-        CGFloat height = [self cacheImageHeight:self.model.ruleItems];
-        if (height) {
-            return height;
+        
+        if (self.model.bottomItems.count > 3) {
+            
+            return [self cacheImageHeight:@[self.model.bottomItems[0]]] ? : CGFLOAT(100);
+            
         } else {
-            return self.model.ruleItems.count ? CGFLOAT(707) : 0;
+            
+            [self threePicHeight];
         }
         
+        
+    } else if (indexPath.section == 3) {
+        
+        if (self.model.bottomItems.count > 3) {
+            
+            return [self threePicHeight];
+        }
     }
+    return CGFLOAT(150);
     
-    return 150;
+}
+
+- (CGFloat)threePicHeight {
+    
+    if (!self.model.ruleItems) {
+        return 0;
+    }
+    CGFloat height = [self cacheImageHeight:self.model.ruleItems];
+    if (height) {
+        return height;
+    } else {
+        return self.model.ruleItems.count ? CGFLOAT(707) : 0;
+    }
     
 }
 
@@ -217,39 +273,193 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 1) {
+    if (indexPath.section == 0) {
+        HHMineInvitedOneImageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHMineInvitedOneImageTableViewCell class]) forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.model = self.model.headerItem ? self.model.headerItem : nil;
+        cell.delegate = self;
+        return cell;
+        
+    } else if (indexPath.section == 1) {
         
         HHMineItemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHMineItemTableViewCell class]) forIndexPath:indexPath];
         [cell setModel:self.itemCellModels[indexPath.row]];
         return cell;
         
-    } else if (indexPath.section == 3) {
+    } else if (indexPath.section == 2) {
         
-        HHMineMyInvitedCodeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHMineMyInvitedCodeTableViewCell class]) forIndexPath:indexPath];
-        cell.invitedCode = self.response.userInviteInfo.code;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.delegate = self;
-        return cell;
-        
-        
-    }   else {
-        
-        HHMineInvitedImageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHMineInvitedImageTableViewCell class]) forIndexPath:indexPath];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        if (indexPath.section == 0) {
-            cell.models = self.model.headerItem ? @[self.model.headerItem] : @[];
+        if (self.model.bottomItems.count > 3) {
+            
+            HHMineInvitedOneImageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BANNER" forIndexPath:indexPath];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            HHInvitedItem *item = self.model.bottomItems[0];
+            item.isBanner = YES;
+            cell.model = item;
+            cell.delegate = self;
+            return cell;
+            
         } else {
+            HHMineInvitedImageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHMineInvitedImageTableViewCell class]) forIndexPath:indexPath];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.models = self.model.ruleItems;
+            return cell;
+        }
+
+    }   else if (indexPath.section == 3) {
+        
+        if (self.model.bottomItems.count > 3) {
+            HHMineInvitedImageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHMineInvitedImageTableViewCell class]) forIndexPath:indexPath];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.models = self.model.ruleItems;
+            return cell;
+            
         }
         
-        return cell;
-        
     }
+    HHMineMyInvitedCodeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHMineMyInvitedCodeTableViewCell class]) forIndexPath:indexPath];
+    cell.invitedCode = self.response.userInviteInfo.code;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.delegate = self;
+    return cell;
     
 }
 
+kRemoveCellSeparator
+
 #pragma mark UITableViewDelegate
+
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.section == 1) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        if (indexPath.row == 0) {
+            
+            HHMineInvitedPersonViewController *vc = [HHMineInvitedPersonViewController new];
+            self.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        } else {
+            
+            HHMineInvitedCreditViewController *vc = [HHMineInvitedCreditViewController new];
+            self.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }
+    }
+}
+
+
+
+#pragma mark HHMineInvitedImageTableViewCellDelegate
+
+- (void)clickBanner:(NSString *)link {
+    
+    HHActivityTaskDetailWebViewController *webVC = [HHActivityTaskDetailWebViewController new];
+    webVC.URLString = link;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:webVC animated:YES];
+}
+
+- (void)invitedCellFillCode {
+    
+    
+    if (self.codeView) {
+        [self.codeView removeFromSuperview];
+        self.codeView = nil;
+    }
+    self.fillCodeView = [HHHeadlineAwardHUD initQrcodeViewWithTarget:self action1:@selector(submit) action2:@selector(showQRCodeVC)];
+    [self.view addSubview:self.fillCodeView];
+    self.codeView = self.fillCodeView.subviews[0];
+    
+    for (UIView *subView in self.codeView.subviews) {
+        if ([subView isKindOfClass:[UITextField class]]) {
+            self.codeTF = (UITextField *)subView;
+        }
+    }
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardFrameChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    
+    
+}
+
+- (void)showQRCodeVC {
+    
+    QRViewController *qrvc = [QRViewController new];
+    qrvc.callback = ^(NSString *error, NSString *url) {
+
+        if (!url) {
+            return ;
+        }
+        if (![url containsString:k_appstore_link] && ![url containsString:k_android_link]) {
+            
+            [HHHeadlineAwardHUD showMessage:@"该二维码格式不正确" animated:YES duration:2];
+            return;
+        }
+        NSString *invitedCode = [[url componentsSeparatedByString:@"#code="] lastObject];
+        if (invitedCode) {
+            self.codeTF.text = invitedCode;
+        }
+        
+    };
+    [self presentViewController:qrvc animated:NO completion:nil];
+    
+}
+
+- (void)keyBoardFrameChange:(NSNotification *)notification{
+   
+    NSDictionary *keyBoardDict = notification.userInfo;
+//    CGRect endKeyBoardFrame = [keyBoardDict[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+//    CGFloat keyHeight = endKeyBoardFrame.size.height;
+    CGFloat duration = [keyBoardDict[UIKeyboardAnimationDurationUserInfoKey]doubleValue];
+    
+    CGFloat ty = - CGFLOAT(150);
+    
+    [UIView animateWithDuration:duration animations:^{
+        self.codeView.transform = CGAffineTransformMakeTranslation(0, ty);
+    }];
+    
+}
+
+
+- (void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)submit {
+    
+    if (!self.codeTF.text || [self.codeTF.text isEqualToString:@""]) {
+        [HHHeadlineAwardHUD showMessage:@"验证码不能为空" animated:YES duration:2];
+        return;
+    }
+    [HHHeadlineAwardHUD showHUDWithText:@"" animated:YES];
+    [HHMineNetwork recommendWithCode:self.codeTF.text callback:^(id error, HHResponse *response) {
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
+        if (error) {
+            [HHHeadlineAwardHUD showMessage:error animated:YES duration:2];
+        } else {
+            
+            self.model.headerItem.isInvited = YES;
+            [self.tableView reloadData];
+            
+        }
+    }];
+    
+    
+}
+
+- (void)invitedCellstNow {
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"把惠头条推荐给您的家人朋友，下载并填写您的邀请码，就能躺着赚钱啦！" preferredStyle:(UIAlertControllerStyleAlert)];
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"我知道了" style:(UIAlertActionStyleCancel) handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alert addAction:action1];
+    [self presentViewController:alert animated:YES completion:nil];
+    
+}
 
 
 

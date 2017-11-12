@@ -16,3 +16,7 @@
 
 @end
 
+
+@implementation HHWeixinAuthorizedResponse
+
+@end

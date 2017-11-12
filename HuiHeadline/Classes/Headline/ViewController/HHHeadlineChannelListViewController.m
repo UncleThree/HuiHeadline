@@ -4,7 +4,6 @@
 //
 //  Created by eyuxin on 2017/9/14.
 //  Copyright © 2017年 eyuxin. All rights reserved.
-//
 
 #import "HHHeadlineChannelListViewController.h"
 #import "BMTodayHeadlinesDragCell.h"
@@ -79,8 +78,6 @@
     
     self.navigationItem.leftBarButtonItems = nil;
     self.navigationItem.leftBarButtonItem = nil;
-    
-    //去除返回时 出现的默认返回按钮
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.leftItemsSupplementBackButton = YES;
     
@@ -92,6 +89,7 @@
     [HHUserManager sharedInstance].channels = self.dataSourceArray[0].mutableCopy;
     [self.navigationController popViewControllerAnimated:YES];
     self.block([HHUserManager sharedInstance].channels);
+
 }
 
 - (void)initDragCollctionView {

@@ -11,17 +11,17 @@
 #import "HHHeadlineShareCollectionView.h"
 #import "HHHeadlineListReadAwardViewController.h"
 #import "HHReadSychDurationResponse.h"
+#import "HHHeadlineNavController.h"
 
 @interface HHHeadlineListWebViewController () < UIScrollViewDelegate, HHHeadlineShareCollectionViewDelegate>
-
-
 
 ///模糊背景图
 @property (nonatomic, strong)UIView *backView;
 ///分享图
 @property (nonatomic, strong)HHHeadlineShareCollectionView *shareView;
 
-
+@property (nonatomic, strong)UIImageView *guideView;
+@property (nonatomic, strong)UILabel *guideLabel;
 
 @end
 
@@ -31,9 +31,32 @@
     
     [super viewWillAppear:animated];
     
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    
+    [super viewDidAppear:animated];
+    self.webView.scrollView.delegate = self;
+    
+    [(HHHeadlineNavController *)self.navigationController setAppear:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    [super viewWillDisappear:animated];
+    
+    ///blog
+    self.webView.scrollView.delegate = nil;
+    
+    [self.progressView removeFromSuperview];
+    [HHUserManager.sharedInstance.timer invalidate];
+    HHUserManager.sharedInstance.timer = nil;
+    
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self initNavigation];
@@ -44,11 +67,9 @@
 }
 
 
-
-
-
 - (void)initProgressView {
-    _circleProgress = ({
+    
+    self.circleProgress = ({
        HHHeadlineNewsDetailProgressView *progress = [[HHHeadlineNewsDetailProgressView alloc]initWithFrame:CGRectMake(0, 0, PROGRESS_KWIDTH, PROGRESS_KWIDTH)];
         [self.view addSubview:progress];
         progress;
@@ -62,8 +83,42 @@
         make.width.height.mas_equalTo(PROGRESS_KWIDTH);
     }];
     
+    
+    if (![[HHDateUtil today] isEqualToString:HHUserManager.sharedInstance.today]) {
+        
+        [self addGuideView];
+    }
+    
+    
     [self initTime];
     
+}
+
+- (void)addGuideView {
+    
+    UIImage *image = [UIImage imageNamed:@"tp_bg"];
+    self.guideView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    self.guideView.image = image;
+    
+    self.guideLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.guideLabel.textColor = [UIColor whiteColor];
+    self.guideLabel.text = @"亲，点即可查看奖励规则，以及每日收益哦~";
+    self.guideLabel.font = Font(15);
+    self.guideLabel.numberOfLines = 0;
+    [self.view addSubview:self.guideView];
+    [self.view addSubview:self.guideLabel];
+    [self.guideView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.circleProgress.progressView.mas_top).with.offset(-5);
+        make.left.equalTo(self.view).with.offset(10);
+        make.height.mas_equalTo(65);
+    }];
+    
+    [self.guideLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.equalTo(self.guideView).with.offset(5);
+        make.height.mas_equalTo(40);
+        make.width.mas_equalTo(KWIDTH / 2);
+        make.centerY.equalTo(self.guideView).with.offset(-3);
+    }];
 }
 
 - (void)initTime {
@@ -81,8 +136,8 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+    
     self.backItem = [[UIBarButtonItem alloc] initWithCustomView:[HHNavigationBackViewCreater customBarItemWithTarget:self action:@selector(back)]];
-    self.backItem.tintColor = BLACK_51;
     self.navigationItem.leftBarButtonItem = self.backItem;
     
     self.progressView = [[UIProgressView alloc] init];
@@ -92,7 +147,7 @@
     self.progressView.frame = CGRectMake(0, 44, KWIDTH, 2);
     [self.navigationController.navigationBar addSubview:self.progressView];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"分享"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(shareSDK)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"分享"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(shareSDK)];
    
 }
 
@@ -194,14 +249,7 @@
     }
 }
 
--(void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [self.progressView removeFromSuperview];
-    
-    [HHUserManager.sharedInstance.timer invalidate];
-    HHUserManager.sharedInstance.timer = nil;
-}
+
 
 - (void)startRead {
     
@@ -211,6 +259,7 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
+    
     if ([keyPath isEqualToString:@"estimatedProgress"]) {
         
         CGFloat progress = [change[NSKeyValueChangeNewKey] floatValue];
@@ -232,10 +281,10 @@
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
+
 - (void)dealloc{
     
     [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
-    
 
     
 }

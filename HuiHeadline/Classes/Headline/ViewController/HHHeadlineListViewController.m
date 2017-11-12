@@ -11,6 +11,7 @@
 #import "HHHeadlineNewsThreePicTableViewCell.h"
 #import "HHHeadlineNewsBigImgTableViewCell.h"
 #import "HHHeadlineListViewController+tableView.h"
+#import "HHHeadlineNavController.h"
 
 @interface  HHHeadlineListViewController ()
 
@@ -33,13 +34,15 @@
    
     
     
-    
-    
 }
+
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self showNav:YES];
+    
+    [(HHHeadlineNavController *)self.navigationController setAppear:YES];
 }
 
 
@@ -48,6 +51,7 @@
     [self requstNews:^{
     
         [self requestTopNews:^{
+            
             [self requestAds:^{
                 
                 [self reloadData];
@@ -104,6 +108,7 @@
 }
 
 - (void)requestAds:(void(^)())handler {
+    
     [HHHeadlineNetwork requestForAdList:^(NSError *error, id result) {
         if (error) {
             Log(error);
@@ -115,9 +120,9 @@
 //                }
                 [self.adData removeAllObjects];
                 [self.adData addObjectsFromArray:result];
-                
+
             }
-            
+
         }
         handler();
     }];
@@ -133,11 +138,9 @@
 
 - (void)showNav:(BOOL)show {
     
-    for (UIView *view in self.navigationController.navigationBar.subviews) {
-        if ([view isKindOfClass:[UIImageView class]] || [view isKindOfClass:[UILabel class]]) {
-            view.hidden = !show;
-        }
-    }
+    [[(HHHeadlineNavController *)self.navigationController timeLabel] setHidden:!show];
+    [[(HHHeadlineNavController *)self.navigationController alarmImgv] setHidden:!show];
+    [[(HHHeadlineNavController *)self.navigationController titleImgV] setHidden:!show];
 }
 
 
@@ -147,10 +150,10 @@
     for (int i = 0; i < self.adData.count; i++) {
         int temp = -1;
         int count = 0;
-        for (int j = 0 ; j < self.data.count; j++) {
+        for (int j = 1 ; j < self.data.count + 1; j++) {
             if ((j - 1) % 6 == 0 ) {
                 count++;
-                if (count == i) {
+                if (count == i + 1) {
                     temp = j;
                     break;
                 }

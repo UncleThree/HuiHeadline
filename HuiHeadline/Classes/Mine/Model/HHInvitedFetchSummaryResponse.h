@@ -20,6 +20,7 @@
 
 @interface HHInvitedFetchSummaryResponse : HHResponse
 
+///是否被邀请过
 @property (nonatomic)BOOL beInvited;
 ///邀请奖励
 @property (nonatomic)NSInteger inviteRewardCredit;

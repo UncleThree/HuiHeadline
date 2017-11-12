@@ -59,10 +59,10 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.sectionHeaderHeight = 0;
     _tableView.sectionFooterHeight = 10;
     _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0.0f,0.0f,_tableView.bounds.size.width,0.01f)];
+    self.tableView.bounces = NO;
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
@@ -92,6 +92,7 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
     
     [HHHeadlineAwardHUD showHUDWithText:nil animated:YES];
     [HHMineNetwork getOrderList:!self.type callback:^(id error, NSArray<HHOrderInfo *> *orders) {
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (error) {
             NSLog(@"%@",error);
             
@@ -105,7 +106,6 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
             }
             
         }
-        [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (!orders.count) {
             self.tableView.hidden = YES;
             [self initNoneView];
@@ -143,6 +143,7 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
     return 45;
 }
 
+kRemoveCellSeparator
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -151,8 +152,10 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
         HHMyOrderTitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHMyOrderTitleTableViewCell class]) forIndexPath:indexPath];
         if (self.type) {
             cell.stateName = [self.allOrders[indexPath.section] stateName];
+            cell.titleName = [self.allOrders[indexPath.section] channel] == 2 ? @"一元惠拍" : @"商城兑换";
         } else {
             cell.stateName = [self.disposingOrders[indexPath.section] stateName];
+            cell.titleName = [self.disposingOrders[indexPath.section] channel] == 2 ? @"一元惠拍" : @"商城兑换";
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
@@ -189,6 +192,7 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
 #pragma mark UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     
     HHOrderInfo *orderInfo = nil;
     if (self.type) {

@@ -57,7 +57,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
-        return 100;
+        
+        return CGFLOAT(100);
+        
     } else if (indexPath.section == 1 || indexPath.section == 2) {
         
         return 50;
@@ -107,8 +109,10 @@ kRemoveCellSeparator
         
         if (indexPath.row == 0) {
             
+            [HHHeadlineAwardHUD showHUDWithText:@"正在清理..." animated:YES];
             [HHUtils clearFile:^(NSString *cache) {
                
+                [HHHeadlineAwardHUD hideHUDAnimated:YES];
                 [HHHeadlineAwardHUD showMessage:[NSString stringWithFormat:@"成功清除%@缓存！", cache] animated:YES duration:2];
             }];
             
@@ -116,12 +120,14 @@ kRemoveCellSeparator
             
             [HHHeadlineAwardHUD showHUDWithText:@"正在检查当前版本，请稍后" animated:YES];
             [HHMineNetwork versionCheck:^(id error, HHResponse *response) {
+                [HHHeadlineAwardHUD hideHUDAnimated:YES];
                 if (response.statusCode == 200 && !response.msg) {
                     
                     [HHHeadlineAwardHUD showMessage:@"当前已经是最新版本了" animated:YES duration:2];
                 } else {
-                    [HHHeadlineAwardHUD hideHUDAnimated:YES];
+                    
                 }
+                
             }];
             
         } else if (indexPath.row == 2) {
@@ -157,13 +163,15 @@ kRemoveCellSeparator
 
 
 - (void)pushVC:(NSString *)title {
-    UIViewController *vc =nil;
+    __block UIViewController *vc =nil;
     if ([title isEqualToString:@"商城兑换"]) {
         vc = [HHMallSegmentViewController new];
     } else if ([title isEqualToString:@"我的订单"]) {
         vc = [HHMyOrderSegmentViewController new];
     }  else if ([title isEqualToString:@"师徒邀请"]) {
+        
         vc = [HHMineInvitedViewController new];
+        
     }  else if ([title isEqualToString:@"收益明细"]) {
         vc = [HHIncomeDetailViewController new];
     }

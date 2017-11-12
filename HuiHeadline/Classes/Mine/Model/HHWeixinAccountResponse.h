@@ -8,6 +8,20 @@
 
 #import "HHResponse.h"
 
+@interface HHWeixinAuthorizedResponse : HHResponse
+
+@property (nonatomic, strong)NSString *headPortrait;
+
+@property (nonatomic, strong)NSString *nickName;
+
+@property (nonatomic, strong)NSString *openId;
+
+@property (nonatomic, strong)NSString *phone;
+
+@property (nonatomic, strong)NSString *realName;
+
+@end
+
 @interface HHWeixinAccount : NSObject
 
 @property (nonatomic, strong)NSString *headPortrait;

@@ -7,6 +7,11 @@
 //
 
 #import "HHNetworkManager.h"
+#import "HHLoginViewController.h"
+
+static UIAlertController *alert = nil;
+
+static UIViewController *currentVC = nil;
 
 @implementation HHNetworkManager
 
@@ -53,8 +58,12 @@
         
         manager.requestSerializer = [AFHTTPRequestSerializer serializer];
     }
+    BOOL CheckLogin = NO;
     if (options) {
         
+        if (options[@"CheckLogin"]) {
+            CheckLogin = options[@"CheckLogin"];
+        }
         if (options[@"requestType"] && [options[@"requestType"] isEqualToString:@"json"] && !isEncryptedJson) {
             
             manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -124,10 +133,37 @@
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
+        if (error.description && [error.description containsString:@"似乎已断开与互联网的连接"]) {
+            
+            [HHHeadlineAwardHUD showMessage:@"请检查网络连接！" animated:YES duration:2];
+        } else if (error.description && [error.description containsString:@"unauthorized"] && !CheckLogin) {
+            
+            [self alertUnaithorized];
+        }
+        
         handler(nil, error);
         
     }];
 }
+
++ (void)alertUnaithorized {
+    
+    
+    [HHHeadlineAwardHUD showLoginErrorViewWithTarget:self action:@selector(login)];
+   
+    
+}
+
++ (void)login {
+    
+    UIApplication.sharedApplication.delegate.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[HHLoginViewController new]];
+    
+}
+
+
+
+
+
 
 
 @end

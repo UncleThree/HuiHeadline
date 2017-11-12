@@ -77,6 +77,7 @@
         
         if (model.subText) {
             self.subLabel.text = model.subText;
+            self.subLabel.textColor = BLACK_153;
         } else if ([model.text isEqualToString:@"手机号"]) {
             
             self.subLabel.text = @"未绑定";

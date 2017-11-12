@@ -48,8 +48,9 @@
     
    
     [self requestIncomeDetailWithNew:YES callback:^{
-        
+        [HHHeadlineAwardHUD showHUDWithText:@"" animated:YES];
         [self.tableView reloadData];
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
     }];
     
 }
@@ -60,10 +61,12 @@
         self.footerString = nil;
         [self initFooter];
     }
+    
     [HHMineNetwork requestIncome:(IncomeDetailCategoryAll) time:clear ? 0 : self.lastTime callback:^(id error, HHIncomDetailResponse *response) {
         if (error) {
             NSLog(@"income detail error : %@",error);
         } else {
+
             if (clear) {
                 [self.models removeAllObjects];
             }
@@ -81,6 +84,7 @@
                 self.separateDict = [self separateSF:self.models];
             }
         }
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         callback();
         
     }];
@@ -145,15 +149,15 @@
     self.tableView.delegate = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
-    self.tableView.sectionHeaderHeight = 30;
-//    self.tableView.sectionFooterHeight = 0;
+    self.tableView.sectionHeaderHeight = 40;
+    self.tableView.sectionFooterHeight = 0;
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 0.01f)];
     [self.tableView registerClass:[HHIncomeDetailTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHIncomeDetailTableViewCell class])];
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     header.lastUpdatedTimeLabel.hidden = YES;
     self.tableView.mj_header = header;
     [self initFooter];
-    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)initFooter {
@@ -198,11 +202,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     
-    if (section == self.keys.count - 1) {
+    if (section == self.keys.count - 1 && self.footerString) {
         
         return 40;
+        
     } else {
-        return 0;
+        
+        return 0.01;
     }
 }
 
@@ -219,10 +225,15 @@
     
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    
+    return 40;
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 30)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, KWIDTH - 20 * 2, 30)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 40)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, KWIDTH - 20 * 2, 40)];
     label.textColor = BLACK_153;
     NSString *key = self.keys[section];
     HHIncomeDetail *model = self.separateDict[key][0];

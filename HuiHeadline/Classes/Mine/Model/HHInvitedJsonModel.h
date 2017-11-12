@@ -14,6 +14,10 @@
 
 @property (nonatomic, copy)NSString *targetLinkUrl;
 
+@property (nonatomic, assign)BOOL isInvited;
+
+@property (nonatomic, assign)BOOL isBanner;
+
 @end
 
 @interface HHInvitedJsonModel : NSObject

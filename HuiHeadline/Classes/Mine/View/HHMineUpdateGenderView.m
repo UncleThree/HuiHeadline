@@ -87,6 +87,9 @@
 
 #pragma mark UITableViewDataSource
 
+
+kRemoveCellSeparator
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 2;
 }

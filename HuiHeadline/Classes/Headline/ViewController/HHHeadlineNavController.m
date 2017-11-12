@@ -8,10 +8,9 @@
 
 #import "HHHeadlineNavController.h"
 #import "HHHeadlineAwardHUD.h"
+#import "UITabBar+Badge.h"
 
 @interface HHHeadlineNavController () <MBProgressHUDDelegate>
-
-@property (nonatomic ,strong)UIImageView *alarmImgv;
 
 @property (nonatomic, strong)NSTimer *timer;
 //倒计时秒数
@@ -30,11 +29,13 @@
 - (void)viewDidAppear:(BOOL)animated {
     
     [super viewDidAppear:animated];
-    self.appear = YES;
+    
     
     if ([HHUserManager sharedInstance].loginId) {
+        [self checkNewDay];
         [self checkHourAward];
     }
+    
     
     
     
@@ -43,10 +44,23 @@
 - (void)viewDidDisappear:(BOOL)animated {
     
     [super viewDidDisappear:animated];
-    self.appear = NO;
+    
+   
     
     
     
+}
+
+- (void)checkNewDay {
+    
+    
+    if (![[HHDateUtil today] isEqualToString:HHUserManager.sharedInstance.today]) {
+        
+        HHUserManager.sharedInstance.today = [HHDateUtil today];
+        [self.tabBarController.tabBar showBadgeOnItemIndex:2];
+        
+        
+    }
 }
 
 - (void)viewDidLoad {
@@ -71,6 +85,7 @@
     imgView.contentMode = UIViewContentModeScaleAspectFill;
     imgView.center = self.navigationBar.center;
     [self.navigationBar addSubview:imgView];
+    self.titleImgV = imgView;
 }
 
 - (void)addLeft {

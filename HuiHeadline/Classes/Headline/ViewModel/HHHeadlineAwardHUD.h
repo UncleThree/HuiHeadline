@@ -11,7 +11,6 @@
 @interface HHHeadlineAwardHUD : NSObject
 
 
-
 + (void)hideHUDAnimated:(BOOL)animated;
 
 + (void)showHUDWithText:(NSString *)text
@@ -32,6 +31,16 @@
 + (void)showInstructionView;
 + (void)hideInstructionView;
 
++ (void)showLoginErrorViewWithTarget:(id)target
+                              action:(SEL)action;
++ (void)hideLoginErrorView;
+
++ (void)showVideoReminderView;
+
++ (UIView *)initQrcodeViewWithTarget:(id)target
+                             action1:(SEL)action1
+                             action2:(SEL)action2;
++ (void)hideQrView;
 
 + (void)showMessage:(NSString *)message
            animated:(BOOL)animated

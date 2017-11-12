@@ -21,7 +21,7 @@
     [super awakeFromNib];
     self.titleLabel.adjustsFontSizeToFitWidth = YES;
     self.titleLabel.textColor = RGB(58, 58, 58);
-    self.titleLabel.font = [UIFont systemFontOfSize:16];
+    self.titleLabel.font = Font(16);
        
     self.mybackgroundView.layer.cornerRadius = 5.0;
     self.mybackgroundView.layer.borderColor = RGB(202, 202, 202).CGColor;

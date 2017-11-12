@@ -9,6 +9,7 @@
 #import "HHVideoListWebViewController.h"
 #import <WebKit/WebKit.h>
 #import "HHVideoDetailWebViewController.h"
+#import "AppDelegate.h"
 
 @interface HHVideoListWebViewController () <WKNavigationDelegate, UIGestureRecognizerDelegate>
 
@@ -33,12 +34,24 @@
     
 }
 
-
+- (void)viewDidAppear:(BOOL)animated {
+    
+    [super viewDidAppear:animated];
+    
+    
+    if ([(AppDelegate *)UIApplication.sharedApplication.delegate firstLoad]) {
+        [HHHeadlineAwardHUD showVideoReminderView];
+    }
+    
+}
 
 
 
 - (void)initWebView {
-    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+    config.allowsInlineMediaPlayback = YES;
+    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) configuration:config];
+    
     self.webView.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [self.view addSubview:self.webView];
    
@@ -115,7 +128,9 @@
 #pragma mark WKNavigationDelegate
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    
     [self.webView.scrollView.mj_header endRefreshing];
+    
 }
 
 

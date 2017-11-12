@@ -135,7 +135,7 @@
 
     
     self.leftLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.creditLabel) + 4, frame.size.width, 15)];
-    self.leftLabel.font = Font(12);
+    self.leftLabel.font = Font(13);
     self.leftLabel.textColor = BLACK_51;
     [self addSubview:self.leftLabel];
 
@@ -145,7 +145,7 @@
 - (void)setModel:(HHMallProductCollectionViewCellModel *)model {
     
     _model = model;
-    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:model.coins attributes:@{KEY_FONT:Font(22)}];
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:model.coins attributes:@{KEY_FONT:Font(21)}];
     [attStr addAttribute:KEY_FONT value:Font(13) range:NSMakeRange(model.coins.length - 1, 1)];
     self.creditLabel.attributedText = attStr.copy;
     self.leftLabel.text = model.leftNum;

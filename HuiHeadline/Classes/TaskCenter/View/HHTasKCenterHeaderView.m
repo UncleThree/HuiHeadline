@@ -69,7 +69,7 @@
 - (void)initHowCreditButton {
     
     CGFloat height = 30;
-    CGFloat width = 95;
+    CGFloat width = CGFLOAT_W(95);
     self.howCreditButton = [[UIButton alloc] initWithFrame:CGRectZero];
     [self.howCreditButton setTitle:@"如何赚钱" forState:(UIControlStateNormal)];
     self.howCreditButton.tintColor= [UIColor whiteColor];
@@ -162,8 +162,8 @@
     CGFloat collectionViewHeight = frame.size.height - MaxY(self.line);
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    layout.minimumInteritemSpacing = 10;
-    layout.itemSize = CGSizeMake(KWIDTH  / self.models.count - 12, collectionViewHeight - 15 * 2);
+    layout.minimumInteritemSpacing = 5;
+    layout.itemSize = CGSizeMake( (KWIDTH - 24 - (self.models.count - 1) * 5) / self.models.count - 1, collectionViewHeight - 15 * 2);
     
     
     CGFloat pad = 12;

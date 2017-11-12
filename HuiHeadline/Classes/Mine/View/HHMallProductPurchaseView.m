@@ -42,8 +42,8 @@
     self.saleCreditLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, KWIDTH / 2, height)];
     [self addSubview:self.saleCreditLabel];
     
-    CGFloat buttonWidth = 111.0f;
-    CGFloat buttonHeight = 42.0f;
+    CGFloat buttonWidth = CGFLOAT(111);
+    CGFloat buttonHeight = CGFLOAT(42);
     self.convertButton = [[UIButton alloc] initWithFrame:CGRectMake(KWIDTH - 20 - buttonWidth, (height - buttonHeight) / 2, buttonWidth, buttonHeight)];
     self.convertButton.titleLabel.font = Font(18);
     self.convertButton.layer.cornerRadius = 5;

@@ -98,6 +98,7 @@
 
 - (void)request {
     
+    
     [HHHeadlineNetwork requestForReadAward:^(NSError *error, id result) {
         if (result && [result isKindOfClass:[NSArray class]]) {
             [self parseResult:result];
@@ -113,6 +114,7 @@
 
 
 - (void)requestForReadIncome {
+    
     [HHHeadlineNetwork requestForReadIncomeDetail:^(NSError *error, id result) {
         if (error) {
             Log(error);
@@ -154,6 +156,7 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
     if ([tableView isEqual:self.yellowTableView]) {
         return self.descriptions.count;
     }
@@ -174,6 +177,7 @@
     } else {
         HHHeadlineReadAwardTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHHeadlineReadAwardTableViewCell class]) forIndexPath:indexPath];
         cell.model = self.income.records[indexPath.section];
+    
         return cell;
     }
     
@@ -192,18 +196,35 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return [tableView isEqual:self.incomeTableView] ? 12 : 0;
     
+    return [tableView isEqual:self.incomeTableView] ? 12 : 0.1;
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    
+    if ([tableView isEqual:self.incomeTableView]) {
+        if (section == self.income.records.count - 1) {
+            return 20;
+        }
+    }
+    return 0.1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([tableView isEqual:self.yellowTableView]) {
+        
         CGFloat height = [self heightForCell:self.descriptions[indexPath.section].text] + yellowCellPad;
+        
         return height;
     } else {
+        
         CGFloat height = [self.income.records[indexPath.section] heightForCell];
+        
         return 45 + 20 * 2 + height;
+        
+        
     }
     
     
@@ -215,7 +236,7 @@
 
 - (CGFloat)heightForCell:(NSString *)text {
     
-    return [HHFontManager sizeWithText:text font:Font(15) maxSize:CGSizeMake(W(self.yellowTableView) - 2 * 16, CGFLOAT_MAX)].height;
+    return [HHFontManager sizeWithText:text font:Font(15) maxSize:CGSizeMake(W(self.yellowTableView) - 12 - 5 - 10, CGFLOAT_MAX)].height;
     
 }
 

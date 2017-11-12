@@ -58,8 +58,8 @@
 }
 - (void)initUI {
     
-    CGFloat width = 70;
-    self.huiImgV = [[UIImageView alloc] initWithFrame:CGRectMake((KWIDTH - width) / 2, 90, width, width)];
+    CGFloat width = 80;
+    self.huiImgV = [[UIImageView alloc] initWithFrame:CGRectMake((KWIDTH - width) / 2, MaxY(self.navigationView) + 40, width, width)];
     self.huiImgV.image = [UIImage imageNamed:@"huiheadline"];
     [self.view addSubview:self.huiImgV];
     
@@ -71,14 +71,14 @@
     self.versionLabel.text = [NSString stringWithFormat:@"v%@",APP_VER_SHORT];
     [self.view addSubview:self.versionLabel];
     
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.versionLabel) + 16, KWIDTH, 30)];
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.versionLabel) + 16, KWIDTH, 20)];
     self.titleLabel.textAlignment = 1;
     self.titleLabel.textColor = BLACK_51;
     self.titleLabel.text = @"会赚钱的头条";
-    self.titleLabel.font = Font(17);
+    self.titleLabel.font = Font(19);
     [self.view addSubview:self.titleLabel];
     
-    self.subTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.titleLabel) + 10, KWIDTH, 30)];
+    self.subTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.titleLabel) + 5, KWIDTH, 20)];
     self.subTitleLabel.textAlignment = 1;
     self.subTitleLabel.textColor = RGB(230, 53, 40);
     self.subTitleLabel.text = @"看资讯也可以赚钱";
@@ -86,7 +86,7 @@
     [self.view addSubview:self.subTitleLabel];
     
     
-    self.webLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, KHEIGHT - 30 - 85, KWIDTH, 30)];
+    self.webLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, KHEIGHT - 20 - 85, KWIDTH, 20)];
     self.webLabel.textAlignment = 1;
     self.webLabel.textColor = BLACK_51;
     self.webLabel.text = @"官网：www.cashtoutiao.com";
@@ -95,9 +95,9 @@
     self.webLabel.userInteractionEnabled = YES;
     [self.webLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(gotoWebsite)]];
     
-    self.userProLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, Y(self.webLabel) - 12 - 30, KWIDTH, 30)];
+    self.userProLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, Y(self.webLabel) - 20, KWIDTH, 20)];
     self.userProLabel.textAlignment = 1;
-    self.userProLabel.textColor = RGB(230, 53, 40);
+    self.userProLabel.textColor = BLACK_51;
     self.userProLabel.text = @"《用户使用条款和隐私协议》";
     self.userProLabel.font = Font(13);
     [self.view addSubview:self.userProLabel];

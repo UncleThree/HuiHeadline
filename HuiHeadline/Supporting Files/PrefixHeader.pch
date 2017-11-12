@@ -33,6 +33,7 @@
 #import "HHJSONToDictionaty.h" //json和字典互转
 #import "HHNetworkManager.h"   //网络请求封装类
 #import "G.h"
+#import "UITabBar+Badge.h"
 
 #import "HHConst.h"
 

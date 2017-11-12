@@ -11,10 +11,12 @@
 
 @interface HHMallBindAliViewController : UIViewController
 
-typedef void(^Callbck)(void);
+typedef void(^Callbck)(NSString *msg);
 
 @property (nonatomic, copy)Callbck callback;
 
 @property (nonatomic, strong)HHAlipayAccount *alipayAccount;
+
+@property (nonatomic, assign)BOOL manager;
 
 @end

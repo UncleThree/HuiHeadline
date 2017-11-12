@@ -45,7 +45,9 @@
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
         label.font = Font(25);
         label.center = CGPointMake(self.center.x, self.center.y - KWIDTH / 35);
-        label.text = [NSString stringWithFormat:@"%zd", coins];
+        if (coins != 0) {
+            label.text = [NSString stringWithFormat:@"%zd", coins];
+        }
         label.textAlignment = 1;
         label.textColor = [UIColor redColor];
         label;

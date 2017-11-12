@@ -25,11 +25,14 @@
 @property (nonatomic, strong) UIView *line4;
 
 
-@property (nonatomic, strong) UILabel *virifyLabel;
+@property (nonatomic, strong) UILabel *verifyLabel;
+
 
 @property (nonatomic, strong) UIButton *registButton;
 
 @property (nonatomic, strong) UILabel *protocolLabel;
+
+@property (nonatomic, strong)NSTimer *timer;
 
 @end
 
@@ -85,6 +88,7 @@
         kButton_setAttr_normalState(button, @"注册", UIColor.whiteColor, K_Font(20));
         button.backgroundColor = HUIRED;
         button.layer.cornerRadius = 5.0;
+        [button addTarget:self action:@selector(regist) forControlEvents:(UIControlEventTouchUpInside)];
         button;
     });
     self.protocolLabel = ({
@@ -97,6 +101,21 @@
         [label addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showUserProtocol:)]];
         label;
     });
+    
+    self.verifyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.verifyLabel.center = CGPointMake(self.verifyLabel.center.x, self.numberTF.center.y);
+    self.verifyLabel.font = Font(14);
+    self.verifyLabel.textAlignment = 2;
+    if (self.countdown) {
+        [self verifyLabelEnabled:NO];
+    } else {
+        [self verifyLabelEnabled:YES];
+    }
+    self.verifyLabel.userInteractionEnabled = YES;
+    [self.verifyLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(getVerifyCode)]];
+    [self.view addSubview:self.verifyLabel];
+    
+    
     [self initTf];
     
     [self.view addSubview:self.titleLabel];
@@ -110,11 +129,120 @@
     [self.view addSubview:self.line3];
     [self.view addSubview:self.line4];
     
-    //virifyLabel
+    [self.view addSubview:self.verifyLabel];
+    
     [self.view addSubview:self.registButton];
     [self.view addSubview:self.protocolLabel];
     
     [self layout];
+    
+    [self.verifyLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.right.equalTo(self.numberTF);
+        make.height.mas_equalTo(18);
+        make.width.mas_equalTo(100);
+    }];
+    
+}
+
+- (void)getVerifyCode {
+    
+    if (self.numberTF.text.length == 0) {
+        
+        [HHHeadlineAwardHUD showMessage:@"请输入手机号码" animated:YES duration:2.0];
+        
+    } else if (![HHUtils isMobileNumber:self.numberTF.text]) {
+        
+        [HHHeadlineAwardHUD showMessage:@"请输入正确的手机号码" animated:YES duration:2.0];
+        
+    } else {
+        
+        self.verifyLabel.userInteractionEnabled = NO;
+        [self sendSms:self.numberTF.text];
+        
+    }
+}
+
+- (void)sendSms:(NSString *)phone {
+    
+    [HHLoginNetwork sendSms:phone type:(SendSmsTypeREGISTER) handler:^(NSString *msg, id error) {
+        self.verifyLabel.userInteractionEnabled = YES;
+        if (error) {
+            Log(error);
+        } else {
+            [HHHeadlineAwardHUD showMessage:msg animated:YES duration:2.0];
+            if ([msg isEqualToString:k_sendsms_success]) {
+                self.countdown = 60;
+                [self startTimer];
+            }
+        }
+    }];
+}
+- (void)startTimer {
+    if (self.timer) {
+        return;
+    }
+    self.timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(timerAction) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:(NSRunLoopCommonModes)];
+    
+}
+
+- (void)timerAction {
+    self.countdown--;
+    if (self.countdown < 0 || self.countdown > 60) {
+        return;
+    }
+    if (self.countdown == 0) {
+        [self.timer invalidate];
+        self.timer = nil;
+        [self verifyLabelEnabled:YES];
+    } else {
+        [self verifyLabelEnabled:NO];
+    }
+    
+}
+
+- (void)verifyLabelEnabled:(BOOL)enabled {
+    
+    if (enabled) {
+        self.verifyLabel.text = @"获取验证码";
+        self.verifyLabel.textColor = HUIRED;
+        self.verifyLabel.userInteractionEnabled = YES;
+    } else {
+        self.verifyLabel.text = [NSString stringWithFormat:@"%zds",self.countdown];
+        self.verifyLabel.textColor = BLACK_153;
+        self.verifyLabel.userInteractionEnabled = NO;
+    }
+}
+
+- (void)regist {
+    
+    if (!self.numberTF.text) {
+        [HHHeadlineAwardHUD showMessage:@"请输入手机号！" animated:YES duration:2];
+    } else if (![HHUtils isMobileNumber:self.numberTF.text]) {
+        [HHHeadlineAwardHUD showMessage:@"请输入正确的手机号！" animated:YES duration:2];
+    } else if (!self.virifyTF.text) {
+        [HHHeadlineAwardHUD showMessage:@"请输入验证码！" animated:YES duration:2];
+    } else if (!self.passTF.text) {
+        [HHHeadlineAwardHUD showMessage:@"请输入密码！" animated:YES duration:2];
+    } else {
+        [HHHeadlineAwardHUD showHUDWithText:@"注册中..." animated:YES];
+        [HHLoginNetwork registWithPhone:self.numberTF.text password:self.passTF.text verifyCode:self.virifyTF.text inviteCode:self.inviteTF.text handler:^(id error, NSString *response) {
+            [HHHeadlineAwardHUD hideHUDAnimated:YES];
+            if (error) {
+                [HHHeadlineAwardHUD showMessage:error animated:YES duration:2];
+            } else {
+                
+                HHUserManager.sharedInstance.userName = self.numberTF.text;
+                [HHHeadlineAwardHUD showMessage:response animated:YES duration:2];
+                self.callback(nil, response);
+                
+            }
+        }];
+        
+    }
+    
+    
+    
     
     
 }
@@ -155,8 +283,8 @@
     for (int i = 0; i < tfs.count; i++) {
         UITextField *tf = tfs[i];
         tf.borderStyle = UITextBorderStyleNone;
-        tf.font = Font(18);
-        tf.clearButtonMode = UITextFieldViewModeWhileEditing;
+        tf.font = Font(17);
+        tf.clearButtonMode = i == 0 ? UITextFieldViewModeNever : UITextFieldViewModeWhileEditing;
         tf.tintColor = BLACK_153;
         //different
         tf.keyboardType = i == 2 ? UIKeyboardTypeDefault : UIKeyboardTypeNumberPad;

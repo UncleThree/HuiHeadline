@@ -21,8 +21,8 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
         CGFloat width = KWIDTH / 4;
-        CGFloat height = 60;
-        CGFloat padding = 21;
+        CGFloat height = CGFLOAT(60);
+        CGFloat padding = CGFLOAT(20);
         array = @[@"商城兑换",@"我的订单",@"师徒邀请",@"收益明细"];
         for (int i = 0 ; i < array.count ; i++) {
             
@@ -82,7 +82,7 @@
         self.imgView.center = CGPointMake(frame.size.width / 2, self.imgView.center.y);
         [self addSubview:self.imgView];
         
-        self.label = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.imgView) + 15, frame.size.width, 20)];
+        self.label = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.imgView) + 10, frame.size.width, 20)];
         self.label.text = text;
         self.label.font = Font(15);
         self.label.textAlignment = 1;

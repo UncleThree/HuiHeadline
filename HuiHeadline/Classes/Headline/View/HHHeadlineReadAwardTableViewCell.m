@@ -20,6 +20,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *thirdLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *fourthLabel;
 
 @end
 
@@ -35,6 +36,7 @@
     self.firLabel.backgroundColor = [UIColor whiteColor];
     self.secLabel.backgroundColor = [UIColor whiteColor];
     self.thirdLabel.backgroundColor = [UIColor whiteColor];
+    self.fourthLabel.backgroundColor = [UIColor whiteColor];
     
     
     self.redView.layer.borderWidth = 1;
@@ -46,6 +48,7 @@
 }
 
 - (void)setModel:(HHReadIncomDetailRecord *)model {
+    
     int day = [HHDateUtil paseDays:model.day];
     NSArray *imgArray = @[@"今",@"昨天",@"前日"];
     NSArray *textArray = @[@"今日数据",@"昨日数据",@"前日数据"];
@@ -66,26 +69,60 @@
     
     UIColor *blueColor = RGB(43, 129, 248);
     
-    NSString *firText = [NSString stringWithFormat:@"阅读时长%@，获得%d金币",[self getMinutesString:model.duration], model.durationCredit];
-    NSMutableAttributedString *firAttr = [[NSMutableAttributedString alloc] initWithString:firText attributes:@{KEY_FONT : Font(14.5), KEY_COLOR : day == 0 ? blueColor : BLACK_51}];
+    NSMutableArray *attrArray = [NSMutableArray array];
+    
+    NSString *firText = [NSString stringWithFormat:@"阅读时长%@，获得%@金币",[self getMinutesString:model.duration], [HHUtils insertComma:[NSString stringWithFormat:@"%d", model.durationCredit]]];
+    NSMutableAttributedString *firAttr = [[NSMutableAttributedString alloc] initWithString:firText attributes:@{KEY_FONT : Font(15), KEY_COLOR : day == 0 ? blueColor : BLACK_51}];
     [firAttr addAttributes:@{KEY_COLOR:BLACK_51} range:[firText rangeOfString:@"阅读时长"]];
     [firAttr addAttributes:@{KEY_COLOR:BLACK_51} range:[firText rangeOfString:@"，获得"]];
-    self.firLabel.attributedText = firAttr.copy;
+//    self.firLabel.attributedText = firAttr.copy;
     
-    NSString *secText = [NSString stringWithFormat:@"分享点击%d次，获得%d金币",model.shareClick, model.shareClickCredit];
-    NSMutableAttributedString *secAttr = [[NSMutableAttributedString alloc] initWithString:secText attributes:@{KEY_FONT : Font(14.5), KEY_COLOR : day == 0 ? blueColor : BLACK_51}];
+    NSString *secText = [NSString stringWithFormat:@"分享点击%d次，获得%@金币",model.shareClick, [HHUtils insertComma:[NSString stringWithFormat:@"%d", model.shareClickCredit]]];
+    NSMutableAttributedString *secAttr = [[NSMutableAttributedString alloc] initWithString:secText attributes:@{KEY_FONT : Font(15), KEY_COLOR : day == 0 ? blueColor : BLACK_51}];
     [secAttr addAttributes:@{KEY_COLOR:BLACK_51} range:[secText rangeOfString:@"分享点击"]];
     [secAttr addAttributes:@{KEY_COLOR:BLACK_51} range:[secText rangeOfString:@"，获得"]];
-    self.secLabel.attributedText = secAttr.copy;
+//    self.secLabel.attributedText = secAttr.copy;
     
-    NSString *thirText = [NSString stringWithFormat:@"任务奖励收益，实际获得%d金币", model.taskCredit];
-    NSMutableAttributedString *thirAttr = [[NSMutableAttributedString alloc] initWithString:thirText attributes:@{KEY_FONT : Font(14.5), KEY_COLOR : day == 0 ? blueColor : BLACK_51}];
-    [thirAttr addAttributes:@{KEY_COLOR:BLACK_51} range:[thirText rangeOfString:@"任务奖励收益，实际获得"]];
-    self.thirdLabel.attributedText = thirAttr.copy;
+    NSString *thirText = [NSString stringWithFormat:@"观看视频时长%@，获得%@金币",[self getMinutesString:model.videoDuration] ,[HHUtils insertComma:[NSString stringWithFormat:@"%d", model.videoDurationCredit]]];
+    NSMutableAttributedString *thirAttr = [[NSMutableAttributedString alloc] initWithString:thirText attributes:@{KEY_FONT : Font(15), KEY_COLOR : day == 0 ? blueColor : BLACK_51}];
+    [thirAttr addAttributes:@{KEY_COLOR:BLACK_51} range:[thirText rangeOfString:@"观看视频时长"]];
+    [thirAttr addAttributes:@{KEY_COLOR:BLACK_51} range:[thirText rangeOfString:@"，获得"]];
+//    self.thirdLabel.attributedText = thirAttr.copy;
     
-    self.firLabel.hidden = model.durationCredit == 0;
-    self.secLabel.hidden = model.shareClickCredit == 0;
-    self.thirdLabel.hidden = model.taskCredit == 0;
+    NSString *fourText = [NSString stringWithFormat:@"完成任务共获得%@金币",[HHUtils insertComma:[NSString stringWithFormat:@"%d", model.taskCredit]]];
+    NSMutableAttributedString *foutAttr = [[NSMutableAttributedString alloc] initWithString:fourText attributes:@{KEY_FONT : Font(15), KEY_COLOR : day == 0 ? blueColor : BLACK_51}];
+    [foutAttr addAttributes:@{KEY_COLOR:BLACK_51} range:[fourText rangeOfString:@"完成任务共获得"]];
+//    self.fourthLabel.attributedText = foutAttr.copy;
+    
+    if (model.durationCredit) {
+        [attrArray addObject:firAttr.copy];
+    }
+    if (model.videoDuration) {
+        [attrArray addObject:thirAttr.copy];
+    }
+    if (model.shareClickCredit) {
+        [attrArray addObject:secAttr.copy];
+    }
+    if (model.taskCredit) {
+        [attrArray addObject:fourText.copy];
+    }
+    
+    for (int i = 0; i < attrArray.count; i++) {
+        if (i == 0) {
+            self.firLabel.attributedText = attrArray[0];
+        } else if (i == 1) {
+            self.secLabel.attributedText = attrArray[1];
+        } else if (i == 2) {
+            self.thirdLabel.attributedText = attrArray[2];
+        } else if (i == 3) {
+            self.fourthLabel.attributedText = attrArray[3];
+        }
+    }
+ 
+    self.firLabel.hidden = attrArray.count < 1;
+    self.secLabel.hidden = attrArray.count < 2;
+    self.thirdLabel.hidden = attrArray.count < 3;
+    self.fourthLabel.hidden = attrArray.count < 4;
     
 }
 

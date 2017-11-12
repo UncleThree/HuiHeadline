@@ -10,6 +10,9 @@
 
 @interface HHMyOrderTitleTableViewCell : UITableViewCell
 
+
+@property (nonatomic, copy)NSString *titleName;
+
 @property (nonatomic, copy)NSString *stateName;
 
 @end

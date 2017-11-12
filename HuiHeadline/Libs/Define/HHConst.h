@@ -16,7 +16,7 @@
 
 #define STATUSBAR_HEIGHT  [[UIApplication sharedApplication] statusBarFrame].size.height
 
-#define PROGRESS_KWIDTH 100
+#define PROGRESS_KWIDTH CGFLOAT(120)
 
 #define UUID [UIDevice currentDevice].identifierForVendor.UUIDString
 
@@ -33,7 +33,7 @@
 #define kTitleFont      Font(18)
 
 //子标题字体
-#define kSubtitleFont      Font(14)
+#define kSubtitleFont      Font(16)
 
 #define LARGE KWIDTH >= 414
 #define NORMAL KWIDTH >= 375
@@ -45,6 +45,8 @@
 
 //适配屏幕的CGFloat 按照plus的比例适配高度
 #define CGFLOAT(float)  ((CGFloat)(float * (KHEIGHT / 736.0)))
+
+#define CGFLOAT_W(float) ((CGFloat)(float * (KWIDTH / 414.0)))
 
 //通过RGB设置颜色
 #define RGB(R,G,B)        [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:1.0]
@@ -62,7 +64,7 @@
 //attributes 字典系统的KEY
 
 #define KEY_FONT NSFontAttributeName
-#define KEY_COLOR NSForegroundColorAttributeName
+#define KEY_COLOR NSForegroundColorAttributeName 
 
 
 //设置Button文字 字体 颜色
@@ -98,6 +100,5 @@
 typedef void(^Block)(NSError *error,id result);
 
 #define WX_APPID @"wx95837f9bce09e2be"
-#define WX_SECRET @""
 
 #endif /* HHConst_h */

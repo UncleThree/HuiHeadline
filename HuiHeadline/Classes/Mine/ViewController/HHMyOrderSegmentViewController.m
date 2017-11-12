@@ -18,9 +18,12 @@
 @implementation HHMyOrderSegmentViewController
 
 - (instancetype)init {
+    
     if (self = [super init]) {
         
         self.itemNames = @[@"正在处理",@"全部订单"].mutableCopy;
+        self.titleSizeNormal = 16.0;
+        self.titleSizeSelected = 17.0;
         self.dataSource = self;
         self.delegate = self;
         self.menuViewStyle = WMMenuViewStyleLine;
@@ -36,11 +39,11 @@
     
     [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     
-    self.tabBarController.tabBar.hidden = YES;
+//    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    self.tabBarController.tabBar.hidden = NO;
+//    self.tabBarController.tabBar.hidden = NO;
 }
 
 - (void)viewDidLoad {
@@ -84,6 +87,7 @@
     
     
 }
+
 
 - (CGRect)pageController:(WMPageController *)pageController preferredFrameForMenuView:(WMMenuView *)menuView {
     

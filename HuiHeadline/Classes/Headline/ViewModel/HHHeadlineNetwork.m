@@ -236,22 +236,38 @@ static NSString *newkey = nil;
     
     NSMutableArray *ads = adStrategy.adPositions.mutableCopy; //用replaceObjectAtIndex来保证顺序
     NSMutableArray *resultModels = [NSMutableArray array];
-    dispatch_queue_t dispatchQueue = dispatch_queue_create("CASHTOUTIAO.REQUESTAD", DISPATCH_QUEUE_CONCURRENT);
-    dispatch_group_t dispatchGroup = dispatch_group_create();
     
-    [adStrategy.adPositions enumerateObjectsUsingBlock:^(AdPosition * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    if (ads.count == 1) {
         HHAdRequest *ad = [[HHAdRequest alloc] init];
         ad.appVersion = APP_VER;
         ad.planId = @"";
-        ad.adPosition = obj;
+        ad.adPosition = ads[0];
         NSDictionary *parameters = [ad mj_JSONObject];
+        [self requestForAdWithUrl:k_ad_list_url parameters:parameters callback:^(NSError *error, id result) {
+            if (error) {
+                Log(error);
+                NSLog(@"%@广告请求error", adStrategy.adPositions[0].channel);
+            }
+            [ads replaceObjectAtIndex:0 withObject:result ?: @[]];
+            
+            for (NSArray *array in ads) {
+                for (HHAdModel *ad in array) {
+                    [resultModels addObject:ad];
+                }
+            }
+            callback(nil, resultModels.copy);
+        }];
+    } else {
+        dispatch_queue_t dispatchQueue = dispatch_queue_create("CASHTOUTIAO.REQUESTAD", DISPATCH_QUEUE_CONCURRENT);
+        dispatch_group_t dispatchGroup = dispatch_group_create();
         
-        //目前iOS只有 ADXHI ADXHI_TOUTIAO channel有数据
-        if (!isBannel && ![obj.channel isEqualToString:@"ADXHI"] && ![obj.channel isEqualToString:@"ADXHI_TOUTIAO"]) {
+        [adStrategy.adPositions enumerateObjectsUsingBlock:^(AdPosition * _Nonnull obj, NSUInteger index, BOOL * _Nonnull stop) {
+            HHAdRequest *ad = [[HHAdRequest alloc] init];
+            ad.appVersion = APP_VER;
+            ad.planId = @"";
+            ad.adPosition = obj;
+            NSDictionary *parameters = [ad mj_JSONObject];
             
-            [ads replaceObjectAtIndex:idx withObject:@[]];
-            
-        } else {
             dispatch_group_enter(dispatchGroup);
             dispatch_async(dispatchQueue, ^{
                 [self requestForAdWithUrl:k_ad_list_url parameters:parameters callback:^(NSError *error, id result) {
@@ -259,24 +275,27 @@ static NSString *newkey = nil;
                         Log(error);
                         NSLog(@"%@广告请求error", obj.channel);
                     }
-                    [ads replaceObjectAtIndex:idx withObject:result ?: @[]];
+                    [ads replaceObjectAtIndex:index withObject:result ?: @[]];
                     dispatch_group_leave(dispatchGroup);
                     
                 }];
             });
-        }
+            
+            
+        }];
         
-    }];
-    
-    dispatch_group_notify(dispatchGroup, dispatchQueue, ^{
-        for (NSArray *array in ads) {
-            for (HHAdModel *ad in array) {
-                [resultModels addObject:ad];
+        dispatch_group_notify(dispatchGroup, dispatchQueue, ^{
+            for (NSArray *array in ads) {
+                for (HHAdModel *ad in array) {
+                    [resultModels addObject:ad];
+                }
             }
-        }
-        callback(nil, resultModels.copy);
-    });
+            callback(nil, resultModels.copy);
+        });
+    }
+    
 }
+
 
 
 // 返回 HHAdModel数组
@@ -365,11 +384,12 @@ static NSString *newkey = nil;
 }
 
 + (void)sychVideoDurationWithDuration:(int)duration
-                             callback:(Block)callback {
+                             callback:(void(^)(id error , HHReadSychDurationResponse *response))callback {
     
     NSLog(@"同步视频时长请求:%zd",duration);
     HHReadSychDurationRequest *sychDurationRequest = [[HHReadSychDurationRequest alloc] init];
     sychDurationRequest.duration = duration;
+    sychDurationRequest.channel = @"360";
     NSDictionary *paramaters = [sychDurationRequest mj_keyValues];
     [HHNetworkManager postRequestWithUrl:k_sync_duration parameters:paramaters isEncryptedJson:YES otherArg:@{ @"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
@@ -380,6 +400,7 @@ static NSString *newkey = nil;
             callback(error, nil);
         }
     }];
+    
 }
 
 

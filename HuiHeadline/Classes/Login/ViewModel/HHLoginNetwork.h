@@ -31,18 +31,28 @@ typedef enum : NSUInteger {
 
 
 
-+ (void)checkLogin:(void(^)(id error , id result))callback;
++ (void)checkLogin:(void(^)(id error , NSString * result))callback;
 ///登陆
 + (void)loginRequestWithPhone:(NSString *)phone
                      password:(NSString *)password
                       handler:(void(^)(NSString *respondsStr, id error))handler;
+///注册
++ (void)registWithPhone:(NSString *)phone
+               password:(NSString *)password
+             verifyCode:(NSString *)verifyCode
+             inviteCode:(NSString *)inviteCode
+                handler:(void(^)(id error, NSString *response))handler;
+
++ (void)changePasswordWithOldPas:(NSString *)oldPassword
+                     newPassword:(NSString *)newPassword
+                         handler:(void(^)(id error, NSString *response))handler;
 ///第三方登录
 + (void)loginRequstByThirdPartyType:(NSInteger)type
                                code:(NSString *)code
                            callback:(void(^)(id error , id result))callback ;
 ///微信授权
 + (void)authorizeWeixinWithCode:(NSString *)code
-                       callback:(void(^)(id error , id result))callback;
+                       callback:(void(^)(id error , HHWeixinAccount *account))callback;
 
 ///获取验证码 type 
 + (void)sendSms:(NSString *)phone

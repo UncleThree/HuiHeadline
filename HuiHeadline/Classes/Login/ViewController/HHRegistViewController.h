@@ -14,5 +14,6 @@
 
 @property (nonatomic, copy)Block callback;
 
+@property (nonatomic)int countdown;
 
 @end

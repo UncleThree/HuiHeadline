@@ -9,7 +9,7 @@
 #import "HHVideoDetailWebViewController.h"
 #import <WebKit/WebKit.h>
 #import "HHVideoDetailWebViewController+Award.h"
-
+#import "HHHeadlineListReadAwardViewController.h"
 
 @interface HHVideoDetailWebViewController () <WKNavigationDelegate, HHVideoDetalBottomViewDelegate>
 
@@ -33,14 +33,24 @@
     
     [super viewWillAppear:animated];
     
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     
     [super viewDidDisappear:animated];
     
-    [HHUserManager.sharedInstance.timer invalidate];
-    HHUserManager.sharedInstance.timer = nil;
+    [HHUserManager.sharedInstance.videoTimer invalidate];
+    HHUserManager.sharedInstance.videoTimer = nil;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (!self.buttomView.hidden) {
+        
+        [self startTimer];
+    }
+    
 }
 
 - (void)viewDidLoad {
@@ -56,6 +66,7 @@
 }
 
 - (void)initAwardImageView {
+    
     self.awardImgV = [[UIImageView alloc] initWithFrame:CGRectZero];
     UIImage *image = [UIImage imageNamed:@"income_abbrev.png"];
     self.awardImgV.image = image;
@@ -105,9 +116,16 @@
     
     self.buttomView.hidden = YES;
     
-    [HHUserManager.sharedInstance.timer invalidate];
-    HHUserManager.sharedInstance.timer = nil;
+    [HHUserManager.sharedInstance.videoTimer invalidate];
+    HHUserManager.sharedInstance.videoTimer = nil;
     
+}
+
+- (void)clickProgressView {
+    
+    HHHeadlineListReadAwardViewController *readVC = [HHHeadlineListReadAwardViewController new];
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:readVC animated:YES];
 }
 
 - (void)clickAwardImageView {
@@ -135,7 +153,7 @@
     self.progressView.frame = CGRectMake(0, 44, KWIDTH, 2);
     [self.navigationController.navigationBar addSubview:self.progressView];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"分享"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(shareSDK)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"分享"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(shareSDK)];
     
 }
 
@@ -148,12 +166,16 @@
 
 - (void)initWebView {
     
-    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+    config.allowsInlineMediaPlayback = YES;
+    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) configuration:config];
     self.webView.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [self.view addSubview:self.webView];
+    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+         make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(0, 0, 0, 0));
+    }];
     
     [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
-    self.webView.scrollView.bounces = NO;
     if(!self.URLString) return;
     [self loadRequest];
     self.webView.navigationDelegate = self;
@@ -168,6 +190,7 @@
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:(self.URLString)]];
     [self.webView loadRequest:request];
+    
     
 }
 
@@ -215,6 +238,13 @@
     
     [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
     
+}
+
+
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    
+  
 }
 
 #pragma mark WKNavigationDelegate

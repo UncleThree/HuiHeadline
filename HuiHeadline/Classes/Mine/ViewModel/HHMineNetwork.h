@@ -18,7 +18,10 @@
 #import "HHIncomDetailResponse.h"
 #import "HHProductResponse.h"
 #import "HHPurchaseResponse.h"
-
+#import "HHBindPhoneResponse.h"
+#import "HHInvitedConstributionSummaryResponse.h"
+#import "HHInvitedSummaryResponse.h"
+#import "HHStateResponse.h"
 //0, "全部"
 //6, "阅读收益"
 //3, "广告收益"
@@ -38,16 +41,40 @@ typedef enum : NSUInteger {
 
 + (void)requestAds:(void(^)(NSError *error ,NSArray<HHAdModel *> * result))callback;
 
-+ (void)updateNickName:(NSString *)nickName;
++ (void)updateNickName:(NSString *)nickName
+              callback:(void(^)(id error, HHResponse *response))callback;
+
++ (void)updateGender:(NSInteger)gender
+            callback:(void(^)(id error, HHResponse *response))callback;
+
++ (void)updateBirthday:(NSString *)birthday
+              callback:(void(^)(id error, HHResponse *response))callback;
+
++ (void)bindPhone:(NSString *)phone
+         password:(NSString *)password
+       verifyCode:(NSString *)verifyCode
+         callback:(void(^)(id error, HHBindPhoneResponse *response))callback;
 
 + (void)rebindPhone:(NSString *)phone
          verifyCode:(NSString *)verifyCode
-           callback:(void(^)(void))callback;
+           callback:(void(^)(id error, HHBindPhoneResponse *response))callback;
 
++ (void)retrievePasswordWithPhone:(NSString *)phone
+                         password:(NSString *)password
+                       verifyCode:(NSString *)verifyCode
+                         callback:(void(^)(id error, HHStateResponse *response))callback;
+//邀请
 + (void)requestInviteJson:(void(^)(id error, HHInvitedJsonModel *model))callback;
 
 + (void)requestInviteFetchSummary:(void(^)(id error,HHInvitedFetchSummaryResponse *response))callback;
 
++ (void)recommendWithCode:(NSString *)code
+                 callback:(void(^)(id error, HHResponse *response))callback;
+
++ (void)requestInviteConstribution:(NSInteger)page
+                          callback:(void(^)(id error, NSArray<HHInvitedConstributionSummary *> *constributions))callback;
+
++ (void)requestInviteSummary:(NSInteger)page callback:(void(^)(id error, NSArray<HHInvitedSummary *> *summaries))callback;
 
 ///商城 - 提现
 + (void)getProductListByCategory:(NSNumber *)category
@@ -69,13 +96,15 @@ typedef enum : NSUInteger {
 
 + (void)getDefaultAlipay:(void(^)(id error ,HHAlipayAccountResponse *response))callback;
 
-+ (void)updateAliAccount:(NSString *)account
-                    name:(NSString *)name
++ (void)updateAliAccount:(HHAlipayAccount *)account
                 callback:(void(^)(id error, HHResponse *response))callback;
 
 //wechat
 
 + (void)getDefaultWechat:(void(^)(id error ,HHWeixinAccountResponse *response))callback;
+
++ (void)updateWeixinAccountWithWxAccount:(HHWeixinAccount *)wexinAccount
+                                callback:(void(^)(id error, HHResponse *response))callback;
 
 
 //order
@@ -93,6 +122,9 @@ typedef enum : NSUInteger {
 
 
 + (void)versionCheck:(void(^)(id error,HHResponse *response))callback;
+
+
+
 
 @end
 

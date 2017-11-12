@@ -47,9 +47,9 @@
     
     self.redPoint.center = CGPointMake(self.redPoint.center.x, self.contentView.center.y);
     [self.label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.redPoint.mas_right).with.offset(15);
+        make.left.equalTo(self.redPoint.mas_right).with.offset(10);
         make.top.bottom.equalTo(self.contentView);
-        make.right.equalTo(self.contentView);
+        make.right.lessThanOrEqualTo(self.contentView);
     }];
     
     self.label.text = readAward.text;

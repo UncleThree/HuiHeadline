@@ -11,6 +11,7 @@
 #import "HHRootViewController.h"
 #import "WechatService.h"
 #import "AlipayService.h"
+#import "HHRetrievePasswordViewController.h"
 
 @interface HHLoginViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -53,6 +54,8 @@
     
     [super viewDidAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
 }
 
 
@@ -64,6 +67,12 @@
     
     self.userNameTextField.keyboardType = UIKeyboardTypeNumberPad;
     self.userNameTextField.tintColor = BLACK_153;
+    
+    if (HHUserManager.sharedInstance.userName.length) {
+        
+        self.userNameTextField.text = HHUserManager.sharedInstance.userName;
+        
+    }
     
     self.passwordTextField.secureTextEntry = YES;
     self.passwordTextField.tintColor = BLACK_153;
@@ -110,13 +119,14 @@
 - (void)loginByWechat {
     
     [HHHeadlineAwardHUD showHUDWithText:@"前往微信授权" addToView:self.view animated:YES];
+    
     [[WechatService sharedWechat] loginToWechat:^(id error, id result) {
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (result) {
             
             G.$.rootVC = [HHRootViewController new];
             [UIApplication sharedApplication].keyWindow.rootViewController = G.$.rootVC;
             
-            [HHHeadlineAwardHUD hideHUDAnimated:YES];
         } else {
             
             [HHHeadlineAwardHUD showMessage:error animated:YES duration:2];
@@ -129,11 +139,11 @@
     
     [HHHeadlineAwardHUD showHUDWithText:@"前往支付宝授权" addToView:self.view animated:YES];
     [[AlipayService sharedAlipay] loginToAli:^(id error, id result) {
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (result) {
             
             G.$.rootVC = [HHRootViewController new];
             [UIApplication sharedApplication].keyWindow.rootViewController = G.$.rootVC;
-            [HHHeadlineAwardHUD hideHUDAnimated:YES];
         }  else {
             
             [HHHeadlineAwardHUD showMessage:error animated:YES duration:2];
@@ -175,16 +185,25 @@
         [HHHeadlineAwardHUD showMessage:@"用户名或密码为空" hideTouch:NO animated:YES duration:2];
         return;
     }
-    [HHHeadlineAwardHUD  showHUDWithText:@"登录中" animated:YES];
     
-    [HHLoginNetwork loginRequestWithPhone:self.userNameTextField.text password:self.passwordTextField.text handler:^(NSString *respondsStr, id error) {
+    [self loginWithUserName:self.userNameTextField.text password:self.passwordTextField.text];
+    
+    
+    
+}
+
+- (void)loginWithUserName:(NSString *)username
+                 password:(NSString *)password {
+    
+    [HHHeadlineAwardHUD  showHUDWithText:@"登录中" animated:YES];
+    [HHLoginNetwork loginRequestWithPhone:username password:password handler:^(NSString *respondsStr, id error) {
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (respondsStr) {
+            
+            HHUserManager.sharedInstance.userName = username;
             
             G.$.rootVC = [HHRootViewController new];
             UIApplication.sharedApplication.keyWindow.rootViewController = G.$.rootVC;
-            
-            
-             [HHHeadlineAwardHUD hideHUDAnimated:YES];
             
             
         } else {
@@ -196,7 +215,6 @@
         
     }];
     
-    
 }
 
 
@@ -207,8 +225,11 @@
     HHRegistViewController *registVC = [[HHRegistViewController alloc] init];
     registVC.callback = ^(NSError *error, id result) {
         if (error) {
-            Log(error);
+            
         } else {
+            /// 已经有currentUser了
+            G.$.rootVC = [HHRootViewController new];
+            UIApplication.sharedApplication.keyWindow.rootViewController = G.$.rootVC;
             
         }
     };
@@ -218,6 +239,13 @@
 
 - (void)forgetPasswordClick {
     //点击忘记密码
+    HHRetrievePasswordViewController *reVC = [HHRetrievePasswordViewController new];
+    reVC.callback = ^(NSString *message) {
+        
+        [HHHeadlineAwardHUD showMessage:message animated:YES duration:2];
+    };
+    [self.navigationController pushViewController:reVC animated:YES];
+    
     
 }
 

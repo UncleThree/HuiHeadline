@@ -7,14 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "HHWeixinAccountResponse.h"
 
 @interface WechatService : NSObject
 
+typedef void (^WechatHandler)(id error,id result);
+
+@property (nonatomic,copy)WechatHandler handler;
 
 + (WechatService *)sharedWechat;
 
-- (void)loginToWechat:(void(^)(id error , id result))callback;
+- (void)loginToWechat:(WechatHandler)callback;
 
-- (void)bindToWechat:(void(^)(id error , id result))callback;
+- (void)bindToWechat:(WechatHandler)callback;
+
+- (void)authorizeToWechat:(void(^)(id error, HHWeixinAccount *account))callback;
 
 @end

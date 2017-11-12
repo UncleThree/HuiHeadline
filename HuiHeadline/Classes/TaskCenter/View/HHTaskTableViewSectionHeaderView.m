@@ -61,7 +61,7 @@
     CGFloat coinWidth = 20;
     UIImage *coinImage = model.isRedPaper ? [UIImage imageNamed:@"red_packet"] : [UIImage imageNamed:@"coin"];
     CGFloat coinHeight = coinImage.size.height / coinImage.size.width * coinWidth;
-    self.coinImgV = [[UIImageView alloc] initWithFrame:CGRectMake(KWIDTH - 30 - 12 - coinWidth, (HEIGHT - coinHeight) / 2, coinWidth, coinHeight)];
+    self.coinImgV = [[UIImageView alloc] initWithFrame:CGRectMake(KWIDTH - 20 - 12 - coinWidth, (HEIGHT - coinHeight) / 2, coinWidth, coinHeight)];
     self.coinImgV.image = coinImage;
     [self addSubview:self.coinImgV];
     
@@ -79,13 +79,13 @@
     CGFloat completeHeight = 20;
     UIImage *completeImage = [UIImage imageNamed:@"已完成"];
     CGFloat completeWidth = completeImage.size.width / completeImage.size.height * completeHeight;
-    self.coinImgV = [[UIImageView alloc] initWithFrame:CGRectMake(KWIDTH - 30 - 12 - completeWidth, (HEIGHT - completeHeight) / 2, completeWidth, completeHeight)];
+    self.coinImgV = [[UIImageView alloc] initWithFrame:CGRectMake(KWIDTH - 20 - 12 - completeWidth, (HEIGHT - completeHeight) / 2, completeWidth, completeHeight)];
     self.coinImgV.image = completeImage;
     [self addSubview:self.coinImgV];
 }
 
 - (void)initTitleLabelAndNextImgV:(CGFloat)HEIGHT model:(HHTaskSectionHeaderModel *)model {
-    self.lineTop = [[UIView alloc] initWithFrame:CGRectMake(12, 0, 0.5, HEIGHT / 2)];
+    self.lineTop = [[UIView alloc] initWithFrame:CGRectMake(12, 0, 1, HEIGHT / 2)];
     self.lineTop.backgroundColor = RGB(230, 230, 230);
     [self addSubview:self.lineTop];
     
@@ -94,13 +94,13 @@
     self.imgView.image = [UIImage imageNamed:@"indicator_1"];
     [self addSubview:self.imgView];
     
-    self.lineBottom = [[UIView alloc] initWithFrame:CGRectMake(X(self.lineTop), HEIGHT / 2, 0.5, HEIGHT / 2)];
+    self.lineBottom = [[UIView alloc] initWithFrame:CGRectMake(X(self.lineTop), HEIGHT / 2, W(self.lineTop), HEIGHT / 2)];
     self.lineBottom.backgroundColor = self.lineTop.backgroundColor;
     [self addSubview:self.lineBottom];
     
     if (model.type == 1) {
         self.lineTop.hidden = YES;
-    } else if (model.type == 3) {
+    } else if (model.type == 3 && !model.open) {
         self.lineBottom.hidden = YES;
     } else {
         self.lineTop.hidden = NO;

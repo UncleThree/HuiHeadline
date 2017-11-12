@@ -20,7 +20,14 @@
 ///1900-01-01 00:00:00
 + (NSString *)detailTimeFormat:(long)interval;
 
-//like this : @[@"1900年01月01日",@"下午00:00"]
+//like this : @[@"1900年01月01日",@"下午00:00",@"2"]
 + (NSArray *)incomeDetailTimerFormatter:(long)time;
+
++ (NSString *)today;
+
++ (NSString *)creditTimeFormat:(long)time;
+
+///01月01日 12：12
++ (NSString *)invitedTime:(long)time;
 
 @end

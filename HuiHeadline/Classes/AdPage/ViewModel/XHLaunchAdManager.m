@@ -111,7 +111,7 @@
         XHLaunchImageAdConfiguration *imageAdconfiguration = [XHLaunchImageAdConfiguration new];
         //广告停留时间
         imageAdconfiguration.duration = model.duration;
-        imageAdconfiguration.duration = 1;
+        imageAdconfiguration.duration = 5;
         
         //广告frame
 //        CGFloat scaleHeight = [UIScreen mainScreen].bounds.size.width/model.width*model.height;
@@ -400,12 +400,12 @@
 - (void)xhLaunchAd:(XHLaunchAd *)launchAd clickAndOpenURLString:(NSString *)openURLString;
 {
     NSLog(@"广告点击");
-    WebViewController *VC = [[WebViewController alloc] init];
-    VC.URLString = openURLString;
-    //此处不要直接取keyWindow
-    UIViewController* rootVC = [[UIApplication sharedApplication].delegate window].rootViewController;
-    
-    [rootVC.myNavigationController pushViewController:VC animated:YES];
+//    WebViewController *VC = [[WebViewController alloc] init];
+//    VC.URLString = openURLString;
+//    //此处不要直接取keyWindow
+//    UIViewController* rootVC = [[UIApplication sharedApplication].delegate window].rootViewController;
+//    
+//    [rootVC.myNavigationController pushViewController:VC animated:YES];
 }
 /**
  *  图片本地读取/或下载完成回调

@@ -14,7 +14,8 @@
 @property (nonatomic,strong)WKWebView *webView;
 @property (nonatomic, strong) UIProgressView *progressView;
 
-@property (nonatomic, strong)UIBarButtonItem *backItem;
+@property (nonatomic, strong)UIView *navigationView;
+
 
 @end
 
@@ -29,6 +30,7 @@
     
     [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     
 }
@@ -37,45 +39,49 @@
     [super viewDidLoad];
     
     [self initNavigation];
+    [self initProgressView];
     [self initWebView];
 }
 
 - (void)initNavigation {
     
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    UIView *backView = [HHNavigationBackViewCreater customBarItemWithTarget:self action:@selector(back) text:[NSString stringWithFormat:@"  %@",self.activityTitle]];
-    _backItem = [[UIBarButtonItem alloc] initWithCustomView:backView];
-    _backItem.tintColor = BLACK_51;
-    self.navigationItem.leftBarButtonItems = @[_backItem];
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.navigationView = [HHNavigationBackViewCreater customNavigationWithTarget:self action:@selector(back) text:[@" " stringByAppendingString:self.activityTitle ?: @""]];
+    [self.view addSubview:self.navigationView];
     
-    
+}
+
+- (void)initProgressView {
     self.progressView = [[UIProgressView alloc] init];
     self.progressView.progressViewStyle = UIProgressViewStyleBar;
     self.progressView.progressTintColor = HUIRED;
     
-    self.progressView.frame = CGRectMake(0, 44, KWIDTH, 2);
-    [self.navigationController.navigationBar addSubview:self.progressView];
-    
-    
-    
+    self.progressView.frame = CGRectMake(0, H(self.navigationView) - 2, KWIDTH, 2);
+    [self.navigationView addSubview:self.progressView];
 }
 
 - (void)initWebView {
     
-    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    self.webView = [[WKWebView alloc] initWithFrame:CGRectZero];
     self.webView.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [self.view addSubview:self.webView];
     
+    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+        make.top.equalTo(self.navigationView.mas_bottom);
+    }];
     [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
+    [self.webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:NULL];
+    
+    
     self.webView.scrollView.bounces = NO;
     if(!self.URLString) return;
     [self loadRequest];
     self.webView.navigationDelegate = self;
-   
-    
-    
+
 }
 
 
@@ -119,13 +125,19 @@
             });
         }
         
-    }else{
+    } else if ([keyPath isEqualToString:@"title"]) {
+        
+        self.activityTitle = self.webView.title;
+        [self initNavigation];
+    }
+    else{
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
 - (void)dealloc{
     
     [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
+    [self.webView removeObserver:self forKeyPath:@"title"];
     
 }
 

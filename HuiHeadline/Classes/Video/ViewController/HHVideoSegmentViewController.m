@@ -61,10 +61,24 @@ static HHVideoSegmentViewController *videoSegmentVC = nil;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self reloadSegment];
+
     
 }
 
 
+- (void)addBackView {
+    
+    for (int i = 0; i < videoSegmentVC.itemNames.count; i++) {
+        
+        CGFloat width = KWIDTH / 3;
+        CGFloat height = width * 200 / 369;
+        UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(KWIDTH * i + width , 0, width, height)];
+        imgV.image = [UIImage imageNamed:@"才是头条"];
+        imgV.center = CGPointMake(imgV.center.x, videoSegmentVC.scrollView.center.y - CGFLOAT(60));
+        [videoSegmentVC.scrollView insertSubview:imgV atIndex:0];
+    }
+}
 
 
 #pragma mark WMPageDataSource+AddButton
@@ -73,6 +87,7 @@ static HHVideoSegmentViewController *videoSegmentVC = nil;
     
     videoSegmentVC.itemNames = HHUserManager.sharedInstance.video_channels;
     [videoSegmentVC reloadData];
+    [self addBackView];
     
 }
 
