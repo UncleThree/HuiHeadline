@@ -67,12 +67,12 @@
     self.contentLabel = ({
         UILabel *label = [[UILabel alloc] init];
         
-        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:messge attributes:@{KEY_FONT:Font(17), }];
+        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:messge attributes:@{KEY_FONT:Font(17),KEY_COLOR:RGB(66, 66, 66)}];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:5];//调整行间距
         [string addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [messge length])];
+        [string addAttribute:KEY_COLOR value:HUIRED range:[messge rangeOfString:@"“视频详情页”"]];
         label.attributedText = string;
-        label.textColor = RGB(66, 66, 66);
         label.numberOfLines = 0;
         label;
     });

@@ -8,8 +8,9 @@
 
 #import "HHMyOrderSegmentViewController.h"
 #import "HHMyOrderViewController.h"
+#import "HHOrderDetailViewController.h"
 
-@interface HHMyOrderSegmentViewController ()<WMPageControllerDataSource>
+@interface HHMyOrderSegmentViewController ()<WMPageControllerDataSource, MyOrderDelegate>
 
 @property (nonatomic, strong)UIView *navigationView;
 
@@ -37,7 +38,6 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     
 //    self.tabBarController.tabBar.hidden = YES;
 }
@@ -82,10 +82,20 @@
 - (UIViewController *)pageController:(WMPageController *)pageController viewControllerAtIndex:(NSInteger)index {
     
     HHMyOrderViewController *orderVC = [HHMyOrderViewController new];
+    orderVC.delegate = self;
     orderVC.type = index;
     return orderVC;
     
     
+}
+
+- (void)pushToOrderDetailVC:(HHOrderInfo *)orderInfo {
+    
+    HHOrderDetailViewController *orderDetailVC = [HHOrderDetailViewController new];
+    orderDetailVC.orderId = orderInfo.orderId;
+    self.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:orderDetailVC animated:YES];
 }
 
 

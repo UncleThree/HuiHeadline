@@ -55,7 +55,6 @@
     [super viewDidAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
 }
 
 
@@ -159,18 +158,18 @@
         make.top.equalTo(self.view).with.offset(CGFLOAT(80));
     }];
     [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(CGFLOAT(150));
+        make.height.mas_equalTo(CGFLOAT(180));
     }];
     
     [self.wechatImgV mas_makeConstraints:^(MASConstraintMaker *make) {
         
-        make.top.equalTo(self.thirLabel.mas_bottom).with.offset(CGFLOAT(25));
+        make.top.equalTo(self.thirLabel.mas_bottom).with.offset(CGFLOAT(30));
         make.width.height.mas_equalTo(CGFLOAT(60));
         make.right.equalTo(self.view.mas_centerX).with.offset(-21);
     }];
     
     [self.alipayImgv mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.thirLabel.mas_bottom).with.offset(CGFLOAT(25));
+        make.top.equalTo(self.thirLabel.mas_bottom).with.offset(CGFLOAT(30));
         make.width.height.mas_equalTo(self.wechatImgV);
         make.left.equalTo(self.view.mas_centerX).with.offset(21);
         
@@ -186,6 +185,9 @@
         return;
     }
     
+    [self.userNameTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
+    
     [self loginWithUserName:self.userNameTextField.text password:self.passwordTextField.text];
     
     
@@ -195,7 +197,7 @@
 - (void)loginWithUserName:(NSString *)username
                  password:(NSString *)password {
     
-    [HHHeadlineAwardHUD  showHUDWithText:@"登录中" animated:YES];
+    [HHHeadlineAwardHUD  showHUDWithText:@"请稍后" animated:YES];
     [HHLoginNetwork loginRequestWithPhone:username password:password handler:^(NSString *respondsStr, id error) {
         [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (respondsStr) {

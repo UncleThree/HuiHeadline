@@ -21,10 +21,7 @@
 
 @implementation HHHeadlineNavController
 
-- (void)viewWillAppear:(BOOL)animated {
-    
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
-}
+
 
 - (void)viewDidAppear:(BOOL)animated {
     
@@ -80,7 +77,7 @@
 
 - (void)addTitleView {
     
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT(20))];
     imgView.image = [UIImage imageNamed:@"titleView.png"];
     imgView.contentMode = UIViewContentModeScaleAspectFill;
     imgView.center = self.navigationBar.center;

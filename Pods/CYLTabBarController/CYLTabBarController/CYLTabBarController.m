@@ -268,8 +268,8 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
     CGFloat offset = 3;
     viewController.tabBarItem.imageInsets = UIEdgeInsetsMake(-offset, 0, offset, 0);
     [viewController.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -offset)];
-    [viewController.tabBarItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11]} forState:UIControlStateNormal];
-    [viewController.tabBarItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11]} forState:UIControlStateSelected];
+    [viewController.tabBarItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12], NSForegroundColorAttributeName:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1.0]} forState:UIControlStateNormal];
+    [viewController.tabBarItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12], NSForegroundColorAttributeName:[UIColor colorWithRed:229/255.0 green:54/255.0 blue:39/255.0 alpha:1.0]} forState:UIControlStateSelected];
     
     
     [self addChildViewController:viewController];

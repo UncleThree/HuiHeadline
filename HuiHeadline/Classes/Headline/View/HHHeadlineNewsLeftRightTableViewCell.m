@@ -77,13 +77,12 @@
 
 - (void)setAdModel:(HHAdModel *)adModel {
     
-    
-    //点击颜色变化
     self.titleLabel.textColor = adModel.hasClicked ? BLACK_153 : BLACK_51;
     
     self.titleLabel.text = adModel.subTitle ?: adModel.title;
     self.subLabel.text = @"广告";
-    NSURL *url = URL(adModel.imgList[0]);
+    
+    NSURL *url = adModel.imgList.count ? URL(adModel.imgList[0]) : nil;
     [self.leftImgV sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"place_image"]];
     
     if (adModel.AdAwards) {
@@ -106,8 +105,8 @@
 
 - (void)addSetTopLabel:(HHTopNewsModel *)topModel {
     
-    UIFont *font = kSubtitleFont;
-    CGFloat height = 18;
+    UIFont *font = Font(14);
+    CGFloat height = CGFLOAT(16);
     NSString *zd = @"置顶";
     CGFloat width = [HHFontManager sizeWithText:zd font:font maxSize:CGSizeMake(CGFLOAT_MAX, 25)].width;
     if (!self.setTopLabel) {

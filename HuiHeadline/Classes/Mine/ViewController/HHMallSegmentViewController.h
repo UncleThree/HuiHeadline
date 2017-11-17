@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HHBaseViewController.h"
 
 @interface HHMallSegmentViewController : UIViewController
 

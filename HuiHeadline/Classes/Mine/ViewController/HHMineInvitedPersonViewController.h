@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HHBaseViewController.h"
 
-@interface HHMineInvitedPersonViewController : UIViewController
+@interface HHMineInvitedPersonViewController : HHBaseViewController
+
+@property (nonatomic, assign)NSInteger personCount;
 
 @end

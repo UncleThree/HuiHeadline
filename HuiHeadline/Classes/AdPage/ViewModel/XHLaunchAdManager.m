@@ -111,8 +111,7 @@
         XHLaunchImageAdConfiguration *imageAdconfiguration = [XHLaunchImageAdConfiguration new];
         //广告停留时间
         imageAdconfiguration.duration = model.duration;
-        imageAdconfiguration.duration = 5;
-        
+        imageAdconfiguration.duration = 1;
         //广告frame
 //        CGFloat scaleHeight = [UIScreen mainScreen].bounds.size.width/model.width*model.height;
         imageAdconfiguration.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, KHEIGHT - 150);
@@ -126,11 +125,11 @@
         //广告点击打开链接
         imageAdconfiguration.openURLString = model.openUrl;
         //广告显示完成动画
-        imageAdconfiguration.showFinishAnimate = ShowFinishAnimateFlipFromLeft;
+        imageAdconfiguration.showFinishAnimate = ShowFinishAnimateFadein;
         //广告显示完成动画时间
         imageAdconfiguration.showFinishAnimateTime = 0.8;
         //跳过按钮类型
-        imageAdconfiguration.skipButtonType = SkipTypeTimeText;
+        imageAdconfiguration.skipButtonType = SkipTypeNone;
         //后台返回时,是否显示广告
         imageAdconfiguration.showEnterForeground = NO;
         

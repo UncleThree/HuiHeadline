@@ -22,17 +22,19 @@
 @implementation HHTaskCenterSignView
 
 - (instancetype)initWithFrame:(CGRect)frame
-                       state:(int)state {
+                       state:(int)state
+                        coin:(NSString *)coin   {
     
     if (self = [super initWithFrame:frame]) {
-        [self initUI:frame state:state];
+        [self initUI:frame state:state coin:coin];
     }
     return self;
     
 }
 
 - (void)initUI:(CGRect)frame
-         state:(int)state {
+         state:(int)state
+          coin:(NSString *)coin{
     
     CGFloat width = frame.size.width;
     CGFloat height = frame.size.height;
@@ -57,7 +59,10 @@
     CGFloat scale2 = 0.595;
     self.coinLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, height * scale2 , width, 25)];
     self.coinLabel.textColor = [UIColor whiteColor];
-    self.coinLabel.text = @"+100金币";
+//    self.coinLabel.text = @"+100金币";
+    if (coin && ![coin isEqualToString:@""]) {
+        self.coinLabel.text = [NSString stringWithFormat:@"+%@金币",coin];
+    } 
     self.coinLabel.font = Font(13);
     self.coinLabel.textAlignment = 1;
     [self addSubview:self.coinLabel];

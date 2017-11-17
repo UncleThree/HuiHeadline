@@ -86,9 +86,8 @@
             view.hidden = NO;
         }
     }
-    [HHUserManager sharedInstance].channels = self.dataSourceArray[0].mutableCopy;
     [self.navigationController popViewControllerAnimated:YES];
-    self.block([HHUserManager sharedInstance].channels);
+    self.block(self.dataSourceArray[0].copy);
 
 }
 

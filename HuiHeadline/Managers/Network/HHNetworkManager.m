@@ -62,7 +62,7 @@ static UIViewController *currentVC = nil;
     if (options) {
         
         if (options[@"CheckLogin"]) {
-            CheckLogin = options[@"CheckLogin"];
+            CheckLogin = [options[@"CheckLogin"] boolValue];
         }
         if (options[@"requestType"] && [options[@"requestType"] isEqualToString:@"json"] && !isEncryptedJson) {
             
@@ -77,28 +77,24 @@ static UIViewController *currentVC = nil;
             
             [manager.requestSerializer setValue:options[@"Accept"] forHTTPHeaderField:@"Accept"];
         }
-        if (options[@"appendUserInfo"]) {
-            
-            NSNumber *userId = [NSNumber numberWithLong:HHUserManager.sharedInstance.userId];
-            NSString *loginId = HHUserManager.sharedInstance.loginId;
-            if (userId && loginId) {
-                
-                url = [url stringByAppendingString:[NSString stringWithFormat:@"?userId=%@&loginId=%@&appVersion=%@", userId, loginId, APP_VER]];
-                if (options[@"appendUserInfo"]) {
-                    NSMutableDictionary *dict = parameters ? [(NSDictionary *)parameters mutableCopy] : [NSMutableDictionary dictionary];
-                    [dict setObject:userId forKey:@"userId"];
-                    [dict setObject:loginId forKey:@"loginId"];
-                    [dict setObject:[NSNumber numberWithInt:[APP_VER intValue]] forKey:@"appVersion"];
-                    parameters = dict.copy;
-                }
-                
-            } else {
-                NSLog(@"请求url:%@",url);
-                NSLog(@"用户未登录");
-            }
-        }
-
+        
     }
+    
+    NSNumber *userId = [NSNumber numberWithLong:HHUserManager.sharedInstance.userId];
+    NSString *loginId = HHUserManager.sharedInstance.loginId;
+    if (userId && loginId) {
+        
+        url = [url stringByAppendingString:[NSString stringWithFormat:@"?userId=%@&loginId=%@&appVersion=%@", userId, loginId, APP_VER]];
+        NSMutableDictionary *dict = parameters ? [(NSDictionary *)parameters mutableCopy] : [NSMutableDictionary dictionary];
+        [dict setObject:userId forKey:@"userId"];
+        [dict setObject:loginId forKey:@"loginId"];
+        parameters = dict.copy;
+        
+    }
+    NSMutableDictionary *dict = parameters ? [(NSDictionary *)parameters mutableCopy] : [NSMutableDictionary dictionary];
+    [dict setObject:@(1) forKey:@"platform"];
+    [dict setObject:[NSNumber numberWithInt:[APP_VER intValue]] forKey:@"appVersion"];
+    parameters = dict.copy;
     
     if (isEncryptedJson) {
         //字典转为json

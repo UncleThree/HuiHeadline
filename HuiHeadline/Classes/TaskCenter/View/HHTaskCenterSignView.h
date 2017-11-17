@@ -12,6 +12,8 @@
 
 ///0未签到
 - (instancetype)initWithFrame:(CGRect)frame
-                       state:(int)state;
+                        state:(int)state
+                         coin:(NSString *)coin;
+
 
 @end

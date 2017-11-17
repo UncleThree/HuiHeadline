@@ -20,6 +20,8 @@
 
 @property (nonatomic, strong)UITableView *tableView;
 
+@property (nonatomic, strong)UIView *statusBarView;
+
 @end
 
 
@@ -124,8 +126,14 @@ static HHMineViewController *mineVC = nil;
     
     [super viewWillAppear:animated];
     
-    [HHStatusBarUtil changeStatusBarColor:RGB(196, 57, 53)];
     
+    
+    if (!self.statusBarView) {
+        self.statusBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, STATUSBAR_HEIGHT)];
+        self.statusBarView.backgroundColor = RGB(196, 57, 53);
+        [UIApplication.sharedApplication.keyWindow addSubview:self.statusBarView];
+        [UIApplication.sharedApplication.keyWindow bringSubviewToFront:self.statusBarView];
+    }
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
@@ -133,9 +141,13 @@ static HHMineViewController *mineVC = nil;
     
 }
 
+
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
+    [self.statusBarView removeFromSuperview];
+    self.statusBarView = nil;
 }
 
 - (void)viewDidAppear:(BOOL)animated {

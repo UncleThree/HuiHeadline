@@ -55,9 +55,9 @@
     
     NSString *title = [@"好友" stringByAppendingString:[HHUtils  phone_sec:model.phone]];
     self.tLabel.text = title;
-    NSString *credit = [NSString stringWithFormat:@"提成收益：%zd金币",model.credit];
+    NSString *credit = [NSString stringWithFormat:@"%@：%zd金币",model.detail, model.credit];
     NSMutableAttributedString *creditatt = [[NSMutableAttributedString alloc] initWithString:credit attributes:@{KEY_FONT:Font(16),KEY_COLOR:HUIRED}];
-    [creditatt addAttribute:KEY_COLOR value:BLACK_153 range:[credit rangeOfString:@"提成收益："]];
+    [creditatt addAttribute:KEY_COLOR value:BLACK_153 range:[credit rangeOfString:[NSString stringWithFormat:@"%@：",model.detail]]];
     self.dLabel.attributedText = creditatt;
     
     self.timeLabel.text = [HHDateUtil creditTimeFormat:model.lastModifiedTime];

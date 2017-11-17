@@ -113,15 +113,18 @@
     BOOL isNewbie = self.model.taskId > 0;
     NSInteger taskId = isNewbie ? self.model.taskId : self.model.dailyTaskId;
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(taskTableViewCellDidClickTaskId:isNewbie:title:)]) {
-        [self.delegate taskTableViewCellDidClickTaskId:taskId isNewbie:isNewbie title:button.currentTitle];
-    }
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(activityTaskTitle:url:)] && !isNewbie && taskId > 101 ) {
-        ///activityTask
+        
         [self.delegate activityTaskTitle:self.model.activityTitle url:self.model.url];
         
     }
+    else if (self.delegate && [self.delegate respondsToSelector:@selector(taskTableViewCellDidClickTaskId:isNewbie:title:url:)]) {
+        
+        [self.delegate taskTableViewCellDidClickTaskId:taskId isNewbie:isNewbie title:button.currentTitle url:self.model.url];
+    }
+    
+   
 
     
 }

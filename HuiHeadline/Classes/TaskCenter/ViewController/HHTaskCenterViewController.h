@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "HHBaseViewController.h"
 
 
 @interface HHTaskCenterViewController : UIViewController
@@ -16,7 +16,7 @@
 
 - (void)reloadHeader:(BOOL)forced;
 
-- (void)reloadTableViewData;
+- (void)reloadTableViewData:(void(^)())callback  ;
 
 
 @end

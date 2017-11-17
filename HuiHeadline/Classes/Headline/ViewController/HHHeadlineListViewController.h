@@ -10,6 +10,7 @@
 #import "HHNewsModel.h"
 #import "HHAdModel.h"
 #import "HHTopNewsModel.h"
+#import "HHBaseViewController.h"
 
 @class HHBaseModel;
 
@@ -17,13 +18,11 @@ static NSString *normalCell = @"HHHeadlineNewsThreePicTableViewCell";
 static NSString *leftRightCell = @"HHHeadlineNewsLeftRightTableViewCell";
 static NSString *bigImgCell = @"HHHeadlineNewsBigImgTableViewCell";
 
-@interface  HHHeadlineListViewController : UIViewController
+@interface  HHHeadlineListViewController : HHBaseViewController
 
 //头条 社会 。。。
 @property (nonatomic, copy)NSString *type;
 
-//总的列表
-@property (nonatomic, strong)NSMutableArray<HHBaseModel *> *data;
 //新闻列表
 @property (nonatomic, strong)NSMutableArray<HHNewsModel *> *newsData;
 //置顶新闻列表
@@ -33,13 +32,20 @@ static NSString *bigImgCell = @"HHHeadlineNewsBigImgTableViewCell";
 //用manager 管理这个数组 显示之后移除
 @property (nonatomic, strong)NSMutableArray<HHAdModel *> *adData;
 
-//广告 待处理
+@property (nonatomic, strong)NSMutableArray<HHBaseModel *> *data;
 
 
 @property (nonatomic, strong)MJRefreshHeader *header;
 @property (nonatomic, strong)MJRefreshFooter *footer;
 
 - (void)showNav:(BOOL)show;
+
+- (void)requestAdsWithRowTag:(NSInteger)tag;
+
+@property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *adMap;
+///处理曝光  超过5分钟未曝光或者浏览广告数达到五个
+- (void)handlerAdExposure:(HHAdModel *)adModel;
+
 
 
 @end

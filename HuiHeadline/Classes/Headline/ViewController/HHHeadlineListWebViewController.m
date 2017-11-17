@@ -16,7 +16,7 @@
 @interface HHHeadlineListWebViewController () < UIScrollViewDelegate, HHHeadlineShareCollectionViewDelegate>
 
 ///模糊背景图
-@property (nonatomic, strong)UIView *backView;
+@property (nonatomic, strong)UIView *backGView;
 ///分享图
 @property (nonatomic, strong)HHHeadlineShareCollectionView *shareView;
 
@@ -39,7 +39,10 @@
     [super viewDidAppear:animated];
     self.webView.scrollView.delegate = self;
     
-    [(HHHeadlineNavController *)self.navigationController setAppear:NO];
+    if ([[self.navigationController class] isKindOfClass:[HHHeadlineNavController class]]) {
+        [(HHHeadlineNavController *)self.navigationController setAppear:NO];
+    }
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -57,15 +60,20 @@
 
 - (void)viewDidLoad {
     
-    [super viewDidLoad];
-    
+
     [self initNavigation];
     [self initWebView];
     [self initProgressView];
     
-    
+    [super viewDidLoad];
 }
 
+
+- (void)refresh {
+    
+    [super refresh];
+    [self loadRequest];
+}
 
 - (void)initProgressView {
     
@@ -84,11 +92,9 @@
     }];
     
     
-    if (![[HHDateUtil today] isEqualToString:HHUserManager.sharedInstance.today]) {
-        
+    if (![HHUserManager sharedInstance].hasClick) {
         [self addGuideView];
     }
-    
     
     [self initTime];
     
@@ -102,7 +108,7 @@
     
     self.guideLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.guideLabel.textColor = [UIColor whiteColor];
-    self.guideLabel.text = @"亲，点即可查看奖励规则，以及每日收益哦~";
+    self.guideLabel.text = @"亲，点击可查看奖励规则，以及每日收益哦~";
     self.guideLabel.font = Font(15);
     self.guideLabel.numberOfLines = 0;
     [self.view addSubview:self.guideView];
@@ -121,7 +127,16 @@
     }];
 }
 
+- (void)removeGuideView {
+    
+    [HHUserManager sharedInstance].hasClick = YES;
+    [self.guideView removeFromSuperview];
+    [self.guideLabel removeFromSuperview];
+    
+}
+
 - (void)initTime {
+    
     self.totalTime = (int)[HHUserManager sharedInstance].readConfig.durations;
     int readTime = [HHUserManager sharedInstance].readTime;
     if (readTime) {
@@ -153,7 +168,9 @@
 
 - (void)readAward {
     
-
+    [self removeGuideView];
+    
+    
     HHHeadlineListReadAwardViewController *readVC = [HHHeadlineListReadAwardViewController new];
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:readVC animated:YES];
@@ -168,8 +185,9 @@
 }
 
 - (void)sychDuration:(void(^)(NSError *error,HHReadSychDurationResponse *response))callback {
-    if (self.totalTime >= 30) {
+    if (self.totalTime >= 10) {
         [HHHeadlineNetwork sychDurationWithDuration:self.totalTime callback:^(NSError *error, id result) {
+            
             callback(error,result);
         }];
     }
@@ -179,12 +197,12 @@
 #define SHARE_HEIGHT 220
 
 - (void)presentShareView {
-    if (!_backView) {
-        _backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, KHEIGHT - 64)];
-        _backView.backgroundColor = TRAN_BLACK;
-        _backView.userInteractionEnabled = YES;
-        [_backView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideShareView)]];
-        [self.view addSubview:_backView];
+    if (!_backGView) {
+        _backGView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, KHEIGHT - 64)];
+        _backGView.backgroundColor = TRAN_BLACK;
+        _backGView.userInteractionEnabled = YES;
+        [_backGView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideShareView)]];
+        [self.view addSubview:_backGView];
     }
     if (!_shareView) {
         _shareView = [[HHHeadlineShareCollectionView alloc] initWithFrame:CGRectZero];
@@ -194,7 +212,7 @@
         
     }
     
-    _backView.hidden = NO;
+    _backGView.hidden = NO;
     [UIView animateWithDuration:0.3 animations:^{
         _shareView.frame = CGRectMake(0, KHEIGHT - 64 - SHARE_HEIGHT, KWIDTH, SHARE_HEIGHT);
     }];
@@ -204,7 +222,7 @@
 
 - (void)hideShareView {
     
-    _backView.hidden = YES;
+    _backGView.hidden = YES;
     [UIView animateWithDuration:0.3 animations:^{
         _shareView.frame = CGRectMake(0, KHEIGHT - 64, KWIDTH, SHARE_HEIGHT);
     }];
@@ -220,20 +238,29 @@
 
 
 - (void)initWebView {
-    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+
+    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) ];
     self.webView.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [self.view addSubview:self.webView];
+    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(0, 0, 0, 0));
+    }];
     
     [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
     self.webView.navigationDelegate = self;
     self.webView.scrollView.delegate = self;
     self.webView.scrollView.bounces = NO;
-    if(!self.URLString) return;
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:(self.URLString)]];
-    [self.webView loadRequest:request];
+    
+    [self loadRequest];
   
 }
 
+- (void)loadRequest {
+    
+    if(!self.URLString) return;
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:(self.URLString)]];
+    [self.webView loadRequest:request];
+}
 
 - (void)back{
     
@@ -243,8 +270,9 @@
     }
     else
     {
-        self.clickCallback();
-        
+        if (self.clickCallback) {
+            self.clickCallback();
+        }
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -267,9 +295,10 @@
         
         ///加载到0.8时开始计时器
         
-        if (progress >= 0.8) {
+        if (progress >= 0.8 && self.webView.loading) {
             
             [self startRead];
+            
         }
         if(progress == 1.0)
         {
@@ -290,7 +319,16 @@
 }
 
 
-
+- (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
+    
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+        
+        NSURLCredential *card = [[NSURLCredential alloc]initWithTrust:challenge.protectionSpace.serverTrust];
+        
+        completionHandler(NSURLSessionAuthChallengeUseCredential,card);
+        
+    }
+}
 
 
 

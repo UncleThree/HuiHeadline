@@ -104,7 +104,8 @@
         [attrArray addObject:secAttr.copy];
     }
     if (model.taskCredit) {
-        [attrArray addObject:fourText.copy];
+        [attrArray addObject:foutAttr.copy];
+        
     }
     
     for (int i = 0; i < attrArray.count; i++) {

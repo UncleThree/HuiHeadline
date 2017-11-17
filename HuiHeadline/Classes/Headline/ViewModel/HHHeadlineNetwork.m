@@ -9,7 +9,6 @@
 #import "HHNewsModel.h"
 #import "HHAdRequest.h"
 #import "HHAdStrategy.h"
-#import "HHAdModel.h"
 #import "HHReadIncomeDetailResponse.h"
 #import "HHReadSychDurationRequest.h"
 #import "HHReadSychDurationResponse.h"
@@ -45,7 +44,9 @@ static NSString *newkey = nil;
                        refresh:(BOOL)refresh //是否是下拉加载
                        handler:(Block)handler {
     if (isFirst) {
+        
         [self reset];
+        
     } else if (refresh) {
         pgnumD--;
         idx = idxD - pageSize;
@@ -192,9 +193,10 @@ static NSString *newkey = nil;
 }
 
 + (void)requestForAdList:(Block)callback {
-    
+    NSLog(@"ad");
     [self requestForAdPositions:^(NSError *error, HHAdStrategy *result) {
         if (error) {
+            NSLog(@"---%@",error);
             callback(error,nil);
         } else {
     
@@ -208,6 +210,15 @@ static NSString *newkey = nil;
 + (void)requestForAdPositions:(Block)callback
                      isBanner:(BOOL)isBanner {
     
+    NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
+    double place = time - AdStrategyManager.sharedInstance.lastTime;
+    
+    if ([AdStrategyManager sharedInstance].adStrategey && place < 60 * 30) {
+       
+        callback(nil, [AdStrategyManager sharedInstance].shortedAdStrategey);
+        return;
+    }
+    AdStrategyManager.sharedInstance.lastTime = time;
     NSString *url = isBanner ? k_getBannerAdStrategy : k_getAdStrategy;
     
     [HHNetworkManager postRequestWithUrl:url parameters:nil isEncryptedJson:NO otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
@@ -247,6 +258,8 @@ static NSString *newkey = nil;
             if (error) {
                 Log(error);
                 NSLog(@"%@广告请求error", adStrategy.adPositions[0].channel);
+                callback(error,nil);
+                return ;
             }
             [ads replaceObjectAtIndex:0 withObject:result ?: @[]];
             
@@ -254,6 +267,9 @@ static NSString *newkey = nil;
                 for (HHAdModel *ad in array) {
                     [resultModels addObject:ad];
                 }
+            }
+            if (!resultModels.count) {
+                NSLog(@"广告没有请求到");
             }
             callback(nil, resultModels.copy);
         }];
@@ -320,7 +336,7 @@ static NSString *newkey = nil;
 
 + (void)requestForReadAward:(Block)callback {
     
-    [HHNetworkManager postRequestWithUrl:k_readConfig_description_url parameters:nil isEncryptedJson:NO otherArg:@{@"requestType" : @"json", @"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_readConfig_description_url parameters:nil isEncryptedJson:NO otherArg:@{@"requestType" : @"json"} handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
             NSDictionary *dict = [respondsStr mj_JSONObject];
             if (dict && dict[@"descList"]) {
@@ -337,7 +353,7 @@ static NSString *newkey = nil;
 
 + (void)requestForReadIncomeDetail:(Block)callback {
     
-    [HHNetworkManager postRequestWithUrl:k_readIncomeDetail_url parameters:nil isEncryptedJson:NO otherArg:@{@"requestType" : @"json", @"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_readIncomeDetail_url parameters:nil isEncryptedJson:NO otherArg:@{@"requestType" : @"json"} handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
             HHReadIncomeDetailResponse *response = [HHReadIncomeDetailResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
             callback(nil, response);
@@ -350,7 +366,7 @@ static NSString *newkey = nil;
 + (void)sychRewardPerHourWithHour:(int)hour
                          callback:(void(^)(NSError *error,HHAwardPerHourResponse *response))callback{
     NSLog(@"时段奖励请求");
-    [HHNetworkManager postRequestWithUrl:k_sync_awardPerhour parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_sync_awardPerhour parameters:nil isEncryptedJson:YES otherArg:nil handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -369,7 +385,7 @@ static NSString *newkey = nil;
     HHReadSychDurationRequest *sychDurationRequest = [[HHReadSychDurationRequest alloc] init];
     sychDurationRequest.duration = duration;
     NSDictionary *paramaters = [sychDurationRequest mj_keyValues];
-    [HHNetworkManager postRequestWithUrl:k_sync_duration parameters:paramaters isEncryptedJson:YES otherArg:@{ @"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_sync_duration parameters:paramaters isEncryptedJson:YES otherArg:nil handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
             HHReadSychDurationResponse *response = [HHReadSychDurationResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
             [HHUserManager sharedInstance].sychDurationResponse = response;
@@ -391,7 +407,7 @@ static NSString *newkey = nil;
     sychDurationRequest.duration = duration;
     sychDurationRequest.channel = @"360";
     NSDictionary *paramaters = [sychDurationRequest mj_keyValues];
-    [HHNetworkManager postRequestWithUrl:k_sync_duration parameters:paramaters isEncryptedJson:YES otherArg:@{ @"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_sync_duration parameters:paramaters isEncryptedJson:YES otherArg:nil handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
             HHReadSychDurationResponse *response = [HHReadSychDurationResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
             [HHUserManager sharedInstance].sychDurationResponse = response;
@@ -403,6 +419,21 @@ static NSString *newkey = nil;
     
 }
 
++ (void)sychListAdExposureWithMap:(NSDictionary<NSString *,NSNumber *> *)map
+                         callback:(void(^)(id error, HHResponse *response))callback
+{
+    
+    
+    [HHNetworkManager postRequestWithUrl:k_sych_ad_exposure parameters:@{@"sychMap":map} isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
+       
+        if (error) {
+            callback(error,nil);
+        } else {
+            HHResponse *response = [HHResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+            callback(nil,response);
+        }
 
+    }];
+}
 
 @end

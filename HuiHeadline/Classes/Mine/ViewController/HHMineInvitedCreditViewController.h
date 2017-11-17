@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HHBaseViewController.h"
 
-@interface HHMineInvitedCreditViewController : UIViewController
+@interface HHMineInvitedCreditViewController : HHBaseViewController
 
 @end

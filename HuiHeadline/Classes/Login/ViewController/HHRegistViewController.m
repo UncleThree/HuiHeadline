@@ -216,13 +216,14 @@
 
 - (void)regist {
     
-    if (!self.numberTF.text) {
+    if (!self.numberTF.text || [self.numberTF.text isEqualToString:@""]) {
+        
         [HHHeadlineAwardHUD showMessage:@"请输入手机号！" animated:YES duration:2];
     } else if (![HHUtils isMobileNumber:self.numberTF.text]) {
         [HHHeadlineAwardHUD showMessage:@"请输入正确的手机号！" animated:YES duration:2];
-    } else if (!self.virifyTF.text) {
+    } else if (!self.virifyTF.text || [self.virifyTF.text isEqualToString:@""]) {
         [HHHeadlineAwardHUD showMessage:@"请输入验证码！" animated:YES duration:2];
-    } else if (!self.passTF.text) {
+    } else if (!self.passTF.text || [self.passTF.text isEqualToString:@""]) {
         [HHHeadlineAwardHUD showMessage:@"请输入密码！" animated:YES duration:2];
     } else {
         [HHHeadlineAwardHUD showHUDWithText:@"注册中..." animated:YES];

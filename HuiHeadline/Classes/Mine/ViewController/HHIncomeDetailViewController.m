@@ -11,7 +11,6 @@
 
 @interface HHIncomeDetailViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong)UIView *navigationView;
 @property (nonatomic, strong)UITableView *tableView;
 
 @property (nonatomic, strong)NSMutableArray<HHIncomeDetail *> *models;
@@ -34,24 +33,32 @@
     
     [super viewWillAppear:animated];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
+
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)viewDidAppear:(BOOL)animated {
     
-    [self initNavigation];
-    [self initTableView];
+    [super viewDidAppear:animated];
     
-   
     [self requestIncomeDetailWithNew:YES callback:^{
         [HHHeadlineAwardHUD showHUDWithText:@"" animated:YES];
         [self.tableView reloadData];
         [HHHeadlineAwardHUD hideHUDAnimated:YES];
     }];
+}
+
+
+- (void)viewDidLoad {
+    
+    
+    [self initNavigation];
+    [self initTableView];
+    
+    [super viewDidLoad];
+    
     
 }
 
@@ -153,11 +160,16 @@
     self.tableView.sectionFooterHeight = 0;
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 0.01f)];
     [self.tableView registerClass:[HHIncomeDetailTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHIncomeDetailTableViewCell class])];
+   
+    [self initHeader];
+    [self initFooter];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+
+- (void)initHeader {
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     header.lastUpdatedTimeLabel.hidden = YES;
     self.tableView.mj_header = header;
-    [self initFooter];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)initFooter {
@@ -167,6 +179,7 @@
 
 - (void)refresh {
     
+    [super refresh];
     [self requestIncomeDetailWithNew:YES callback:^{
         [self.tableView reloadData];
         [self.tableView.mj_header endRefreshing];
@@ -208,7 +221,7 @@
         
     } else {
         
-        return 0.01;
+        return 0;
     }
 }
 
@@ -230,6 +243,8 @@
     return 40;
 }
 
+kRemoveCellSeparator
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 40)];
@@ -239,6 +254,7 @@
     HHIncomeDetail *model = self.separateDict[key][0];
     label.text = model.timeArray[0];
     label.textAlignment = 2;
+    label.font = Font(16);
     [view addSubview:label];
     view.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1.0];
     return view;

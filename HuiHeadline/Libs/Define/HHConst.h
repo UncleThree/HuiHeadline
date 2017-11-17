@@ -18,6 +18,8 @@
 
 #define PROGRESS_KWIDTH CGFLOAT(120)
 
+#define VIDEO_AD_HEIGHT 130.0
+
 #define UUID [UIDevice currentDevice].identifierForVendor.UUIDString
 
 #define APP_VER [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
@@ -33,7 +35,7 @@
 #define kTitleFont      Font(18)
 
 //子标题字体
-#define kSubtitleFont      Font(16)
+#define kSubtitleFont      Font(15)
 
 #define LARGE KWIDTH >= 414
 #define NORMAL KWIDTH >= 375
@@ -100,5 +102,7 @@
 typedef void(^Block)(NSError *error,id result);
 
 #define WX_APPID @"wx95837f9bce09e2be"
+
+//#define WX_APPID @"wxd0be1cf0ca04364b"
 
 #endif /* HHConst_h */

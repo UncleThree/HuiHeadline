@@ -77,7 +77,16 @@
 		5B3B97D91FB596BE00BC1500 /* HHRetrievePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97D81FB596BE00BC1500 /* HHRetrievePasswordViewController.m */; };
 		5B3B97DC1FB5999400BC1500 /* HHStateResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B97DB1FB5999400BC1500 /* HHStateResponse.m */; };
 		5B3B97DE1FB5AEA700BC1500 /* tp_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B97DD1FB5AEA700BC1500 /* tp_bg.png */; };
+		5B4E24B51FBBE94000B38963 /* HHBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4E24B41FBBE94000B38963 /* HHBaseViewController.m */; };
+		5B4E24BB1FBC5A5300B38963 /* notice_robot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B4E24BA1FBC5A5300B38963 /* notice_robot.png */; };
 		5B56BA101F7A5CB300830EF5 /* HHVideoSegmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B56BA0F1F7A5CB200830EF5 /* HHVideoSegmentViewController.m */; };
+		5B61C0BA1FBD9392007C48A2 /* UIView+XDRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B61C0B81FBD9392007C48A2 /* UIView+XDRefresh.m */; };
+		5B61C0BB1FBD9392007C48A2 /* XDRefreshResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5B61C0B91FBD9392007C48A2 /* XDRefreshResource.bundle */; };
+		5B6354EC1FBE7D6F00FF25EF /* CCPActionSheetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6354E31FBE7D6F00FF25EF /* CCPActionSheetCell.m */; };
+		5B6354ED1FBE7D6F00FF25EF /* CCPActionSheetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B6354E41FBE7D6F00FF25EF /* CCPActionSheetCell.xib */; };
+		5B6354EE1FBE7D6F00FF25EF /* CCPActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6354E61FBE7D6F00FF25EF /* CCPActionSheetView.m */; };
+		5B6354EF1FBE7D6F00FF25EF /* UIView+CCPExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6354E81FBE7D6F00FF25EF /* UIView+CCPExtension.m */; };
+		5B6354F01FBE7D6F00FF25EF /* CCPScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6354EB1FBE7D6F00FF25EF /* CCPScrollView.m */; };
 		5B7BFEB51F8B116700A615F9 /* HHAdModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFEB41F8B116700A615F9 /* HHAdModel.m */; };
 		5B7BFEB81F8B5A6600A615F9 /* HHBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFEB71F8B5A6600A615F9 /* HHBaseModel.m */; };
 		5B7BFEBB1F8C61C200A615F9 /* HHHeadlineNewsBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFEBA1F8C61C200A615F9 /* HHHeadlineNewsBaseTableViewCell.m */; };
@@ -111,7 +120,6 @@
 		5BA5EBDF1F6F805E0066A06A /* LaunchAdModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBDE1F6F805E0066A06A /* LaunchAdModel.m */; };
 		5BA5EBE21F6F80730066A06A /* UIViewController+Nav.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBE11F6F80730066A06A /* UIViewController+Nav.m */; };
 		5BA5EBE51F6F80850066A06A /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBE41F6F80850066A06A /* WebViewController.m */; };
-		5BA5EBF51F6F83260066A06A /* image12.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5BA5EBEC1F6F83260066A06A /* image12.gif */; };
 		5BA5EBF61F6F83260066A06A /* LaunchImageAd.json in Resources */ = {isa = PBXBuildFile; fileRef = 5BA5EBED1F6F83260066A06A /* LaunchImageAd.json */; };
 		5BA5EBF71F6F83260066A06A /* LaunchVideoAd.json in Resources */ = {isa = PBXBuildFile; fileRef = 5BA5EBEE1F6F83260066A06A /* LaunchVideoAd.json */; };
 		5BA5EBFA1F6FA6730066A06A /* HHHeadlineAwardHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA5EBF91F6FA6730066A06A /* HHHeadlineAwardHUD.m */; };
@@ -170,6 +178,7 @@
 		5BDEB6691F78B4D6005B931C /* EntryNeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDEB6681F78B4D6005B931C /* EntryNeed.m */; };
 		5BDEB66F1F79F402005B931C /* HHHeadlineNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDEB66E1F79F402005B931C /* HHHeadlineNetwork.m */; };
 		5BDEB6721F79FC6C005B931C /* HHHeadlineListWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDEB6711F79FC6C005B931C /* HHHeadlineListWebViewController.m */; };
+		5BE1F4BE1FB9917500ED1D05 /* HHInvitedInitResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BE1F4BD1FB9917500ED1D05 /* HHInvitedInitResponse.m */; };
 		5BE9873C1FA6F98000710AA1 /* HHMallBindAliViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BE9873A1FA6F98000710AA1 /* HHMallBindAliViewController.m */; };
 		5BE987401FA6FC5900710AA1 /* HHLabelAndTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BE9873F1FA6FC5900710AA1 /* HHLabelAndTextFieldTableViewCell.m */; };
 		5BE987431FA70AD600710AA1 /* HHAlipayAccountResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BE987421FA70AD600710AA1 /* HHAlipayAccountResponse.m */; };
@@ -364,8 +373,23 @@
 		5B3B97DA1FB5999400BC1500 /* HHStateResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHStateResponse.h; sourceTree = "<group>"; };
 		5B3B97DB1FB5999400BC1500 /* HHStateResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHStateResponse.m; sourceTree = "<group>"; };
 		5B3B97DD1FB5AEA700BC1500 /* tp_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tp_bg.png; sourceTree = "<group>"; };
+		5B4E24B31FBBE94000B38963 /* HHBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHBaseViewController.h; sourceTree = "<group>"; };
+		5B4E24B41FBBE94000B38963 /* HHBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHBaseViewController.m; sourceTree = "<group>"; };
+		5B4E24BA1FBC5A5300B38963 /* notice_robot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notice_robot.png; sourceTree = "<group>"; };
 		5B56BA0E1F7A5CB200830EF5 /* HHVideoSegmentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHVideoSegmentViewController.h; sourceTree = "<group>"; };
 		5B56BA0F1F7A5CB200830EF5 /* HHVideoSegmentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHVideoSegmentViewController.m; sourceTree = "<group>"; };
+		5B61C0B71FBD9392007C48A2 /* UIView+XDRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+XDRefresh.h"; sourceTree = "<group>"; };
+		5B61C0B81FBD9392007C48A2 /* UIView+XDRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+XDRefresh.m"; sourceTree = "<group>"; };
+		5B61C0B91FBD9392007C48A2 /* XDRefreshResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = XDRefreshResource.bundle; sourceTree = "<group>"; };
+		5B6354E21FBE7D6F00FF25EF /* CCPActionSheetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCPActionSheetCell.h; sourceTree = "<group>"; };
+		5B6354E31FBE7D6F00FF25EF /* CCPActionSheetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCPActionSheetCell.m; sourceTree = "<group>"; };
+		5B6354E41FBE7D6F00FF25EF /* CCPActionSheetCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CCPActionSheetCell.xib; sourceTree = "<group>"; };
+		5B6354E51FBE7D6F00FF25EF /* CCPActionSheetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCPActionSheetView.h; sourceTree = "<group>"; };
+		5B6354E61FBE7D6F00FF25EF /* CCPActionSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCPActionSheetView.m; sourceTree = "<group>"; };
+		5B6354E71FBE7D6F00FF25EF /* UIView+CCPExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CCPExtension.h"; sourceTree = "<group>"; };
+		5B6354E81FBE7D6F00FF25EF /* UIView+CCPExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CCPExtension.m"; sourceTree = "<group>"; };
+		5B6354EA1FBE7D6F00FF25EF /* CCPScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCPScrollView.h; sourceTree = "<group>"; };
+		5B6354EB1FBE7D6F00FF25EF /* CCPScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCPScrollView.m; sourceTree = "<group>"; };
 		5B7BFEB31F8B116700A615F9 /* HHAdModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHAdModel.h; sourceTree = "<group>"; };
 		5B7BFEB41F8B116700A615F9 /* HHAdModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHAdModel.m; sourceTree = "<group>"; };
 		5B7BFEB61F8B5A6600A615F9 /* HHBaseModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHBaseModel.h; sourceTree = "<group>"; };
@@ -535,6 +559,8 @@
 		5BDEB66E1F79F402005B931C /* HHHeadlineNetwork.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineNetwork.m; sourceTree = "<group>"; };
 		5BDEB6701F79FC6C005B931C /* HHHeadlineListWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHHeadlineListWebViewController.h; sourceTree = "<group>"; };
 		5BDEB6711F79FC6C005B931C /* HHHeadlineListWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHHeadlineListWebViewController.m; sourceTree = "<group>"; };
+		5BE1F4BC1FB9917500ED1D05 /* HHInvitedInitResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHInvitedInitResponse.h; sourceTree = "<group>"; };
+		5BE1F4BD1FB9917500ED1D05 /* HHInvitedInitResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHInvitedInitResponse.m; sourceTree = "<group>"; };
 		5BE987391FA6F98000710AA1 /* HHMallBindAliViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHMallBindAliViewController.h; sourceTree = "<group>"; };
 		5BE9873A1FA6F98000710AA1 /* HHMallBindAliViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHMallBindAliViewController.m; sourceTree = "<group>"; };
 		5BE9873E1FA6FC5900710AA1 /* HHLabelAndTextFieldTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHLabelAndTextFieldTableViewCell.h; sourceTree = "<group>"; };
@@ -751,6 +777,39 @@
 			path = HuiHeadline/Libs/Category;
 			sourceTree = SOURCE_ROOT;
 		};
+		5B4E24AF1FBBE90600B38963 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				5B4E24B01FBBE92400B38963 /* Controller */,
+				5B4E24B21FBBE92400B38963 /* Model */,
+				5B4E24B11FBBE92400B38963 /* View */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		5B4E24B01FBBE92400B38963 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				5B4E24B31FBBE94000B38963 /* HHBaseViewController.h */,
+				5B4E24B41FBBE94000B38963 /* HHBaseViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		5B4E24B11FBBE92400B38963 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5B4E24B21FBBE92400B38963 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		5B56BA0A1F7A5BE300830EF5 /* Video */ = {
 			isa = PBXGroup;
 			children = (
@@ -790,6 +849,39 @@
 			children = (
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		5B61C0B61FBD9392007C48A2 /* XDRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				5B61C0B71FBD9392007C48A2 /* UIView+XDRefresh.h */,
+				5B61C0B81FBD9392007C48A2 /* UIView+XDRefresh.m */,
+				5B61C0B91FBD9392007C48A2 /* XDRefreshResource.bundle */,
+			);
+			path = XDRefresh;
+			sourceTree = "<group>";
+		};
+		5B6354E11FBE7D6F00FF25EF /* CCPActionSheetView */ = {
+			isa = PBXGroup;
+			children = (
+				5B6354E21FBE7D6F00FF25EF /* CCPActionSheetCell.h */,
+				5B6354E31FBE7D6F00FF25EF /* CCPActionSheetCell.m */,
+				5B6354E41FBE7D6F00FF25EF /* CCPActionSheetCell.xib */,
+				5B6354E51FBE7D6F00FF25EF /* CCPActionSheetView.h */,
+				5B6354E61FBE7D6F00FF25EF /* CCPActionSheetView.m */,
+				5B6354E71FBE7D6F00FF25EF /* UIView+CCPExtension.h */,
+				5B6354E81FBE7D6F00FF25EF /* UIView+CCPExtension.m */,
+			);
+			path = CCPActionSheetView;
+			sourceTree = "<group>";
+		};
+		5B6354E91FBE7D6F00FF25EF /* CCPScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				5B6354EA1FBE7D6F00FF25EF /* CCPScrollView.h */,
+				5B6354EB1FBE7D6F00FF25EF /* CCPScrollView.m */,
+			);
+			path = CCPScrollView;
 			sourceTree = "<group>";
 		};
 		5B8DF6521F9F476D004DB0F6 /* TaskCenter */ = {
@@ -859,6 +951,9 @@
 		5B8F898E1F7B9EBC001EAA9F /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				5B6354E11FBE7D6F00FF25EF /* CCPActionSheetView */,
+				5B6354E91FBE7D6F00FF25EF /* CCPScrollView */,
+				5B61C0B61FBD9392007C48A2 /* XDRefresh */,
 				5BE987941FAB34AE00710AA1 /* Alipay */,
 				5BE987841FAB0EE800710AA1 /* Wechat */,
 				5BE987801FAB0EB300710AA1 /* Reachablity */,
@@ -938,6 +1033,7 @@
 		5BA5EB5E1F677D270066A06A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				5B4E24AF1FBBE90600B38963 /* Common */,
 				5BA5EB5F1F677D270066A06A /* Headline */,
 				5B56BA0A1F7A5BE300830EF5 /* Video */,
 				5B8DF6521F9F476D004DB0F6 /* TaskCenter */,
@@ -1067,6 +1163,7 @@
 		5BA5EB761F677D270066A06A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5B4E24BA1FBC5A5300B38963 /* notice_robot.png */,
 				5B3B97DD1FB5AEA700BC1500 /* tp_bg.png */,
 				5B3B97C01FB19FB400BC1500 /* 闪光灯-关.png */,
 				5B3B97C11FB19FB400BC1500 /* 闪光灯-开.png */,
@@ -1398,8 +1495,8 @@
 				5B047E441F975968008E2CEC /* HHMineNormalCellModel.h */,
 				5B047E451F975968008E2CEC /* HHMineNormalCellModel.m */,
 				5B047E551F988B4F008E2CEC /* HHMineSettingCellModel.h */,
-				5B047E561F988B4F008E2CEC /* HHMineSettingCellModel.m */,
 				5BAA9D4D1FA305A30033041B /* HHInvitedJsonModel.h */,
+				5B047E561F988B4F008E2CEC /* HHMineSettingCellModel.m */,
 				5BAA9D4E1FA305A30033041B /* HHInvitedJsonModel.m */,
 				5BAA9D591FA31CDD0033041B /* HHMineItemCellModel.h */,
 				5BAA9D5A1FA31CDD0033041B /* HHMineItemCellModel.m */,
@@ -1409,6 +1506,8 @@
 				5BAA9D5D1FA322DD0033041B /* HHInvitedFetchSummaryResponse.m */,
 				5B3B97A91FB0650500BC1500 /* HHInvitedConstributionSummaryResponse.h */,
 				5B3B97AA1FB0650500BC1500 /* HHInvitedConstributionSummaryResponse.m */,
+				5BE1F4BC1FB9917500ED1D05 /* HHInvitedInitResponse.h */,
+				5BE1F4BD1FB9917500ED1D05 /* HHInvitedInitResponse.m */,
 				5B3B97D41FB5867100BC1500 /* HHInvitedSummaryResponse.h */,
 				5B3B97D51FB5867100BC1500 /* HHInvitedSummaryResponse.m */,
 				5BAA9D7B1FA45D690033041B /* HHProductIndoResponse.h */,
@@ -1634,10 +1733,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B6354ED1FBE7D6F00FF25EF /* CCPActionSheetCell.xib in Resources */,
+				5B4E24BB1FBC5A5300B38963 /* notice_robot.png in Resources */,
 				5B3B97B61FB1842D00BC1500 /* icon_qr_code_scan.png in Resources */,
 				5BE987731FA9CDFB00710AA1 /* icon_return.png in Resources */,
 				5BE987721FA9CDFB00710AA1 /* icon_income.png in Resources */,
 				5BE987711FA9CDFB00710AA1 /* icon_expenditure.png in Resources */,
+				5B61C0BB1FBD9392007C48A2 /* XDRefreshResource.bundle in Resources */,
 				5BE987701FA9CDFB00710AA1 /* icon_debit.png in Resources */,
 				5BE987B91FAB38A600710AA1 /* AlipaySDK.bundle in Resources */,
 				5BAA9D911FA47A2F0033041B /* icon_go_help.png in Resources */,
@@ -1670,7 +1772,6 @@
 				5BA5EBF61F6F83260066A06A /* LaunchImageAd.json in Resources */,
 				5BA5EB4D1F6779FC0066A06A /* LaunchScreen.storyboard in Resources */,
 				5B3B97BC1FB19B8C00BC1500 /* qr_scan_line.png in Resources */,
-				5BA5EBF51F6F83260066A06A /* image12.gif in Resources */,
 				5BF3A4AD1FA1E39B00B6E542 /* 计时奖励.png in Resources */,
 				5BA5EBF71F6F83260066A06A /* LaunchVideoAd.json in Resources */,
 				5BA5EC0A1F6FBEB10066A06A /* HHHeadlineNewsThreePicTableViewCell.xib in Resources */,
@@ -1751,6 +1852,7 @@
 				5BAA9D521FA307530033041B /* HHMineInvitedViewController.m in Sources */,
 				5B3B97AE1FB067FA00BC1500 /* HHMineInvitedCreditViewController.m in Sources */,
 				5B047E351F96F8E8008E2CEC /* HHStatusBarUtil.m in Sources */,
+				5B6354F01FBE7D6F00FF25EF /* CCPScrollView.m in Sources */,
 				5B047E371F96F8E8008E2CEC /* UIImage+Scale.m in Sources */,
 				5B2E45331F90AE1500361485 /* HHVideoDetailBottomView.m in Sources */,
 				5BE987581FA8296700710AA1 /* HHMyOrderTitleTableViewCell.m in Sources */,
@@ -1769,6 +1871,7 @@
 				5BA5EBCA1F6B84040066A06A /* HHHeadlineChannelListSecondHeaderView.m in Sources */,
 				5BB574041F74E65D002A1EF2 /* HHNetworkManager.m in Sources */,
 				5BA5EBDF1F6F805E0066A06A /* LaunchAdModel.m in Sources */,
+				5B6354EE1FBE7D6F00FF25EF /* CCPActionSheetView.m in Sources */,
 				5B047E641F99AFE4008E2CEC /* HHUtils.m in Sources */,
 				5B0DFDFA1FA0725D003C3771 /* HHSignResponse.m in Sources */,
 				5BE987C01FAC11CB00710AA1 /* AlipayService.m in Sources */,
@@ -1785,6 +1888,7 @@
 				5BA5EBAC1F6A626F0066A06A /* HHHeadlineSegmentViewController+TableView.m in Sources */,
 				5BA5EB7C1F6780100066A06A /* HHRootViewController.m in Sources */,
 				5BA5EBDB1F6F80380066A06A /* HHAdNetwork.m in Sources */,
+				5B6354EC1FBE7D6F00FF25EF /* CCPActionSheetCell.m in Sources */,
 				5BE9877C1FAB02ED00710AA1 /* HHPurchaseResponse.m in Sources */,
 				5BA5EB931F67AF8A0066A06A /* HHHeadlineTimer.m in Sources */,
 				5BA5EB9F1F691FF80066A06A /* HHHeadlineSegmentViewController.m in Sources */,
@@ -1831,6 +1935,7 @@
 				5BF7A3401F8DC74300D0DEF9 /* HHReadAward.m in Sources */,
 				5BA5EBFA1F6FA6730066A06A /* HHHeadlineAwardHUD.m in Sources */,
 				5BAA9D551FA309EE0033041B /* HHMineInvitedImageTableViewCell.m in Sources */,
+				5B4E24B51FBBE94000B38963 /* HHBaseViewController.m in Sources */,
 				5BA5EBE21F6F80730066A06A /* UIViewController+Nav.m in Sources */,
 				5BB573EC1F74B8F3002A1EF2 /* HHLoginNetwork.m in Sources */,
 				5B047E571F988B4F008E2CEC /* HHMineSettingCellModel.m in Sources */,
@@ -1903,12 +2008,15 @@
 				5BFAFB131F95EB3F0002E258 /* HHMineNetwork.m in Sources */,
 				5B3B97DC1FB5999400BC1500 /* HHStateResponse.m in Sources */,
 				5B047E541F987CE1008E2CEC /* HHMineSettingTableViewCell.m in Sources */,
+				5BE1F4BE1FB9917500ED1D05 /* HHInvitedInitResponse.m in Sources */,
 				5B0DFDFD1FA07BFB003C3771 /* HHUserNewbieTaskResponse.m in Sources */,
 				5BCF73281F7CFE5400936567 /* HHHeadlineShareCell.m in Sources */,
+				5B6354EF1FBE7D6F00FF25EF /* UIView+CCPExtension.m in Sources */,
 				5BFAFB191F95F0850002E258 /* HHMineCreditView.m in Sources */,
 				5B047E401F973C6A008E2CEC /* HHMineTableViewCell.m in Sources */,
 				5BF3A4A31FA190C700B6E542 /* G.m in Sources */,
 				5B3B97B11FB0725500BC1500 /* HHMineChangePasswordViewController.m in Sources */,
+				5B61C0BA1FBD9392007C48A2 /* UIView+XDRefresh.m in Sources */,
 				5BF7A3431F8DED5000D0DEF9 /* HHReadConfigResponse.m in Sources */,
 				5BF7A3461F8DF20D00D0DEF9 /* HHReadConfigRuleResponse.m in Sources */,
 				5BBD65F91F7F6D09006A3C0C /* HHNavigationBackViewCreater.m in Sources */,
@@ -2048,6 +2156,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = A9SSU4DP78;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2082,7 +2191,7 @@
 					"$(PROJECT_DIR)/HuiHeadline/Libs/ThirdParty/Wechat",
 					"$(PROJECT_DIR)/HuiHeadline/Libs/ThirdParty/Alipay",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cashtoutiao;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cashtoutiao.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2095,6 +2204,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = A9SSU4DP78;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2129,7 +2239,7 @@
 					"$(PROJECT_DIR)/HuiHeadline/Libs/ThirdParty/Wechat",
 					"$(PROJECT_DIR)/HuiHeadline/Libs/ThirdParty/Alipay",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cashtoutiao;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cashtoutiao.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

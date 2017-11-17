@@ -42,7 +42,6 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
 }
 
 - (void)initNavigation {
@@ -86,7 +85,7 @@
     self.passwordTF.textField.tintColor = BLACK_153;
     self.passwordTF.textField.font = font;
     self.passwordTF.textField.returnKeyType = UIReturnKeyDone;
-    self.passwordTF.textField.keyboardType = UIKeyboardTypeNumberPad;
+    self.passwordTF.textField.keyboardType = UIKeyboardTypeASCIICapable;
     self.passwordTF.textField.delegate = self;
     [self.view addSubview:self.passwordTF];
     
@@ -129,7 +128,7 @@
         
         [HHHeadlineAwardHUD showMessage:@"请输入验证码!" animated:YES duration:2.0];
         
-    } else if (!self.passwordTF.textField.text) {
+    } else if (!self.passwordTF.textField.text|| [self.passwordTF.textField.text isEqualToString:@""]) {
         
         [HHHeadlineAwardHUD showMessage:@"请输入密码!" animated:YES duration:2.0];
     } else {

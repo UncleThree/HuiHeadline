@@ -17,7 +17,9 @@
 
 @property (nonatomic, strong)HHAdStrategy *shortedAdStrategey;
 
-
 @property (nonatomic, strong)HHAdStrategy *bannerAdStrategey;
+///同步策略时间 s
+@property (nonatomic, assign)double lastTime;
+
 
 @end

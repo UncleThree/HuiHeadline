@@ -33,12 +33,12 @@
     self.imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.width)];
     self.imgView.layer.cornerRadius = frame.size.width / 2;
     self.imgView.layer.masksToBounds = YES;
-    self.imgView.layer.borderWidth = 0.5;
+    self.imgView.layer.borderWidth = 1.3 / 2;
     self.imgView.layer.borderColor = [UIColor whiteColor].CGColor;
     
     [self.contentView addSubview:self.imgView];
     
-    CGFloat scale = 0.43;
+    CGFloat scale = LARGE ? 0.50 : (NORMAL ? 0.47 : 0.45);
     CGFloat imgHeight = frame.size.width;
     self.coinsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, imgHeight * scale, imgHeight, 20)];
     self.coinsLabel.font = Font(11);

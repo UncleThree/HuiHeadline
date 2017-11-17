@@ -54,7 +54,7 @@
 
 - (UILabel *)reminderLabel {
     if (!_reminderLabel) {
-        _reminderLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, MaxY(self.changeAliButton) + 20, KWIDTH - 40, 80)];
+        _reminderLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, MaxY(self.changeAliButton) + 12, KWIDTH - 40, 80)];
         _reminderLabel.textColor = HUIRED;
         _reminderLabel.font = Font(15);
         _reminderLabel.numberOfLines = 0;
@@ -80,9 +80,9 @@
     
     _weixinAccount = weixinAccount;
     HHLabelAndTextFieldModel *model1 = [[HHLabelAndTextFieldModel alloc] init];
-    model1.labelText = @"真实姓名";
+    model1.labelText = @"真实姓名：";
     HHLabelAndTextFieldModel *model2 = [[HHLabelAndTextFieldModel alloc] init];
-    model2.labelText = @"手机号码";
+    model2.labelText = @"手机号码：";
     if (weixinAccount.realName && weixinAccount.phone) {
         
         model1.tfText = weixinAccount.realName;
@@ -97,7 +97,13 @@
         model2.tfEnabled = YES;
         [self.changeAliButton setTitle:@"保存" forState:(UIControlStateNormal)];
     }
-    self.reminderLabel.text = @"温馨提示：\n真实姓名，请填写微信绑定的银行卡的真实认证姓名";
+    
+    NSString *reminder = @"温馨提示：\n真实姓名，请填写微信绑定的银行卡的实名认证姓名";
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:reminder attributes:@{KEY_FONT:Font(15),KEY_COLOR:HUIRED}];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:5];//调整行间距
+    [string addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [reminder length])];
+    self.reminderLabel.attributedText = string;
     
     [self.models removeAllObjects];
     [self.models addObject:model1];
@@ -133,12 +139,22 @@
             view.hidden = YES;
         }
     }
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
     
     if (self.manager) {
         [self requstDefaultWXAccount];
     }
     
 }
+
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+}
+
 
 - (void)requstDefaultWXAccount {
     
@@ -147,6 +163,8 @@
             HHUserManager.sharedInstance.weixinAccount = response.weixinAccount;
             [self setWeixinAccount:response.weixinAccount];
             
+        } else {
+            [self setWeixinAccount:nil];
         }
         [self.tableView reloadData];
     }];
@@ -154,13 +172,13 @@
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self initNav];
 }
 
 - (void)initNav {
-    
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:[HHNavigationBackViewCreater customBarItemWithTarget:self action:@selector(back) text:@" 管理微信钱包"]];
     self.view.backgroundColor = [UIColor colorWithWhite:0.90 alpha:1.0];

@@ -62,9 +62,9 @@
     
     _alipayAccount = alipayAccount;
     HHLabelAndTextFieldModel *model1 = [[HHLabelAndTextFieldModel alloc] init];
-    model1.labelText = @"支付宝账户";
+    model1.labelText = @"支付宝账户：";
     HHLabelAndTextFieldModel *model2 = [[HHLabelAndTextFieldModel alloc] init];
-    model2.labelText = @"支付宝姓名";
+    model2.labelText = @"支付宝姓名：";
     if (alipayAccount && alipayAccount.account && alipayAccount.name) {
         model1.tfText = alipayAccount.account;
         model1.tfEnabled = NO;
@@ -105,10 +105,21 @@
         }
     }
     
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
     if (self.manager) {
         [self requstDefaultAliAccount];
     }
     
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (void)viewDidLoad {
@@ -125,7 +136,7 @@
     [HHMineNetwork getDefaultAlipay:^(id error, HHAlipayAccountResponse *response) {
         if (error) {
             //暂无绑定支付宝信息
-            
+            [self setAlipayAccount:nil];
         } else {
             [HHUserManager sharedInstance].alipayAccount = response.alipayAccount;
             [self setAlipayAccount:response.alipayAccount];
@@ -224,6 +235,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 50;
 }
+
+kRemoveCellSeparator
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     

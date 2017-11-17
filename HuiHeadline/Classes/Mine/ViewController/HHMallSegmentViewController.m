@@ -11,6 +11,7 @@
 #import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 #import "HHMallBindAliViewController.h"
 #import "HHMallBindWechatViewController.h"
+#import "HHOrderDetailViewController.h"
 
 @interface HHMallSegmentViewController () <UIScrollViewDelegate,HHMallTableViewDelegate>
 
@@ -37,7 +38,6 @@
     
     [super viewWillAppear:animated];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithWhite:0.2 alpha:1.0];
     for (UIView *view in self.navigationController.navigationBar.subviews) {
@@ -51,9 +51,12 @@
 
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self initUI];
+    
+    [super viewDidLoad];
 }
 
 - (void)initUI {
@@ -68,6 +71,7 @@
     
     
 }
+
 
 - (void)initScrollView {
     
@@ -201,5 +205,25 @@
     
 }
 
+
+- (void)alertSuccessActionWithOrderId:(NSInteger)orderId {
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"兑换成功！" message:@"" preferredStyle:(UIAlertControllerStyleAlert)];
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"查看详情" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+        
+        HHOrderDetailViewController *orderDetailVC = [HHOrderDetailViewController new];
+        orderDetailVC.orderId = orderId;
+        self.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:orderDetailVC animated:YES];
+        
+    }];
+    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"取消" style:(UIAlertActionStyleCancel) handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alert addAction:action1];
+    [alert addAction:action2];
+    
+    [self.navigationController presentViewController:alert animated:YES completion:nil];
+}
 
 @end

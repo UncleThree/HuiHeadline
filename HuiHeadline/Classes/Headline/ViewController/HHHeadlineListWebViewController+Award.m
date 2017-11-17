@@ -37,14 +37,9 @@ static int timerInterval = 0;
 }
 
 
-
-
-
-
-
 - (void)addProgress {
     
-
+   
     if (self.circleProgress.progressView.progress == 1 && !self.sychLock ) {
         
         [HHUserManager.sharedInstance.timer invalidate];
@@ -56,12 +51,17 @@ static int timerInterval = 0;
             [self award_sychDuration:nil];
         }];
     } else {
-        
+        if (timerInterval >= 5) {
+            [HHUserManager.sharedInstance.timer invalidate];
+            HHUserManager.sharedInstance.timer = nil;
+            return;
+        }
         timerInterval++;
         HHUserManager.sharedInstance.readTime++;
         self.circleProgress.progressView.progress = (float)HHUserManager.sharedInstance.readTime / (float)self.totalTime;
-        
-        if (timerInterval == 5) {
+        if (self.circleProgress.progressView.progress == 1) {
+            [self addProgress];
+        } else if (timerInterval == 5) {
             
             [HHUserManager.sharedInstance.timer invalidate];
             HHUserManager.sharedInstance.timer = nil;
@@ -106,7 +106,7 @@ static int timerInterval = 0;
     self.circleProgress.progressView.progress = 0;
     HHUserManager.sharedInstance.readTime = 0;
     CGPoint center = CGPointMake(PROGRESS_KWIDTH / 2, Y(self.circleProgress) + PROGRESS_KWIDTH / 2);
-    [HHHeadlineAwardHUD showImageView:@"计时奖励" coins:coins animation:YES originCenter:center addToView:self.view duration:1.0];
+    [HHHeadlineAwardHUD showImageView:@"计时奖励" coins:coins animation:YES originCenter:center addToView:self.view duration:2.0];
     
     
 

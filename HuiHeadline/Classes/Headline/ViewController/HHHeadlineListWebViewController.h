@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "HHHeadlineNewsDetailProgressView.h"
 #import <WebKit/WebKit.h>
+#import "HHBaseViewController.h"
 
 @class HHReadSychDurationResponse;
 
-@interface HHHeadlineListWebViewController : UIViewController
+@interface HHHeadlineListWebViewController : HHBaseViewController
 
 @property (nonatomic, copy)void (^clickCallback)(void);
 

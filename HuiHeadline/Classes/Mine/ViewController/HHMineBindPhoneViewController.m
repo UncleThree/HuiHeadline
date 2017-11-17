@@ -41,7 +41,7 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
+   
 }
 
 - (void)initNavigation {
@@ -53,7 +53,9 @@
 }
 
 - (void)back {
+    
     [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 
@@ -128,7 +130,7 @@
         
         [HHHeadlineAwardHUD showMessage:@"请输入验证码!" animated:YES duration:2.0];
         
-    } else if (!self.passwordTF.textField.text) {
+    } else if (!self.passwordTF.textField.text || [self.passwordTF.textField.text isEqualToString:@""]) {
         [HHHeadlineAwardHUD showMessage:@"请输入密码!" animated:YES duration:2.0];
     } else {
         

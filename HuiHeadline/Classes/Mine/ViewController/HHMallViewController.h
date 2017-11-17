@@ -7,15 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HHBaseViewController.h"
 
 @protocol HHMallTableViewDelegate <NSObject>
 
 - (void)clickSetAccountCellCategory:(NSInteger)category;
 
+- (void)alertSuccessActionWithOrderId:(NSInteger)orderId;
 
 @end
 
-@interface HHMallViewController : UIViewController
+@interface HHMallViewController : HHBaseViewController
 
 @property (nonatomic, strong)UITableView *tableView;
 

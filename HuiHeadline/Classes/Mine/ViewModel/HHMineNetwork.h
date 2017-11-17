@@ -109,6 +109,7 @@ typedef enum : NSUInteger {
 
 //order
 + (void)getOrderList:(NSInteger)state
+           orderTime:(long)orderTime
             callback:(void(^)(id error,NSArray<HHOrderInfo *> *orders))callback;
 
 + (void)getOrderDetailInfo:(NSInteger)orderId

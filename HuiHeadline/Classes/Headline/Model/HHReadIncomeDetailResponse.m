@@ -35,6 +35,10 @@
     
 }
 
+- (int)pastDay {
+    return  [HHDateUtil paseDays:_day];
+}
+
 
 
 

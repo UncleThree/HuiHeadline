@@ -9,10 +9,9 @@
 #import "AdStrategyManager.h"
 
 
-
 @implementation AdStrategyManager
 
-//@synthesize adStrategey = _adStrategey;
+@synthesize adStrategey = _adStrategey;
 
 static AdStrategyManager *adManager;
 
@@ -23,6 +22,22 @@ static AdStrategyManager *adManager;
         adManager = [[AdStrategyManager alloc] init];
     });
     return adManager;
+}
+
+
+- (void)setAdStrategey:(HHAdStrategy *)adStrategey {
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[adStrategey mj_JSONObject] forKey:@"ADSTRATEGEY"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    
+}
+
+- (HHAdStrategy *)adStrategey {
+    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:@"ADSTRATEGEY"];
+    _adStrategey = [HHAdStrategy mj_objectWithKeyValues:dict];
+    return _adStrategey;
+    
 }
 
 ///经过随机数重新排列的广告

@@ -10,6 +10,6 @@
 
 @interface HHStatusBarUtil : NSObject
 
-+ (void)changeStatusBarColor:(UIColor *)color;
+//+ (void)changeStatusBarColor:(UIColor *)color;
 
 @end

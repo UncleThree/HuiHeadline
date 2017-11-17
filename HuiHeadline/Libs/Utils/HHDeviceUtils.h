@@ -16,6 +16,8 @@
 + (Gps *)getGps;
 + (Network *)getNetwork;
 
++ (NSDictionary *)deviceExtra;
 
++ (int)formatConnectionType;
 
 @end

@@ -8,14 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "HHVideoDetailBottomView.h"
+#import "HHBaseViewController.h"
 
-@interface HHVideoDetailWebViewController : UIViewController
+@interface HHVideoDetailWebViewController : HHBaseViewController
 
 @property(nonatomic,copy)NSString *URLString;
 
 @property (nonatomic, strong)HHVideoDetailBottomView *buttomView;
 
 @property (nonatomic)int totalTime;
+
+@property (nonatomic, strong)NSMutableDictionary<NSString *, NSNumber *> *adMap;
+
+
+- (void)handlerAdExposure:(HHAdModel *)adModel;
 
 
 @end

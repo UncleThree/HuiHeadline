@@ -33,6 +33,7 @@
 
 - (NSString *)genderString {
     
+    self.isNew = _isNew;
     if (_gender == 1) {
         return @"男";
     } else if (_gender == 2) {
@@ -42,5 +43,18 @@
     }
     
 }
+
+- (BOOL)isNew {
+    
+    if (_registerTime) {
+        
+        return _registerTime / 1000 > 1510717404;
+    }
+    
+    return YES;
+    
+}
+
+
 
 @end

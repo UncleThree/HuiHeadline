@@ -43,9 +43,17 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
 
 - (void)viewDidLoad {
     
-    [super viewDidLoad];
-   
+    
     [self initTableView];
+    
+    [super viewDidLoad];
+}
+
+- (void)refresh {
+    
+    [super refresh];
+    
+    [self setCategory:self.category];
 }
 
 - (void)setCategory:(NSInteger)category {
@@ -176,8 +184,8 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
             NSLog(@"%@",error);
         } else {
             self.currentCredit = [NSString stringWithFormat:@"当前余额 : %@金币", [HHUtils insertComma:summary.remaining]];
-            callback();
         }
+        callback();
     }];
     
 }
@@ -338,10 +346,12 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
     
     [HHMineNetwork purchaseWithProductId:product.productOutlineId count:1 address:address message:@"" callState:0 voiceCode:@"" callback:^(id error, HHPurchaseResponse *response) {
         if (error) {
-            [HHHeadlineAwardHUD showMessage:error animated:YES duration:2];
+            
+            [HHHeadlineAwardHUD showMessage:error animated:YES duration:3];
+            
         } else {
             
-            [HHHeadlineAwardHUD showMessage:response.msg animated:YES duration:2];
+            [self alertSuccess:response.orderId];
             
             [self getCreditSummary:^{
                 [self.tableView reloadData];
@@ -350,6 +360,17 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
         
     }];
     
+    
+}
+
+
+- (void)alertSuccess:(NSInteger)orderId {
+    if (!orderId) {
+        return;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(alertSuccessActionWithOrderId:)]) {
+        [self.delegate alertSuccessActionWithOrderId:orderId];
+    }
     
 }
 

@@ -16,7 +16,7 @@
         [self setNewsModel:(HHNewsModel *)model];
     } else if ([model isKindOfClass:[HHAdModel class]]) {
         [self setAdModel:(HHAdModel *)model];
-    } else {
+    } else if ([model isKindOfClass:[HHTopNewsModel class]]) {
         
         [self setTopModel:(HHTopNewsModel *)model];
     }

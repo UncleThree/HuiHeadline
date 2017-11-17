@@ -7,18 +7,25 @@
 //
 
 #import "HHVideoDetailBottomView.h"
+#import "HHHeadlineNewsBaseTableViewCell.h"
 #import "HHHeadlineNewsLeftRightTableViewCell.h"
 
 @interface HHVideoDetailBottomView ()<UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong)UITableView *backTableView;
 
 
+@property (nonatomic, strong)NSMutableArray<HHAdModel *> *adData;
+
+@property (nonatomic, strong)HHAdModel *ad;
+
+@property (nonatomic, assign)BOOL requesting;
 
 
 @end
 
-static NSString *identifier = @"VIDEO_AD_CELL";
+static NSString *identifier1 = @"VIDEO_AD_CELL1";
+static NSString *identifier2 = @"VIDEO_AD_CELL2";
+static NSString *identifier3 = @"VIDEO_AD_CELL3";
 
 @implementation HHVideoDetailBottomView
 
@@ -49,7 +56,10 @@ static NSString *identifier = @"VIDEO_AD_CELL";
     self.backTableView.delegate = self;
     self.backTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.backTableView.bounces = NO;
-    [self.backTableView registerNib:[UINib nibWithNibName:@"HHHeadlineNewsLeftRightTableViewCell" bundle:nil] forCellReuseIdentifier:identifier];
+    [self.backTableView registerNib:[UINib nibWithNibName:@"HHHeadlineNewsLeftRightTableViewCell" bundle:nil] forCellReuseIdentifier:identifier1];
+    
+    
+    
     
     [self addSubview:self.backTableView];
     self.progressView = [[HHHeadlineNewsDetailProgressView alloc] initWithFrame:CGRectMake(0, 0, PROGRESS_KWIDTH, PROGRESS_KWIDTH)];
@@ -71,6 +81,51 @@ static NSString *identifier = @"VIDEO_AD_CELL";
     }
 }
 
+- (NSMutableArray<HHAdModel *> *)adData {
+    if (!_adData) {
+        _adData = [NSMutableArray array];
+    }
+    return _adData;
+}
+
+- (void)requstAds {
+    
+    [HHHeadlineNetwork requestForAdList:^(NSError *error, id result) {
+        
+        if (error) {
+            Log(error);
+        } else {
+            if (result && [result isKindOfClass:[NSArray class]]) {
+                
+                [self.adData addObjectsFromArray:result];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.backTableView reloadData];
+                });
+            }
+        }
+        self.requesting = NO;
+    }];
+}
+
+- (HHAdModel *)ad {
+    
+    if (!_ad) {
+        if (self.adData.count) {
+            _ad = self.adData[0];
+            [self.adData removeObjectAtIndex:0];
+        } else if (!self.requesting) {
+            self.requesting = YES;
+            [self requstAds];
+        } else {
+            
+            NSLog(@"111");
+        }
+    }
+    return _ad;
+}
+
+
+
 
 #pragma  mark UITableviewDataSource
 
@@ -85,9 +140,24 @@ static NSString *identifier = @"VIDEO_AD_CELL";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [UITableViewCell new];
+    
+    self.ad = nil;
+
+    HHHeadlineNewsLeftRightTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier1 forIndexPath:indexPath];
+    [cell setModel:self.ad];
+    if (self.ad && self.delegate && [self.delegate respondsToSelector:@selector(exposure:)] && !self.ad.exporsed) {
+        self.ad.exporsed = YES;
+        [self.delegate exposure:self.ad];
+    }
     cell.backgroundColor = [UIColor clearColor];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return VIDEO_AD_HEIGHT - 20;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -104,7 +174,7 @@ static NSString *identifier = @"VIDEO_AD_CELL";
     }
     return headerView;
     
-}
+} 
 
 - (void)clickFold {
     if (self.delegate && [self.delegate respondsToSelector:@selector(clickFold)]) {
@@ -118,10 +188,20 @@ static NSString *identifier = @"VIDEO_AD_CELL";
     return 20;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    return 100 - 20;
+    
+    if (!self.ad) {
+        return;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(clickAd:)]) {
+        [self.delegate clickAd:self.ad];
+    }
+    
+    
 }
+
 
 
 

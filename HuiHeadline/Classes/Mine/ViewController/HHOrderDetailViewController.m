@@ -12,9 +12,9 @@
 
 @interface HHOrderDetailViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong)UIView *navigationView;
-
 @property (nonatomic, strong)UITableView *tableView;
+
+@property (nonatomic, strong)HHOrderInfo *detailOrderInfo;
 
 @end
 
@@ -30,27 +30,33 @@ static NSString *orderAddress = @"ORDER_ADDRESS_CELL_ID";
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-//    self.tabBarController.tabBar.hidden = YES;
-    
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    
     [super viewDidAppear:animated];
     
-    
+    [self requestOrderDetail];
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+    
     
     [self initNav];
     
     [self initTableView];
     
-    [self requestOrderDetail];
+    [super viewDidLoad];
     
+    
+    
+}
+
+- (void)refresh {
+    
+    [super refresh];
+    [self requestOrderDetail];
 }
 - (void)initNav {
     
@@ -130,7 +136,8 @@ kRemoveCellSeparator
             return 120;
         } else if (indexPath.row == 3) {
             
-            return [HHFontManager sizeWithText:[self addressString] font:Font(17) maxSize:CGSizeMake(KWIDTH - 24, CGFLOAT_MAX)].height + 20;
+            CGFloat height = [HHFontManager sizeWithText:[self addressString] font:Font(17) maxSize:CGSizeMake(KWIDTH - 24, CGFLOAT_MAX)].height + 20;
+            return height < 45 ? 45 : height;
         }
     } else if (indexPath.section == 1) {
         
@@ -146,6 +153,7 @@ kRemoveCellSeparator
     }
     return 45;
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     

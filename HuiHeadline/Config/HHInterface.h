@@ -36,10 +36,10 @@
 #define k_user_protocol @"http://toutiao.huadongmedia.com/user-service.html"
 
 
-#define k_base_url @"http://api.cashtoutiao.com/frontend"
-// http://192.168.0.247:9780/frontend
-// http://192.168.0.147:8080/frontend
-// http://api.cashtoutiao.com/frontend
+//#define k_base_url @"http://192.168.0.114:8080/frontend"
+#define k_base_url @"http://192.168.0.247:9780/frontend"
+//#define k_base_url @"http://api.cashtoutiao.com/frontend"
+
 
 
 #define $(url) [k_base_url stringByAppendingString:url]
@@ -99,6 +99,8 @@
 #define k_sync_awardPerhour $(@"/credit/sych/reward/per/hour")
 
 #define k_get_income $(@"/read/income")
+
+#define k_sych_ad_exposure  $(@"/read/sych/list/ad/exposure")
 
 //credit
 

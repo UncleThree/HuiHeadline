@@ -74,7 +74,7 @@
     
     CGFloat myInLabelHeight = 15;
     NSString *text = @"我的邀请码";
-    self.myInLabel = [[UILabel alloc] initWithFrame:CGRectMake(X(self.copInImgV), Y(self.copInImgV) - 5 - myInLabelHeight, [HHFontManager sizeWithText:text font:Font(14) maxSize:CGSizeMake(MAXFLOAT, myInLabelHeight)].width, myInLabelHeight)];
+    self.myInLabel = [[UILabel alloc] initWithFrame:CGRectMake(X(self.copInImgV), self.backImgV.center.y - 5 - myInLabelHeight, [HHFontManager sizeWithText:text font:Font(14) maxSize:CGSizeMake(MAXFLOAT, myInLabelHeight)].width, myInLabelHeight)];
     self.myInLabel.text = text;
     self.myInLabel.font = Font(14);
     self.myInLabel.textColor = BLACK_153;
@@ -94,6 +94,9 @@
 - (void)setInvitedCode:(NSString *)invitedCode {
     
     _invitedCode = invitedCode;
+    if (!invitedCode) {
+        return;
+    }
     NSString *url = [k_appstore_link stringByAppendingString:[NSString stringWithFormat:@"#code=%@",invitedCode]];
     [self createQRCodeImage:url];
     

@@ -39,7 +39,6 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
 }
 
 - (void)initNavigation {

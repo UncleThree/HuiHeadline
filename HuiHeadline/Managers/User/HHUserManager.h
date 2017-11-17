@@ -23,6 +23,9 @@
 @property (nonatomic, copy)NSString *userName;
 @property (nonatomic, copy)NSString *passWord;
 
+///阅读奖励的引导图是否被点击过
+@property (nonatomic, assign)BOOL hasClick;
+
 ///当前用户
 @property (nonatomic, strong)HHUserModel *currentUser;
 ///当前奖励规则 每次启动程序重新获取
@@ -58,6 +61,8 @@
 
 @property (nonatomic, assign)int virifyCodeCountdown;
 
+@property (nonatomic, assign)NSTimeInterval lastSychAdTime;
+
 //当前用户对应的频道列表
 @property (nonatomic, strong)NSMutableArray<NSString *> *channels;
 //所有channel
@@ -73,6 +78,7 @@
 @property (nonatomic, assign)long userId;
 
 @property (nonatomic, copy)NSString *loginId;
+
 
 
 

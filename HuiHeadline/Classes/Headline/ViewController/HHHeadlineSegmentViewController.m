@@ -85,7 +85,8 @@ static HHHeadlineSegmentViewController *vc = nil;
     channelListVC.block = ^(NSArray *channels) {
         
         if (![channels isEqualToArray:vc.itemNames.copy]) {
-            [HHUserManager sharedInstance].channels = channels.mutableCopy;
+            
+            HHUserManager.sharedInstance.channels = channels.mutableCopy;
             [self reloadSegment];
         } else {
             //do noting

@@ -23,7 +23,7 @@
 @property (nonatomic, assign)BOOL show;
 ///activityTask url
 @property (nonatomic, copy)NSString *url;
-///activityTask url
+
 @property (nonatomic, copy)NSString *activityTitle;
 
 - (CGFloat)heightForModel;

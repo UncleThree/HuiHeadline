@@ -27,6 +27,7 @@
 ///ADXHI
 @property (nonatomic, copy)NSString *type;
 
+@property (nonatomic, assign)BOOL exporsed;
 
 // 钱包图片和+200金币的Label 设为nil或者不设置代表没有
 @property (nonatomic, copy)NSString *AdAwards;

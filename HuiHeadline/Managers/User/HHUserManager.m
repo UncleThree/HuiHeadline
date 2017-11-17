@@ -27,6 +27,7 @@ static HHUserManager *userManager = nil;
 @synthesize alipayAccount = _alipayAccount;
 @synthesize weixinAccount = _weixinAccount;
 @synthesize today = _today;
+@synthesize hasClick = _hasClick;
 
 + (instancetype)sharedInstance {
     
@@ -37,9 +38,17 @@ static HHUserManager *userManager = nil;
     return userManager;
 }
 
+- (void)setHasClick:(BOOL)hasClick {
+    [self saveWithKey:@"CLICK" object:@(hasClick)];
+}
+
+- (BOOL)hasClick {
+    
+   return  [[self objectForKeyInUserDefaults:@"CLICK"] integerValue];
+}
+
 - (void)setUserName:(NSString *)userName {
     
-    _userName = userName;
     [self saveWithKey:@"USER_NAME" object:userName];
 }
 
@@ -50,7 +59,7 @@ static HHUserManager *userManager = nil;
 }
 
 - (void)setPassWord:(NSString *)passWord {
-    _passWord = passWord;
+    
     [self saveWithKey:@"PASS_WORD" object:passWord];
 }
 
@@ -70,8 +79,7 @@ static HHUserManager *userManager = nil;
         [[NSUserDefaults standardUserDefaults] synchronize];
         return;
     }
-    _currentUser = currentUser;
-    [self saveWithKey:@"CURRENT_USER" object:[_currentUser mj_JSONObject]];
+    [self saveWithKey:@"CURRENT_USER" object:[currentUser mj_JSONObject]];
     
 }
 
@@ -85,8 +93,7 @@ static HHUserManager *userManager = nil;
 
 - (void)setAlipayAccount:(HHAlipayAccount *)alipayAccount {
     
-    _alipayAccount = alipayAccount;
-    [self saveToUserDefaultsWithKey:@"ALIACCOUNT" object:[_alipayAccount mj_JSONObject]];
+    [self saveToUserDefaultsWithKey:@"ALIACCOUNT" object:[alipayAccount mj_JSONObject]];
 }
 
 - (HHAlipayAccount *)alipayAccount {
@@ -98,8 +105,7 @@ static HHUserManager *userManager = nil;
 
 - (void)setWeixinAccount:(HHWeixinAccount *)weixinAccount {
     
-    _weixinAccount = weixinAccount;
-    [self saveToUserDefaultsWithKey:@"WEIXINACCOUNT" object:[_weixinAccount mj_JSONObject]];
+    [self saveToUserDefaultsWithKey:@"WEIXINACCOUNT" object:[weixinAccount mj_JSONObject]];
 }
 
 - (HHWeixinAccount *)weixinAccount {
@@ -154,15 +160,10 @@ static HHUserManager *userManager = nil;
 
 - (void)setReadConfig:(HHReadConfigResponse *)readConfig {
     
-    if (_readConfig && [[_readConfig mj_keyValues] isEqualToDictionary:[readConfig mj_keyValues]]) {
-        return;
-    }
-    _readConfig = readConfig;
     [self saveToUserDefaultsWithKey:@"READCONFIG" object:[readConfig mj_keyValues]];
 }
 
 - (HHReadConfigResponse *)readConfig {
-    
     
     NSDictionary *readConfigDict = [self objectForBindedKeyInUserDefaults:@"READCONFIG"];
     _readConfig = [HHReadConfigResponse mj_objectWithKeyValues:readConfigDict];
@@ -172,10 +173,10 @@ static HHUserManager *userManager = nil;
 #pragma mark creditSummary
 
 - (void)setCreditSummary:(HHUserCreditSummary *)creditSummary {
+    
     if (_creditSummary && [[_creditSummary mj_keyValues] isEqualToDictionary:[creditSummary mj_keyValues]]) {
         return;
     }
-    _creditSummary = creditSummary;
     [self saveToUserDefaultsWithKey:@"CREDITSUMMARY" object:[creditSummary mj_keyValues]];
     
 }
@@ -191,10 +192,7 @@ static HHUserManager *userManager = nil;
 
 - (void)setSychDurationResponse:(HHReadSychDurationResponse *)sychDurationResponse{
     
-    if (_sychDurationResponse && [[_sychDurationResponse mj_keyValues] isEqualToDictionary:[sychDurationResponse mj_keyValues]]) {
-        return;
-    }
-    _sychDurationResponse = sychDurationResponse;
+    
     [self saveToUserDefaultsWithKey:@"SYCHDURATIONRESPONSE" object:[sychDurationResponse mj_keyValues]];
 }
 
@@ -215,7 +213,6 @@ static HHUserManager *userManager = nil;
     if (_channels && [_channels isEqualToArray:channels]) {
         return;
     }
-    _channels = channels;
     [self saveToUserDefaultsWithKey:@"NEWS_CHANNELS" object:channels];
 
 }
@@ -243,7 +240,6 @@ static HHUserManager *userManager = nil;
     if (_video_channels && [_video_channels isEqualToArray:video_channels]) {
         return;
     }
-    _video_channels = video_channels;
     [self saveToUserDefaultsWithKey:@"VIDEO_CHANNELS" object:video_channels];
     
 }
@@ -270,7 +266,6 @@ static HHUserManager *userManager = nil;
 
 - (void)setToday:(NSString *)today {
     
-    _today = today;
     [self saveWithKey:@"TODAY" object:[HHDateUtil today]];
     
 }

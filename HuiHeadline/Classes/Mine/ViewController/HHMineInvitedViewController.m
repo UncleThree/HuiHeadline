@@ -20,7 +20,6 @@
 
 @interface HHMineInvitedViewController () <UITableViewDataSource, UITableViewDelegate, MyInVitedCodeCellDelegate, HHMineInvitedImageTableViewCellDelegate>
 
-@property (nonatomic, strong)UIView *navigationView;
 
 @property (nonatomic, strong)UIImageView *headerItemView;
 
@@ -43,17 +42,27 @@
     
     [super viewWillAppear:animated];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+    
+    
     
     [self initNavigation];
+    
     [self initTableView];
+    
+    [super viewDidLoad];
+    
+    [self requestData];
+}
+
+- (void)refresh {
+    
+    [super refresh];
     
     [self requestData];
 }
@@ -68,13 +77,14 @@
         if (error) {
             NSLog(@"%@",error);
         }
+        __block HHInvitedJsonModel *myModel = model;
         [HHMineNetwork requestInviteFetchSummary:^(id error, HHInvitedFetchSummaryResponse *response) {
             if (error) {
                 NSLog(@"%@",error);
             }
             [self setResponse:response];
-            model.headerItem.isInvited = response.beInvited;
-            [self setModel:model callback:^{
+            myModel.headerItem.isInvited = response.beInvited;
+            [self setModel:myModel callback:^{
                 [weakSelf.tableView reloadData];
                 weakSelf.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
                 [HHHeadlineAwardHUD hideHUDAnimated:YES];
@@ -145,7 +155,6 @@
     
     [self.itemCellModels addObject:countModel];
     [self.itemCellModels addObject:model];
-    
     [self.tableView reloadData];
 }
 
@@ -169,7 +178,7 @@
     self.tableView.bounces = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
-    self.tableView.sectionFooterHeight = 10;
+    self.tableView.sectionHeaderHeight = 12;
     
     [self.tableView registerClass:[HHMineInvitedImageTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMineInvitedImageTableViewCell class])];
     [self.tableView registerClass:[HHMineItemTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMineItemTableViewCell class])];
@@ -198,11 +207,15 @@
     return section == 1 ? self.itemCellModels.count : 1;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (section == 2 && self.model.bottomItems.count > 3) {
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    
+    if (section == 0 || (section == 3 && self.model.bottomItems.count > 3)) {
+        
         return 0;
     }
-    return 10;
+    return 12;
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -337,6 +350,7 @@ kRemoveCellSeparator
         if (indexPath.row == 0) {
             
             HHMineInvitedPersonViewController *vc = [HHMineInvitedPersonViewController new];
+            vc.personCount = self.response.userInviteInfo.count;
             self.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
             
@@ -363,7 +377,6 @@ kRemoveCellSeparator
 }
 
 - (void)invitedCellFillCode {
-    
     
     if (self.codeView) {
         [self.codeView removeFromSuperview];
@@ -431,7 +444,9 @@ kRemoveCellSeparator
 - (void)submit {
     
     if (!self.codeTF.text || [self.codeTF.text isEqualToString:@""]) {
-        [HHHeadlineAwardHUD showMessage:@"验证码不能为空" animated:YES duration:2];
+        [HHHeadlineAwardHUD showMessage:@"请填写邀请码" animated:YES duration:2];
+        
+        
         return;
     }
     [HHHeadlineAwardHUD showHUDWithText:@"" animated:YES];
@@ -441,9 +456,10 @@ kRemoveCellSeparator
             [HHHeadlineAwardHUD showMessage:error animated:YES duration:2];
         } else {
             
+            [self.fillCodeView removeFromSuperview];
             self.model.headerItem.isInvited = YES;
             [self.tableView reloadData];
-            
+            [HHHeadlineAwardHUD showMessage:response.msg ?: @"成功" animated:YES duration:2];
         }
     }];
     

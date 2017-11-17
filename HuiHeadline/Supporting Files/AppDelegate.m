@@ -44,6 +44,15 @@
     return NO;
 }
 
+- (BOOL)firstAward {
+    
+    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstAward"]){
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstAward"];
+        return YES;
+    }
+    return NO;
+}
+
 - (BOOL)isFirstLoadOrUpdate {
     
     

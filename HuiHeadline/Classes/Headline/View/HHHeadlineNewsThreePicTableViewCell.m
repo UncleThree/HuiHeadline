@@ -123,8 +123,8 @@
 - (void)addSetTopLabel {
     
     if (!self.setTopLabel) {
-        UIFont *font = Font(12);
-        CGFloat height = 14;
+        UIFont *font = Font(14);
+        CGFloat height = CGFLOAT(16);
         NSString *zd = @"置顶";
         CGFloat width = [HHFontManager sizeWithText:zd font:font maxSize:CGSizeMake(CGFLOAT_MAX, 25)].width;
         self.setTopLabel = [[UILabel alloc] initWithFrame:CGRectZero];

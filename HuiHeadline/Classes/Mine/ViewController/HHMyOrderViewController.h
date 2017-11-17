@@ -7,9 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HHBaseViewController.h"
 
-@interface HHMyOrderViewController : UIViewController
 
+@protocol  MyOrderDelegate <NSObject>
+
+- (void)pushToOrderDetailVC:(HHOrderInfo *)orderInfo;
+
+
+@end
+
+@interface HHMyOrderViewController : HHBaseViewController
+
+@property (nonatomic, assign)id<MyOrderDelegate> delegate;
 
 @property (nonatomic, assign)NSInteger type;
 

@@ -47,5 +47,7 @@
 @property (nonatomic, copy) NSString *birthday;
 @property (nonatomic, assign)int state;
 @property (nonatomic, assign)long registerTime;
+///2017-11-15号之前注册的账户不显示新手任务
+@property (nonatomic, assign)BOOL isNew;
 
 @end

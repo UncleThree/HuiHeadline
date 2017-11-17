@@ -29,22 +29,20 @@
 
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+    
     [self initWebView];
     
+    [super viewDidLoad];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     
     [super viewDidAppear:animated];
     
-    
     if ([(AppDelegate *)UIApplication.sharedApplication.delegate firstLoad]) {
         [HHHeadlineAwardHUD showVideoReminderView];
     }
-    
 }
-
 
 
 - (void)initWebView {
@@ -69,12 +67,16 @@
     [self.webView addSubview:self.progressView];
     [self.webView bringSubviewToFront:self.progressView];
     
-    self.webView.scrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
+    header.lastUpdatedTimeLabel.hidden = YES;
+    self.webView.scrollView.mj_header = header;
     
     
 }
 
 - (void)refresh {
+    
+    [super refresh];
     
     [self loadRequest];
 }
@@ -103,6 +105,7 @@
 {
     [super viewWillDisappear:animated];
     [self.progressView removeFromSuperview];
+    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
@@ -131,19 +134,24 @@
     
     [self.webView.scrollView.mj_header endRefreshing];
     
+
+    
 }
 
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void(^)(WKNavigationActionPolicy))decisionHandler {
 
     NSString *strRequest = [navigationAction.request.URL.absoluteString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     if ([strRequest isEqualToString:self.URLString]) {
         
         decisionHandler(WKNavigationActionPolicyAllow);
         
-    } else {
+    }  else {
         
         [self.navigationController setNavigationBarHidden:NO animated:NO];
+        
+        
         
         HHVideoDetailWebViewController *detailWebVC = [[HHVideoDetailWebViewController alloc] init];
         detailWebVC.URLString = strRequest;

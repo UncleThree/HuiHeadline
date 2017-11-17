@@ -15,12 +15,15 @@
 
 @property (nonatomic, strong)NSMutableArray<HHReadIncomDetailRecord *> *records;
 
+
 @end
 
 @interface HHReadIncomDetailRecord : NSObject
 
 ///日期
 @property (nonatomic)int day;
+
+@property (nonatomic)int pastDay;
 ///阅读时长
 @property (nonatomic)int duration;
 ///阅读获得积分

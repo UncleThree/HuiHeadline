@@ -12,7 +12,7 @@
 
 @interface HHMineInvitedPersonViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong)UIView *navigationView;
+
 
 
 @property (nonatomic, strong)UITableView *tableView;
@@ -30,13 +30,18 @@
 
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+    
+    
     
     [self initNavigation];
+    
     [self initTableView];
     
+    [super viewDidLoad];
     
 }
+
+
 
 - (NSMutableArray<HHInvitedSummary *> *)data {
     if (!_data) {
@@ -49,7 +54,6 @@
     
     [super viewWillAppear:animated];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     
@@ -68,7 +72,6 @@
     if (fresh) {
         count = 0;
         noMore = NO;
-        [self initFooter];
         [self.data removeAllObjects];
     }
     if (more) {
@@ -80,8 +83,16 @@
             Log(error);
         } else {
             if (constributions.count) {
+                
                 [self.data addObjectsFromArray:constributions];
-            } else {
+               
+                if (fresh && constributions.count == self.personCount) {
+                    self.tableView.bounces = NO;
+                } else {
+                    self.tableView.bounces = YES;
+                    
+                }
+            }  else {
                 noMore = YES;
                 [self.tableView.mj_footer endRefreshingWithNoMoreData];
                 self.tableView.mj_footer = nil;
@@ -106,7 +117,7 @@
 - (void)addNoLabel {
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-    label.text = @"暂无收益";
+    label.text = @"暂无邀请徒弟";
     label.textColor = BLACK_153;
     label.textAlignment = 1;
     [self.view addSubview:label];
@@ -122,6 +133,7 @@
     
     self.navigationView = [HHNavigationBackViewCreater customNavigationWithTarget:self action:@selector(back) text:@" 成功邀请的徒弟"];
     [self.view addSubview:self.navigationView];
+    
 }
 
 - (void)back {
@@ -132,18 +144,23 @@
 
 - (void)initTableView {
     
+    
+    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, MaxY(self.navigationView), KWIDTH, KHEIGHT - MaxY(self.navigationView)) style:(UITableViewStylePlain)];
+    self.tableView.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1.0];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
-    
+    self.tableView.tableFooterView = [UIView new];
+    self.tableView.sectionHeaderHeight = 12;
     [self.tableView registerClass:[HHInvitedCreditTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHInvitedCreditTableViewCell class])];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+//    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 12)];
+//    self.tableView.tableHeaderView.backgroundColor = [UIColor colorWithWhite:0.98 alpha:1.0];
     [self initHeader];
     [self initFooter];
-    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 12)];
-    self.tableView.tableHeaderView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
     
 }
 
@@ -161,6 +178,7 @@
 
 - (void)refresh {
     
+    [super refresh];
     [self requestInviteConstributionWithFresh:YES more:NO];
 }
 
@@ -174,9 +192,14 @@
 
 kRemoveCellSeparator
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
     return self.data.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    return 1;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -186,7 +209,10 @@ kRemoveCellSeparator
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
-    return 0.0;
+    if (section == 0) {
+        return 12;
+    }
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -196,7 +222,7 @@ kRemoveCellSeparator
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     HHInvitedCreditTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHInvitedCreditTableViewCell class]) forIndexPath:indexPath];
-    cell.summaryModel = self.data[indexPath.row];
+    cell.summaryModel = self.data[indexPath.section];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

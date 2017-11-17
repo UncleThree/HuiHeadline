@@ -23,7 +23,14 @@
 
 @property (nonatomic, strong)NSMutableArray<HHOrderInfo *> *allOrders;
 
+@property (nonatomic, assign)long lastTime;
+
+@property (nonatomic, copy)NSString *footerString;
+
+
 @end
+
+#define NOMORE @"(*￣ω￣) 没有更多了"
 
 static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
 
@@ -31,9 +38,27 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
 
 - (void)viewDidLoad {
     
-    [super viewDidLoad];
+    
     [self initTableView];
-    [self requestOrders];
+    
+    [super viewDidLoad];
+    
+    [self requestOrders:YES];
+   
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    
+    [super viewDidAppear:animated];
+    
+}
+
+- (void)refresh {
+    
+    [super refresh];
+    
+    [self requestOrders:YES];
+    
 }
 
 - (void)initNoneView {
@@ -60,9 +85,9 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
     _tableView.sectionHeaderHeight = 0;
-    _tableView.sectionFooterHeight = 10;
+    _tableView.sectionFooterHeight = 12;
     _tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0.0f,0.0f,_tableView.bounds.size.width,0.01f)];
-    self.tableView.bounces = NO;
+//    self.tableView.bounces = NO;
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.view);
         make.bottom.equalTo(self.view);
@@ -70,6 +95,25 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
     [self.tableView registerNib:[UINib nibWithNibName:@"HHMyOrderTableViewCell" bundle:nil] forCellReuseIdentifier:NSStringFromClass([HHMyOrderTableViewCell class])];
     [self.tableView registerClass:[HHMyOrderTitleTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMyOrderTitleTableViewCell class])];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:totalCreditCellIdentifier];
+    
+    [self initHeader];
+    [self initFooter];
+}
+
+- (void)initHeader {
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
+    header.lastUpdatedTimeLabel.hidden = YES;
+    self.tableView.mj_header = header;
+}
+
+- (void)initFooter {
+    MJRefreshBackNormalFooter *footer  = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMore)];
+    self.tableView.mj_footer = footer;
+}
+
+- (void)loadMore {
+    
+    [self requestOrders:NO];
 }
 
 - (NSMutableArray<HHOrderInfo *> *)allOrders {
@@ -88,30 +132,61 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
     return _disposingOrders;
 }
 
-- (void)requestOrders {
+- (void)requestOrders:(BOOL)refresh {
     
     [HHHeadlineAwardHUD showHUDWithText:nil animated:YES];
-    [HHMineNetwork getOrderList:!self.type callback:^(id error, NSArray<HHOrderInfo *> *orders) {
+    [HHMineNetwork getOrderList:!self.type
+                      orderTime:(refresh ? 0 : self.lastTime)
+                       callback:^(id error, NSArray<HHOrderInfo *> *orders) {
         [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (error) {
             NSLog(@"%@",error);
             
         } else {
+            
+            if (refresh) {
+                self.footerString = nil;
+                [self initFooter];
+            }
+            
+            
             if (!self.type) {
-                [self.disposingOrders removeAllObjects];
+                if (refresh) {
+                    [self.disposingOrders removeAllObjects];
+                }
                 [self.disposingOrders addObjectsFromArray:orders];
+                
             } else {
-                [self.allOrders removeAllObjects];
+                if (refresh) {
+                    [self.allOrders removeAllObjects];
+                }
                 [self.allOrders addObjectsFromArray:orders];
             }
             
-        }
-        if (!orders.count) {
-            self.tableView.hidden = YES;
-            [self initNoneView];
-        } else {
+            if (!orders.count) {
+                
+                if (refresh) {
+                    
+                    self.tableView.hidden = YES;
+                    [self initNoneView];
+                    
+                } else {
+                    
+                    self.footerString = NOMORE;
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                    self.tableView.mj_footer = nil;
+                    
+                }
+            } else {
+                self.lastTime = orders.lastObject.createTime;
+               
+            }
             [self.tableView reloadData];
+            [self.tableView.mj_header endRefreshing];
+            [self.tableView.mj_footer endRefreshing];
+            
         }
+        
         
     }];
 }
@@ -146,16 +221,62 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
 kRemoveCellSeparator
 
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    
+    if (section == (self.type ? self.allOrders.count : self.disposingOrders.count) - 1 && self.footerString) {
+        
+        return 40;
+        
+    } else {
+        
+        return 12;
+    }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    
+    if (section != (self.type ? self.allOrders.count - 1 : self.disposingOrders.count - 1)) {
+        
+        return [UIView new];
+    }
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 30)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, KWIDTH - 20 * 2, 30)];
+    label.textColor = BLACK_153;
+    label.text = self.footerString;
+    label.textAlignment = 1;
+    [view addSubview:label];
+    view.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1.0];
+    return view;
+    
+}
+
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == 0) {
         HHMyOrderTitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHMyOrderTitleTableViewCell class]) forIndexPath:indexPath];
         if (self.type) {
             cell.stateName = [self.allOrders[indexPath.section] stateName];
-            cell.titleName = [self.allOrders[indexPath.section] channel] == 2 ? @"一元惠拍" : @"商城兑换";
+            if ([self.allOrders[indexPath.section] channel] == 2) {
+                cell.titleName = @"一元惠拍";
+            } else if ([self.allOrders[indexPath.section] channel] == 1) {
+                cell.titleName = @"商城兑换";
+            } else {
+                NSLog(@"%@",[self.allOrders[indexPath.section] mj_JSONObject]);
+                NSLog(@" channel 待处理 ");
+            }
+           
         } else {
             cell.stateName = [self.disposingOrders[indexPath.section] stateName];
-            cell.titleName = [self.disposingOrders[indexPath.section] channel] == 2 ? @"一元惠拍" : @"商城兑换";
+            if ([self.disposingOrders[indexPath.section] channel] == 2) {
+                cell.titleName = @"一元惠拍";
+            } else if ([self.disposingOrders[indexPath.section] channel] == 1) {
+                cell.titleName = @"商城兑换";
+            } else {
+                NSLog(@"%@",[self.disposingOrders[indexPath.section] mj_JSONObject]);
+                NSLog(@" channel 待处理 ");
+            }
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
@@ -193,17 +314,16 @@ kRemoveCellSeparator
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    
     HHOrderInfo *orderInfo = nil;
     if (self.type) {
         orderInfo = self.allOrders[indexPath.section];
     } else {
         orderInfo = self.disposingOrders[indexPath.section];
     }
-    HHOrderDetailViewController *orderDetailVC = [HHOrderDetailViewController new];
-    orderDetailVC.orderId = orderInfo.orderId;
-    orderDetailVC.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:orderDetailVC animated:YES];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pushToOrderDetailVC:)]) {
+        [self.delegate pushToOrderDetailVC:orderInfo];
+    }
+
     
 }
 

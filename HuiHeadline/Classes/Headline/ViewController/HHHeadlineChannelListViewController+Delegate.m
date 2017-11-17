@@ -32,10 +32,10 @@
     NSString *title = self.dataSourceArray[indexPath.section][indexPath.row];
     if (indexPath.section == 0) {
         cell.removeButton.hidden = !self.showDeleteButton;
-        if ([title isEqualToString:@"头条"])
+        if ([title isEqualToString:@"头条"] || [title isEqualToString:@"推荐"])
         cell.removeButton.hidden = YES;
         cell.titleLabel.text = title;
-        cell.titleLabel.textColor = [title isEqualToString:@"头条"] ? UIColor.redColor : UIColor.blackColor;
+        cell.titleLabel.textColor = ([title isEqualToString:@"头条"] || [title isEqualToString:@"推荐"] ) ? UIColor.redColor : UIColor.blackColor;
         
     } else {
         cell.removeButton.hidden = YES;
@@ -97,7 +97,7 @@
         
         // 删除操作
         NSString *title = self.dataSourceArray[indexPath.section][indexPath.row];
-        if (!self.showDeleteButton || [title isEqualToString:@"头条"] ) {
+        if (!self.showDeleteButton || [title isEqualToString:@"头条"] || [title isEqualToString:@"推荐"] ) {
             return;
         }
         BMTodayHeadlinesDragCell *cell = (BMTodayHeadlinesDragCell *)[collectionView cellForItemAtIndexPath:indexPath];

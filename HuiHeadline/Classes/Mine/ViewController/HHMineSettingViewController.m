@@ -40,7 +40,6 @@
     
     [super viewWillAppear:animated];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 

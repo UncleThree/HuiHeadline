@@ -12,6 +12,8 @@
 #import "HHHeadlineNewsBigImgTableViewCell.h"
 #import "HHHeadlineListViewController+tableView.h"
 #import "HHHeadlineNavController.h"
+#import "HHDeviceUtils.h"
+#import "Reachability.h"
 
 @interface  HHHeadlineListViewController ()
 
@@ -20,6 +22,8 @@
 
 @property (nonatomic, strong)UITableView *tableView;
 
+@property (nonatomic, strong)NSCache *cache;
+
 @end
 
 
@@ -27,14 +31,18 @@
 @implementation  HHHeadlineListViewController
 
 - (void)viewDidLoad {
+   
+    [self initTableView];
+    
     [super viewDidLoad];
     
-    [self initTableView];
     [self requestData];
    
-    
-    
+
 }
+
+
+
 
 
 
@@ -48,45 +56,42 @@
 
 - (void)requestData {
     
-    [self requstNews:^{
+    [self requstNews:YES];
     
-        [self requestTopNews:^{
-            
-            [self requestAds:^{
-                
-                [self reloadData];
-            }];
-            
-        }];
-        
-    }];
+    [self requestTopNews];
+    
+
+}
+
+- (void)refresh {
+    
+    [super refresh];
+    
+    [self requestData];
     
 }
 
-
-
-- (void)requstNews:(void(^)())handler {
+- (void)requstNews:(BOOL)refresh {
     
-    [HHHeadlineNetwork requestForNewsWithType:self.type isFirst:YES refresh:NO handler:^(NSError *error, id result) {
+    [HHHeadlineNetwork requestForNewsWithType:self.type isFirst:NO refresh:refresh handler:^(NSError *error, id result) {
         
         if (result && [result isKindOfClass:[NSArray class]]) {
             NSLog(@"------新闻数据------%zd",[(NSArray *)result count]);
-//            for (id model in result) {
-//                NSLog(@"%@", [model mj_keyValues]);
-//            }
-            [self.newsData removeAllObjects];
+            if (refresh) {
+                [self.newsData removeAllObjects];
+            }
             [self.newsData addObjectsFromArray:result];
             
-
         }
-        handler();
+        [self.header endRefreshing];
+        [self.footer endRefreshing];
+        [self reloadData];
     }];
     
 }
 
-- (void)requestTopNews:(void(^)())handler {
+- (void)requestTopNews {
     if (![self.type isEqualToString:@"头条"]) {
-        handler();
         return;
     }
     [HHHeadlineNetwork requestForTopNews:^(NSError *error, id result) {
@@ -96,35 +101,54 @@
             if (result && [result isKindOfClass:[NSArray class]]) {
                 // data待处理
                 NSLog(@"------置顶新闻数据------%zd",[(NSArray *)result count]);
-//                for (id model in result) {
-//                    NSLog(@"%@", [model mj_keyValues]);
-//                }
                 [self.topData removeAllObjects];
                 [self.topData addObjectsFromArray:result];
+                [self.tableView reloadData];
             }
         }
-        handler();
+       
     }];
 }
 
-- (void)requestAds:(void(^)())handler {
+- (NSCache *)cache {
+    if (!_cache) {
+        _cache = [[NSCache alloc] init];
+    }
+    return _cache;
+}
+
+
+- (void)requestAdsWithRowTag:(NSInteger)tag {
     
+
+    ///如果存在 直接刷新
+    if (self.adData.count && self.adData.count - 1 >= (tag - 1) / 6 ) {
+        [self.tableView reloadData];
+        return;
+    }
+    ///正在缓存 不需要加载
+    if ([self.cache objectForKey:@(tag)]) {
+        return;
+    }
+    ///加载新的广告
+    [self.cache setObject:@(1) forKey:@(tag)];
     [HHHeadlineNetwork requestForAdList:^(NSError *error, id result) {
+        [self.cache setObject:@(0) forKey:@(tag)];
         if (error) {
             Log(error);
         } else {
             if (result && [result isKindOfClass:[NSArray class]]) {
-                NSLog(@"------广告数据------%zd",[(NSArray *)result count]);
-//                for (id model in result) {
-//                    NSLog(@"%@", [model mj_keyValues]);
-//                }
-                [self.adData removeAllObjects];
+
                 [self.adData addObjectsFromArray:result];
-
+                if (self.adData.count) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.tableView reloadData];
+                    });
+                }
             }
-
         }
-        handler();
+
     }];
 }
 
@@ -146,53 +170,72 @@
 
 // 将广告插入数组中 第一个在下标1 然后每隔五个插入一个
 - (void)insertAds {
-    
-    for (int i = 0; i < self.adData.count; i++) {
-        int temp = -1;
-        int count = 0;
-        for (int j = 1 ; j < self.data.count + 1; j++) {
-            if ((j - 1) % 6 == 0 ) {
-                count++;
-                if (count == i + 1) {
-                    temp = j;
-                    break;
-                }
-            }
-        }
-        if (temp != -1) { //不是break出来的为-1 过滤掉
-            [self.data insertObject:self.adData[i] atIndex:temp];
+
+    for (int i = 0; i < self.data.count; i++) {
+        if ((i - 1) % 6 == 0 ) {
+            HHNewsModel *model = (id)[NSNull null];
+            [self.data insertObject:model atIndex:i];
+            [self requestAdsWithRowTag:i];
         }
     }
     
 }
 
 
+- (void)handlerAdExposure:(HHAdModel *)adModel {
+
+    
+    if ([self.adMap.allKeys containsObject:adModel.type]) {
+        
+        NSInteger integer = [[self.adMap objectForKey:adModel.type] integerValue];
+        [self.adMap setObject:@(++integer) forKey:adModel.type];
+        
+    } else {
+        [self.adMap setObject:@(1) forKey:adModel.type];
+    }
+    NSLog(@"%@",self.adMap);
+        
+    NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval place = time - HHUserManager.sharedInstance.lastSychAdTime ;
+    if ((HHUserManager.sharedInstance.lastSychAdTime && place > 5 * 60) ||  [self getAllCount] >= 5 ) {
+        
+        [HHHeadlineNetwork sychListAdExposureWithMap:self.adMap callback:^(id error, HHResponse *response) {
+            if (error) {
+                NSLog(@"%@",error);
+            } else if (response.statusCode != 200) {
+                NSLog(@"%@",response.msg);
+            } else {
+                NSLog(@"曝光成功");
+            }
+        }];
+        HHUserManager.sharedInstance.lastSychAdTime = [[NSDate date] timeIntervalSince1970];
+        [self.adMap removeAllObjects];
+    }
+    
+}
+
+- (NSInteger)getAllCount {
+    
+    NSInteger count = 0;
+    for (NSString *key in self.adMap) {
+        count += [self.adMap[key] integerValue];
+    }
+    return count;
+    
+}
 
 - (void)reloadData {
     
     [self.data removeAllObjects];
-    //插入新闻
-    [self.data addObjectsFromArray:self.newsData.copy];
-    if (self.adData.count && self.data.count) {
-        //插入广告
-        [self insertAds];
-    }
-    //插入置顶新闻
-    [self.data insertObjects:self.topData.copy atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.topData.count)]];
+    [self.data addObjectsFromArray:self.newsData];
+    [self insertAds];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
-}
-
-
-- (NSMutableArray<HHBaseModel *> *)data {
-    if (!_data) {
-        _data = [NSMutableArray array];
-    }
-    return _data;
     
 }
+
 
 - (NSMutableArray<HHNewsModel *> *)newsData {
     
@@ -212,9 +255,25 @@
 - (NSMutableArray<HHAdModel *> *)adData {
     if (!_adData) {
         _adData = [NSMutableArray array];
+
     }
     return _adData;
 }
+
+- (NSMutableArray<HHBaseModel *> *)data {
+    if (!_data) {
+        _data = [NSMutableArray array];
+    }
+    return _data;
+}
+
+- (NSMutableDictionary *)adMap {
+    if (!_adMap) {
+        _adMap = [NSMutableDictionary dictionary];
+    }
+    return _adMap;
+}
+
 
 
 - (void)initTableView {
@@ -231,6 +290,10 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    //
+    self.tableView.tableFooterView = [[UIView alloc]init];
+    
+    
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([HHHeadlineNewsThreePicTableViewCell class]) bundle:nil] forCellReuseIdentifier:normalCell];
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([HHHeadlineNewsLeftRightTableViewCell class]) bundle:nil] forCellReuseIdentifier:leftRightCell];
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([HHHeadlineNewsBigImgTableViewCell class]) bundle:nil] forCellReuseIdentifier:bigImgCell];
@@ -255,36 +318,15 @@
     
     BOOL refresh = [sender isKindOfClass:[MJRefreshNormalHeader class]];
     
-    [HHHeadlineNetwork requestForNewsWithType:self.type isFirst:NO refresh:refresh handler:^(NSError *error, id result) {
-        if (error) {
-            Log(error);
-        } else {
-            if (result && [result isKindOfClass:[NSArray class]]) {
-                if (refresh) {
-                    //刷新 先清空
-                    [self.newsData removeAllObjects];
-                    [self.newsData addObjectsFromArray:result];
-                    
-                    [self requestTopNews:^{
-                        [self requestAds:^{
-                            [self reloadData];
-                            [self.header endRefreshing];
-                            [self.footer endRefreshing];
-                        }];
-                    }];
-                } else {
-                    [self.newsData addObjectsFromArray:result];
-                    [self reloadData];
-                    [self.header endRefreshing];
-                    [self.footer endRefreshing];
-                }
-                
-                
-                
-            }
-            
-        }
-    }];
+    [self requstNews:refresh];
+    
+    if (refresh) {
+        [self.cache removeAllObjects];
+        [self.adData removeAllObjects];
+        [self requestTopNews];
+        
+    }
+    
     
 }
 

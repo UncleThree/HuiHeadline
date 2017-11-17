@@ -104,7 +104,7 @@
     
     
     UIView *line = [[UIView alloc] initWithFrame:CGRectZero];
-    line.backgroundColor = RGB(180, 180, 180);
+    line.backgroundColor = RGB(200, 200, 200);
     [self.view addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.nickTextField.mas_bottom).with.offset(1);
@@ -129,7 +129,7 @@
 
 - (void)submit {
     
-    if ([self.nickTextField.text isEqualToString:@""]) {
+    if (!self.nickTextField.text || [self.nickTextField.text isEqualToString:@""]) {
         
         [HHHeadlineAwardHUD  showMessage:@"输入的昵称不能为空" animated:YES duration:1];
         
@@ -178,19 +178,19 @@
 }
 
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-    if (textField == self.nickTextField) {
-        if (string.length == 0) return YES;
-        NSInteger existedLength = textField.text.length;
-        NSInteger selectedLength = range.length;
-        NSInteger replaceLength = string.length;
-        if (existedLength - selectedLength + replaceLength > 8) {
-            return NO;
-        }
-    }
-    
-    return YES;
-}
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+//{
+//    if (textField == self.nickTextField) {
+//        if (string.length == 0) return YES;
+//        NSInteger existedLength = textField.text.length;
+//        NSInteger selectedLength = range.length;
+//        NSInteger replaceLength = string.length;
+//        if (existedLength - selectedLength + replaceLength > 8) {
+//            return NO;
+//        }
+//    }
+//
+//    return YES;
+//}
 
 @end

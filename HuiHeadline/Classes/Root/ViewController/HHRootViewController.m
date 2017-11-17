@@ -69,12 +69,10 @@
     ///请求阅读规则
     [HHLoginNetwork requestReadConfig];
     ///刷新我的信息页面
-//    [[HHMineViewController defaultMineVC] realoadHeaderData:YES];
+    [[HHMineViewController defaultMineVC] realoadHeaderData:YES];
     ///刷新签到配置
-    [[HHTaskCenterViewController defaultTaskCenterVC] reloadHeader:YES];
-    ///小红点
+//    [[HHTaskCenterViewController defaultTaskCenterVC] reloadHeader:YES];
 
-    
 }
 
 
@@ -105,9 +103,7 @@
         [tabBarItemsAttributes addObject:dict];
     }
     tbc.tabBarItemsAttributes = tabBarItemsAttributes.copy;
-    
-    
-    
+
     
 }
 

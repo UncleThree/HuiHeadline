@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "HHInvitedJsonModel.h"
 #import "HHInvitedFetchSummaryResponse.h"
+#import "HHBaseViewController.h"
 
-@interface HHMineInvitedViewController : UIViewController
+@interface HHMineInvitedViewController : HHBaseViewController
 
 @property (nonatomic, strong)HHInvitedJsonModel *model;
 

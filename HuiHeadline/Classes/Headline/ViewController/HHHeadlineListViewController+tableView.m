@@ -21,40 +21,103 @@
 
 #pragma mark dataSource
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    return 2;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.data.count;
+    if (section == 0) {
+        
+        return self.topData.count;
+    }
+    NSInteger count = self.newsData.count;
+    
+    return count ;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    HHBaseModel *model = self.data[indexPath.row];
     HHHeadlineNewsBaseTableViewCell *cell = nil;
-    NSArray *identyfiers = @[leftRightCell,normalCell,bigImgCell];
-    cell = [tableView dequeueReusableCellWithIdentifier:identyfiers[model.type_cell] forIndexPath:indexPath];
-    [cell setModel:model];
-    
-    return cell;
+    if (indexPath.section == 0) {
+        
+        HHTopNewsModel *model = self.topData[indexPath.row];
+        
+        NSArray *identyfiers = @[leftRightCell,normalCell,bigImgCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:identyfiers[model.type_cell] forIndexPath:indexPath];
+        [cell setModel:model];
+        
+        return cell;
+        
+    } else  if ( (indexPath.row - 1) % 6 == 0 ) {
+        
+        HHAdModel *model = nil;
+        if (self.adData.count && self.adData.count - 1 >= (indexPath.row - 1) / 6) {
+            model = self.adData[ (indexPath.row - 1) / 6 ];
+            
+            ///曝光显示出来的cell
+            if ([[tableView indexPathsForVisibleRows] containsObject:indexPath] && !model.exporsed) {
+                model.exporsed = YES;
+                [self handlerAdExposure:model];
+            }
+        } else {
+            ///mark
+            return [UITableViewCell new];
+        }
+        NSArray *identyfiers = @[leftRightCell,normalCell,bigImgCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:identyfiers[model.type_cell] forIndexPath:indexPath];
+        [cell setModel:model];
+        return cell;
+    } else {
+        
+        HHNewsModel *model = self.newsData[indexPath.row];
+        NSArray *identyfiers = @[leftRightCell,normalCell,bigImgCell];
+        cell = [tableView dequeueReusableCellWithIdentifier:identyfiers[model.type_cell] forIndexPath:indexPath];
+        [cell setModel:model];
+        return cell;
+    }
     
     
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    HHBaseModel *model = self.data[indexPath.row];
-    CGFloat height = [model heightForCell];
-    return height;
+    HHBaseModel *model = nil;
+    if (indexPath.section == 0) {
+        
+        model = self.topData[indexPath.row];
+        
+    }
+    else if ((indexPath.row - 1) % 6 == 0) {
+        
+        if (self.adData.count && self.adData.count - 1 >= (indexPath.row - 1) / 6 ) {
+            
+            model = self.adData[ (indexPath.row - 1) / 6 ];
+            
+        }
+        
+    }
+    else {
+        
+        model = self.newsData[indexPath.row];
+    }
+    if (!model) {
+        
+        return 0;
+    }
+    return [model heightForCell];
     
 }
 
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     cell.separatorInset = UIEdgeInsetsZero;
     cell.layoutMargins = UIEdgeInsetsZero;
     cell.preservesSuperviewLayoutMargins = NO;
-    
-    
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    
 }
 
 
@@ -68,17 +131,24 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    HHBaseModel *model = self.data[indexPath.row];
+    HHBaseModel *model = nil;
+    if (indexPath.section == 0) {
+        model = self.topData[indexPath.row];
+    } else if ( (indexPath.row - 1) % 6 == 0) {
+        model = self.adData[ (indexPath.row - 1) / 6 ];
+    } else {
+        model = self.newsData[indexPath.row];
+    }
     model.hasClicked = YES;
-    
     //点击新闻
-    
-        
     HHHeadlineListWebViewController *webVC = [[HHHeadlineListWebViewController alloc] init];
     if ([model isKindOfClass:[HHNewsModel class]]) {
         webVC.URLString = [(HHNewsModel *)model httpsurl];
     } else if ([model isKindOfClass:[HHAdModel class]]) {
          webVC.URLString = [(HHAdModel *)model landingUrl];
+        
+    
+        
     } else {
         webVC.URLString = [(HHTopNewsModel *)model url];
     }

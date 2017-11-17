@@ -25,8 +25,12 @@ static int timerInterval = 0;
 
 - (void)addProgress {
     
+    if (timerInterval && timerInterval % 10 == 0) {
+        
+        [self.buttomView.backTableView reloadData];
+    }
     
-    if (HHUserManager.sharedInstance.videoTime == self.totalTime) {
+    if (self.buttomView.progress == 1) {
         
         [self sych];
         
@@ -50,8 +54,9 @@ static int timerInterval = 0;
 }
 
 - (void)sychVideoDutation:(void(^)())callback {
-    if (self.totalTime >= 30) {
+    if (self.totalTime >= 10) {
         [HHHeadlineNetwork sychVideoDurationWithDuration:self.totalTime callback:^(id error, HHReadSychDurationResponse *response) {
+            timerInterval = 0;
             if (error) {
                 NSLog(@"%@",error);
             } else {
@@ -73,13 +78,13 @@ static int timerInterval = 0;
 //提交奖励 (以每次response为准)
 - (void)submitIncomeWithCoins:(int)coins {
     
-    timerInterval = 0;
+    
     [HHUserManager.sharedInstance.videoTimer invalidate];
     HHUserManager.sharedInstance.videoTimer = nil;
     //提交之后再清0
     self.buttomView.progress = 0;
     CGPoint center = CGPointMake(KWIDTH -  PROGRESS_KWIDTH / 2, Y(self.buttomView) + PROGRESS_KWIDTH / 2);
-    [HHHeadlineAwardHUD showImageView:@"计时奖励" coins:coins animation:YES originCenter:center addToView:self.view duration:1.0];
+    [HHHeadlineAwardHUD showImageView:@"计时奖励" coins:coins animation:YES originCenter:center addToView:self.view duration:2.0];
     HHUserManager.sharedInstance.videoTime = 0;
     [self startTimer];
     

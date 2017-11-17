@@ -12,7 +12,6 @@
 
 @interface HHMineInvitedCreditViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong)UIView *navigationView;
 
 
 @property (nonatomic, strong)UITableView *tableView;
@@ -30,13 +29,15 @@
 
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
     
     [self initNavigation];
     [self initTableView];
     
-    
+    [super viewDidLoad];
 }
+
+
+
 
 - (NSMutableArray<HHInvitedConstributionSummary *> *)data {
     if (!_data) {
@@ -49,7 +50,6 @@
     
     [super viewWillAppear:animated];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     
@@ -107,7 +107,7 @@
 - (void)addNoLabel {
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-    label.text = @"暂无邀请徒弟";
+    label.text = @"暂无收益";
     label.textColor = BLACK_153;
     label.textAlignment = 1;
     [self.view addSubview:label];
@@ -137,6 +137,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
+    self.tableView.tableFooterView = [UIView new];
     
     [self.tableView registerClass:[HHInvitedCreditTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHInvitedCreditTableViewCell class])];
     
@@ -162,6 +163,7 @@
 
 - (void)refresh {
     
+    [super refresh];
     [self requestInviteConstributionWithFresh:YES more:NO];
 }
 

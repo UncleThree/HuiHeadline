@@ -52,7 +52,9 @@
 - (void)initUI:(CGRect)frame
       response:(HHSignRecordResponse *)response{
     
-    [self initSignViewWithState:response.state];
+    NSString *coin = response.signDailyRewards[response.day - 1];
+    
+    [self initSignViewWithState:response.state coin:coin];
     
     [self initHowCreditButton];
     
@@ -105,10 +107,10 @@
         
         if (response.state) {
             
-            if (i < response.day - 1) {
+            if (i < response.day - 1 - 1) {
                 model.type = HHTaskCollectionCellSigned;
                 model.day = @"已领取";
-            } else if (i == response.day - 1) {
+            } else if (i == response.day - 1 - 1) {
                 model.type = HHTaskCollectionCellSigned;
                 model.day = @"今天";
             } else {
@@ -116,10 +118,11 @@
                 model.day = [NSString stringWithFormat:@"%zd天", i + 1];
             }
         } else {
-            if (i < response.day) {
+            
+            if (i < response.day - 1) {
                 model.type = HHTaskCollectionCellSigned;
                 model.day = @"已领取";
-            } else if (i == response.day) {
+            } else if (i == response.day - 1) {
                 model.type = HHTaskCollectionCellToday;
                 model.day = @"今天";
             } else {
@@ -133,10 +136,11 @@
     }
 }
 
-- (void)initSignViewWithState:(int)state {
+- (void)initSignViewWithState:(int)state
+                         coin:(NSString *)coin{
     
     self.backgroundColor = RGB(230, 53, 40);
-    self.signView = [[HHTaskCenterSignView alloc] initWithFrame:CGRectMake(KWIDTH / 2 - SIGN_WIDTH / 2, 35, SIGN_WIDTH, SIGN_WIDTH) state:state];
+        self.signView = [[HHTaskCenterSignView alloc] initWithFrame:CGRectMake(KWIDTH / 2 - SIGN_WIDTH / 2, 40, SIGN_WIDTH, SIGN_WIDTH) state:state coin:coin];
     [self addSubview:self.signView];
     
     self.signView.userInteractionEnabled = YES;
@@ -181,9 +185,6 @@
 
 #pragma mark UICollectionViewDataSource
 
-
-
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
     return self.models.count;
@@ -199,9 +200,7 @@
 
 
 
-
 #pragma mark UICollectionViewDelegate
-
 
 
 

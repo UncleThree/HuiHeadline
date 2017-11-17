@@ -12,9 +12,9 @@
 @interface HHActivityTaskDetailWebViewController ()<WKNavigationDelegate>
 
 @property (nonatomic,strong)WKWebView *webView;
+
 @property (nonatomic, strong) UIProgressView *progressView;
 
-@property (nonatomic, strong)UIView *navigationView;
 
 
 @end
@@ -28,7 +28,6 @@
     
     [super viewWillAppear:animated];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
@@ -36,11 +35,18 @@
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
     
     [self initNavigation];
     [self initProgressView];
     [self initWebView];
+    
+    [super viewDidLoad];
+}
+
+- (void)refresh {
+    
+    [super refresh];
+    [self loadRequest];
 }
 
 - (void)initNavigation {

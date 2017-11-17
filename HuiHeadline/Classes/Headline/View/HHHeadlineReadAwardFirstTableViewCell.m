@@ -39,6 +39,7 @@
     self.label = [[UILabel alloc] initWithFrame:CGRectZero];
     self.label.font = Font(15);
     self.label.textColor = RGB(124, 112, 8);
+    self.label.numberOfLines = 0;
     [self.contentView addSubview:self.label];
     
 }

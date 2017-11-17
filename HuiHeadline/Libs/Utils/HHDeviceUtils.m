@@ -128,4 +128,15 @@
    
 }
 
++ (NSDictionary *)deviceExtra {
+    
+    return @{
+             @"model":@"",
+             @"manufacturer":@"",
+             @"osVersion":@"",
+             @"macAddress":@"",
+             };
+    
+}
+
 @end

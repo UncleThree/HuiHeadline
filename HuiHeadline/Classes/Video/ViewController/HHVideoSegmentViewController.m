@@ -51,11 +51,7 @@ static HHVideoSegmentViewController *videoSegmentVC = nil;
     return [HHUserManager sharedInstance].video_channels;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
-    [super viewWillAppear:animated];
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
-}
+
 
 
 - (void)viewDidLoad {

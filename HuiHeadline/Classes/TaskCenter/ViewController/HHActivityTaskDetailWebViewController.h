@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HHBaseViewController.h"
 
-@interface HHActivityTaskDetailWebViewController : UIViewController
+@interface HHActivityTaskDetailWebViewController : HHBaseViewController
 
 @property(nonatomic,copy)NSString *URLString;
 

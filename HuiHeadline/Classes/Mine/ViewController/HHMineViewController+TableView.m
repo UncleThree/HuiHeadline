@@ -132,7 +132,7 @@ kRemoveCellSeparator
             
         } else if (indexPath.row == 2) {
             NSLog(@"跳转appStore");
-            NSString *appStoreLink = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%@&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8",@"******"];
+            NSString *appStoreLink = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%@&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8",@"1313670358"];
              [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appStoreLink]];
             
         } else if (indexPath.row == 3) {

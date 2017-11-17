@@ -15,7 +15,7 @@
 + (void)requestForSignNotificationList:(Block)callback {
     
     
-    [HHNetworkManager postRequestWithUrl:k_sign_notification_list parameters:nil isEncryptedJson:NO otherArg:@{@"appendUserInfo":@YES,@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_sign_notification_list parameters:nil isEncryptedJson:NO otherArg:@{@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -34,7 +34,7 @@
 ///获取用户签到信息
 + (void)requestForSignRecord:(void(^)(id error, HHSignRecordResponse *response))callback {
     
-    [HHNetworkManager postRequestWithUrl:k_sign_record parameters:nil isEncryptedJson:NO otherArg:@{@"appendUserInfo":@YES,@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_sign_record parameters:nil isEncryptedJson:NO otherArg:@{@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -50,7 +50,7 @@
 ///签到
 + (void)sign:(void(^)(id error, HHSignResponse *response))callback  {
     
-    [HHNetworkManager postRequestWithUrl:k_sign parameters:nil isEncryptedJson:NO otherArg:@{@"appendUserInfo":@YES,@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_sign parameters:nil isEncryptedJson:NO otherArg:@{@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -65,7 +65,7 @@
 
 + (void)requstNewBieTaskList:(void(^)(id error,NSArray<HHUserNewbieTask *> *tasks))callback {
     
-    [HHNetworkManager postRequestWithUrl:k_user_newbie_task parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_user_newbie_task parameters:nil isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -84,7 +84,7 @@
 
 + (void)requestDailyTaskList:(void(^)(id error,HHUserDailyTaskResponse *response))callback {
     
-    [HHNetworkManager postRequestWithUrl:k_user_daily_task parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_user_daily_task parameters:nil isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -114,7 +114,7 @@
     NSDictionary *parameters = @{
                            @"taskId":[NSNumber numberWithInteger:taskId]
                            };
-    [HHNetworkManager postRequestWithUrl:url parameters:parameters isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:url parameters:parameters isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {

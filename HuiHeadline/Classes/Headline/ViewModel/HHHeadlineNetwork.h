@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HHAwardPerHourResponse.h"
+#import "HHAdModel.h"
 
 //typedef void(^Block)(NSError *error,id result);
 
@@ -37,6 +38,10 @@
 + (void)sychVideoDurationWithDuration:(int)duration
                              callback:(void(^)(id error , HHReadSychDurationResponse *response))callback;
 
+///同步广告曝光
+/// 五个广告/超过2分钟曝光一次 
++ (void)sychListAdExposureWithMap:(NSDictionary<NSString *,NSNumber *> *)map
+                         callback:(void(^)(id error, HHResponse *response))callback;
 
 
 @end

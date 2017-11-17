@@ -137,10 +137,11 @@
 }
 
 - (NSString *)defaultNickName:(HHUserModel *)user {
+    
     if (!user.loginId) {
         return @"";
     }
-    if (user.userInfo.nickName) {
+    if (user.userInfo.nickName && ![user.userInfo.nickName isEqualToString:@""]) {
         return user.userInfo.nickName;
     }
     NSString *registStr = [NSString stringWithFormat:@"%ld",user.userInfo.registerTime];

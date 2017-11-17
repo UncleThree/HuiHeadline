@@ -47,13 +47,18 @@
 #define yellowCellPad 10.0
 - (void)initTableView {
     
-    CGFloat tableHeight = ([self heightForCell:@""] + yellowCellPad ) * self.descriptions.count;
+    CGFloat tableHeight = 0;
+    for (int i = 0; i < self.descriptions.count; i++) {
+        
+        tableHeight += [self heightForCell:self.descriptions[i].text] + yellowCellPad;
+
+    }
     self.yellowView = [[UIView alloc] initWithFrame:CGRectMake(12, 12, KWIDTH - 12 * 2, tableHeight + 20 + 20)];
     self.yellowView.backgroundColor = RGB(246, 240, 188);
     [self.view addSubview:self.yellowView];
     
     self.yellowTableView = ({
-        UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 20, W(self.yellowView), tableHeight)];
+        UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 20, W(self.yellowView), tableHeight) style:(UITableViewStylePlain)];
         tableView.dataSource = self;
         tableView.delegate = self;
         tableView.bounces = NO;
@@ -75,19 +80,21 @@
     self.incomeTableView.delegate = self;
     self.incomeTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.incomeTableView.bounces = NO;
+    self.incomeTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 20)];
     [self.view addSubview:self.incomeTableView];
     
     [self.incomeTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(12);
         make.right.equalTo(self.view).offset(-12);
-        make.top.equalTo(self.yellowView.mas_bottom).with.offset(13);
+        make.top.equalTo(self.yellowView.mas_bottom).with.offset(0);
         make.bottom.equalTo(self.view);
     }];
     
     [self.incomeTableView registerNib:[UINib nibWithNibName:@"HHHeadlineReadAwardTableViewCell" bundle:nil] forCellReuseIdentifier:NSStringFromClass([HHHeadlineReadAwardTableViewCell class])];
 }
 
-- (NSMutableArray *)descriptions {
+- (NSMutableArray<HHReadAward *> *)descriptions
+{
     if (!_descriptions) {
         _descriptions = [NSMutableArray array];
     }
@@ -175,7 +182,12 @@
         cell.readAward = self.descriptions[indexPath.section];
         return cell;
     } else {
+        
         HHHeadlineReadAwardTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHHeadlineReadAwardTableViewCell class]) forIndexPath:indexPath];
+        ///根据时间排序
+        NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"pastDay" ascending:YES];
+        [self.income.records sortUsingDescriptors:@[descriptor]];
+
         cell.model = self.income.records[indexPath.section];
     
         return cell;
@@ -203,12 +215,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     
-    if ([tableView isEqual:self.incomeTableView]) {
-        if (section == self.income.records.count - 1) {
-            return 20;
-        }
-    }
-    return 0.1;
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -218,10 +225,11 @@
         CGFloat height = [self heightForCell:self.descriptions[indexPath.section].text] + yellowCellPad;
         
         return height;
+        
     } else {
         
-        CGFloat height = [self.income.records[indexPath.section] heightForCell];
         
+        CGFloat height = [self.income.records[indexPath.section] heightForCell];
         return 45 + 20 * 2 + height;
         
         
@@ -236,7 +244,7 @@
 
 - (CGFloat)heightForCell:(NSString *)text {
     
-    return [HHFontManager sizeWithText:text font:Font(15) maxSize:CGSizeMake(W(self.yellowTableView) - 12 - 5 - 10, CGFLOAT_MAX)].height;
+    return [HHFontManager sizeWithText:text font:Font(15) maxSize:CGSizeMake(KWIDTH - 12 * 2 - 12 - 5 - 10, CGFLOAT_MAX)].height;
     
 }
 

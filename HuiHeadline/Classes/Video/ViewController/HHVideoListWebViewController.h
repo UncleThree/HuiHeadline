@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HHBaseViewController.h"
 
-@interface HHVideoListWebViewController : UIViewController
+@interface HHVideoListWebViewController : HHBaseViewController
 
 @property(nonatomic,copy)NSString *URLString;
 

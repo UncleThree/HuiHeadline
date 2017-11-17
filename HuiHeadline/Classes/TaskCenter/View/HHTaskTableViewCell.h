@@ -16,7 +16,8 @@
 
 - (void)taskTableViewCellDidClickTaskId:(NSInteger)taskId
                                isNewbie:(BOOL)isNewbie
-                                  title:(NSString *)title;
+                                  title:(NSString *)title
+                                    url:(NSString *)url;
 
 @end
 

@@ -22,7 +22,7 @@
 
 + (void)checkLogin:(void(^)(id error , NSString * result))callback {
     
-    [HHNetworkManager postRequestWithUrl:k_account_check_state parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES,@"CheckLogin":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_account_check_state parameters:nil isEncryptedJson:YES otherArg:@{@"CheckLogin":@YES} handler:^(NSString *respondsStr, NSError *error) {
        
         if (error && [error.description containsString:@"unauthorized"]) {
             callback(@"unauthorized",nil);
@@ -46,7 +46,6 @@
 {
     NSString *uuid = [UIDevice currentDevice].identifierForVendor.UUIDString;
     
-    uuid = @"9083B8EC-0DDC-42A7-B613-DEF1B43459EE";
     NSDictionary *parameter = @{
                                 @"phone":phone,
                                 @"password":password,
@@ -123,7 +122,7 @@
                                 @"newPassword":newPassword,
                                 };
     
-    [HHNetworkManager postRequestWithUrl:k_update_password parameters:parameter isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_update_password parameters:parameter isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
             
             NSDictionary *dict = [respondsStr mj_JSONObject];
@@ -248,12 +247,12 @@
 
 + (void)requestReadConfig {
     
-    [HHNetworkManager postRequestWithUrl:k_readConfig_url parameters:nil isEncryptedJson:NO otherArg:@{@"requestType" : @"json", @"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_readConfig_url parameters:nil isEncryptedJson:NO otherArg:@{@"requestType" : @"json"} handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
             
             NSDictionary *dict = [respondsStr mj_JSONObject];
             HHReadConfigResponse *readConfig = [HHReadConfigResponse mj_objectWithKeyValues:dict[@"readConfig"]];
-            [HHUserManager sharedInstance].readConfig = readConfig;
+            [[HHUserManager sharedInstance] setReadConfig:readConfig];
         } else {
             Log(error);
         }

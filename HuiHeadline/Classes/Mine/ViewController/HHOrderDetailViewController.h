@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "HHMyOrderTableViewCell.h"
+#import "HHBaseViewController.h"
 
-@interface HHOrderDetailViewController : UIViewController
+@interface HHOrderDetailViewController : HHBaseViewController
 
 @property (nonatomic, assign)NSInteger orderId;
 
-@property (nonatomic, strong)HHOrderInfo *detailOrderInfo;
+
 
 @end
 

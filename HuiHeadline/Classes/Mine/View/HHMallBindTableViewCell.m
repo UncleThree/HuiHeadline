@@ -52,6 +52,10 @@
 }
 
 - (void)setModel:(HHMineNormalCellModel *)model {
+    
+    if (!model) {
+        return;
+    }
     _model = model;
     self.leftImgV.image = [UIImage imageNamed:model.imgName];
     self.titleLabel.text = model.text;

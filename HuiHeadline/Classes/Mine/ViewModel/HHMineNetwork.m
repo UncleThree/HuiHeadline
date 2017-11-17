@@ -9,14 +9,14 @@
 #import "HHMineNetwork.h"
 #import "HHAdRequest.h"
 #import "HHAdModel.h"
-
+#import "HHInvitedInitResponse.h"
 
 @implementation HHMineNetwork
 
 + (void)requestCreditSummary:(void(^)(id error, HHUserCreditSummary *summary))callback {
     
     
-    [HHNetworkManager postRequestWithUrl:k_get_credict parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_get_credict parameters:nil isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -47,7 +47,7 @@
                                  @"value":nickName
                                      };
     
-    [HHNetworkManager postRequestWithUrl:k_account_update_nickName parameters:paramaters isEncryptedJson:NO otherArg:@{@"requestType":@"json",@"appendUserInfo":@YES, } handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_account_update_nickName parameters:paramaters isEncryptedJson:NO otherArg:@{@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -65,7 +65,7 @@
     NSDictionary *paramaters = @{
                                  @"value":@(gender)
                                  };
-    [HHNetworkManager postRequestWithUrl:k_account_update_nickName parameters:paramaters isEncryptedJson:NO otherArg:@{@"requestType":@"json",@"appendUserInfo":@YES, } handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_account_update_nickName parameters:paramaters isEncryptedJson:NO otherArg:@{@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -82,7 +82,7 @@
     NSDictionary *paramaters = @{
                                  @"value":birthday
                                  };
-    [HHNetworkManager postRequestWithUrl:k_account_update_birthday parameters:paramaters isEncryptedJson:NO otherArg:@{@"requestType":@"json",@"appendUserInfo":@YES, } handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_account_update_birthday parameters:paramaters isEncryptedJson:NO otherArg:@{@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -102,7 +102,7 @@
                               @"password":password,
                               @"verifyCode":verifyCode
                               };
-    [HHNetworkManager postRequestWithUrl:k_account_bind_phone parameters:parames isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_account_bind_phone parameters:parames isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         
         if (error) {
             callback(error,nil);
@@ -121,7 +121,7 @@
                               @"phone":phone,
                               @"verifyCode":verifyCode
                               };
-    [HHNetworkManager postRequestWithUrl:k_account_rebind_phone parameters:parames isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_account_rebind_phone parameters:parames isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         
         if (error) {
             callback(error,nil);
@@ -173,7 +173,8 @@
 + (void)recommendWithCode:(NSString *)code
                  callback:(void(^)(id error, HHResponse *response))callback{
     
-    [HHNetworkManager postRequestWithUrl:k_invite parameters:@{@"code":code} isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    NSLog(@"%@", code);
+    [HHNetworkManager postRequestWithUrl:k_invite parameters:@{@"code":code} isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -193,20 +194,52 @@
 
 + (void)requestInviteFetchSummary:(void(^)(id error,HHInvitedFetchSummaryResponse *response))callback {
     
-    [HHNetworkManager postRequestWithUrl:k_invite_fetch_summary parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_invite_fetch_summary parameters:nil isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error, nil);
         } else  {
             HHInvitedFetchSummaryResponse *response = [HHInvitedFetchSummaryResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
             if (response.statusCode == 200) {
-                callback(nil, response);
+                if (!response.userInviteInfo) {
+                    [self inviteFetchSummaryInit:^(id error, NSString *code) {
+                        if (error) {
+                            callback(error,nil);
+                        } else {
+                            HHUserInviteInfo *info = [HHUserInviteInfo new];
+                            info.code = code;
+                            info.totalCredit = 0;
+                            info.count = 0;
+                            response.userInviteInfo = info;
+                            callback(nil, response);
+                        }
+                    }];
+                } else {
+                    callback(nil, response);
+                }
             } else {
                 callback(response.msg, nil);
             }
         }
     }];
-    
-    
+}
+
++ (void)inviteFetchSummaryInit:(void(^)(id error, NSString *code))callback {
+
+
+    [HHNetworkManager postRequestWithUrl:k_invite_init parameters:nil isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
+        if (error) {
+            callback(error,nil);
+        } else  {
+            HHInvitedInitResponse *response = [HHInvitedInitResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+            
+            if (response.statusCode == 200) {
+                callback(nil, response.criticalValue);
+            } else {
+                callback(response.msg, nil);
+            }
+
+        }
+    }];
 }
 
 
@@ -214,7 +247,7 @@
 + (void)requestInviteConstribution:(NSInteger)page callback:(void(^)(id error, NSArray<HHInvitedConstributionSummary *> *constributions))callback {
     
     
-    [HHNetworkManager postRequestWithUrl:k_invite_constribution_detail parameters:@{@"page":@(page)} isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_invite_constribution_detail parameters:@{@"page":@(page)} isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -234,7 +267,7 @@
 + (void)requestInviteSummary:(NSInteger)page callback:(void(^)(id error, NSArray<HHInvitedSummary *> *summaries))callback {
     
     
-    [HHNetworkManager postRequestWithUrl:k_invite_constribution_summary parameters:@{@"page":@(page)} isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_invite_constribution_summary parameters:@{@"page":@(page)} isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -257,7 +290,7 @@
     NSDictionary *parameters = @{
                                  @"category":category
                                  };
-    [HHNetworkManager postRequestWithUrl:k_product_list parameters:parameters isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_product_list parameters:parameters isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -278,7 +311,7 @@
                             callback:(void(^)(id error , HHProductInfo *productInfo))callback{
     
     
-    [HHNetworkManager postRequestWithUrl:k_product_info parameters:@{@"productId":@(productId)} isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_product_info parameters:@{@"productId":@(productId)} isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -312,7 +345,7 @@
                                  @"callState":@(callState),
                                  @"voiceCode":voiceCode
                                  };
-    [HHNetworkManager postRequestWithUrl:k_product_purchase parameters:paramaters isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_product_purchase parameters:paramaters isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -331,7 +364,7 @@
 
 + (void)getDefaultAlipay:(void(^)(id error ,HHAlipayAccountResponse *response))callback{
     
-    [HHNetworkManager postRequestWithUrl:k_default_alipay parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_default_alipay parameters:nil isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -356,7 +389,7 @@
     NSDictionary *para = @{
                            @"alipayAccount" : [account mj_JSONObject]
                            };
-    [HHNetworkManager postRequestWithUrl:k_update_alipay parameters:para isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_update_alipay parameters:para isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -375,7 +408,7 @@
 
 + (void)getDefaultWechat:(void(^)(id error ,HHWeixinAccountResponse *response))callback{
     
-    [HHNetworkManager postRequestWithUrl:k_default_wechat parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_default_wechat parameters:nil isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -401,7 +434,7 @@
     NSDictionary *para = @{
                            @"weixinAccount" : weixinAccountDict
                            };
-    [HHNetworkManager postRequestWithUrl:k_update_wechat parameters:para isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_update_wechat parameters:para isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -420,14 +453,15 @@
 
 ///0 all 1 进行中
 + (void)getOrderList:(NSInteger)state
+           orderTime:(long)orderTime
             callback:(void(^)(id error,NSArray<HHOrderInfo *> *orders))callback   {
     
     NSDictionary *parameters = @{
-                                 @"orderTime":@([[NSDate date] timeIntervalSince1970] * 1000),
+                                 @"orderTime":@(orderTime ?: [[NSDate date] timeIntervalSince1970] * 1000),
                                  @"state":@(state)
                                  };
     
-    [HHNetworkManager postRequestWithUrl:k_order_list parameters:parameters isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_order_list parameters:parameters isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -450,7 +484,7 @@
                                  @"orderId":@(orderId),
                                  };
     
-    [HHNetworkManager postRequestWithUrl:k_order_info parameters:parameters isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_order_info parameters:parameters isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -480,7 +514,7 @@
                            @"category":@(category)
                            };
     
-    [HHNetworkManager postRequestWithUrl:k_credit_detail parameters:dict isEncryptedJson:YES otherArg:@{@"appendUserInfo":@YES} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_credit_detail parameters:dict isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {

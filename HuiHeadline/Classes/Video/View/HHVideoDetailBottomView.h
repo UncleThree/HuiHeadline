@@ -16,6 +16,10 @@
 
 - (void)clickProgressView;
 
+- (void)clickAd:(HHAdModel *)ad;
+
+- (void)exposure:(HHAdModel *)adModel;
+
 @end
 
 
@@ -25,6 +29,8 @@
 @property (nonatomic, assign)id<HHVideoDetalBottomViewDelegate> delegate;
 
 @property (nonatomic, strong)HHHeadlineNewsDetailProgressView *progressView;
+
+@property (nonatomic, strong)UITableView *backTableView;
 
 @property (nonatomic)CGFloat progress;
 

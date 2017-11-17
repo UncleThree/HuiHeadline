@@ -46,7 +46,7 @@
     self.timeLabel.text = [HHDateUtil detailTimeFormat:orderInfo.lastModifiedTime];
     self.numberLabel.text = [NSString stringWithFormat:@"X %zd",orderInfo.count];
     
-    [self.saleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.saleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
         
         make.right.equalTo(self.contentView.mas_right).with.offset(-12);
         make.height.mas_equalTo(17);
@@ -54,18 +54,18 @@
         make.top.equalTo(self.orderImgV);
     }];
     
-    [self.rmbLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.rmbLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.saleLabel.mas_bottom);
         make.right.equalTo(self.saleLabel);
         make.height.mas_equalTo(17);
-        make.width.mas_equalTo([HHFontManager sizeWithText:rmb font:self.rmbLabel.font maxSize:CGSizeMake(CGFLOAT_MAX, 20)].width + 1);
+        make.left.mas_greaterThanOrEqualTo(self.saleLabel.mas_left);
     }];
     
     if (!self.lineView) {
         self.lineView = [[UIView alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:self.lineView];
     }
-    [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.lineView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.equalTo(self.rmbLabel);
         make.height.mas_equalTo(0.5);
         make.centerY.equalTo(self.rmbLabel);

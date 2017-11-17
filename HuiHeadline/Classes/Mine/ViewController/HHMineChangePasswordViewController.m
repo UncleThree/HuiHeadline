@@ -32,7 +32,7 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    [HHStatusBarUtil changeStatusBarColor:[UIColor clearColor]];
+
 }
 
 - (void)viewDidLoad {
@@ -101,14 +101,23 @@
 
 - (void)submit {
     
-    if (!self.oldPasTF.textField.text) {
+    if (!self.oldPasTF.textField.text || [self.oldPasTF.textField.text isEqualToString:@""]) {
         
         [HHHeadlineAwardHUD showMessage:@"请输入旧密码" animated:YES duration:2];
-    } else if (!self.nePasTF.textField.text) {
+        
+    } else if (!self.nePasTF.textField.text || [self.nePasTF.textField.text isEqualToString:@""]) {
+        
         [HHHeadlineAwardHUD showMessage:@"请输入新密码" animated:YES duration:2];
         
-    } else if (![self.confirmTF.textField.text isEqualToString:self.nePasTF.textField.text]) {
+    }  else if (!self.confirmTF.textField.text || [self.confirmTF.textField.text isEqualToString:@""]) {
+        
+        [HHHeadlineAwardHUD showMessage:@"请确认密码" animated:YES duration:2];
+        
+    }
+    else if (![self.confirmTF.textField.text isEqualToString:self.nePasTF.textField.text]) {
+        
         [HHHeadlineAwardHUD showMessage:@"两次输入密码不同！" animated:YES duration:2];
+        
     } else {
         
         [HHHeadlineAwardHUD showHUDWithText:@"提交中，请稍后..." animated:YES];
