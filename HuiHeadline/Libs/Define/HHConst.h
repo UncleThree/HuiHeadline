@@ -102,6 +102,7 @@
 typedef void(^Block)(NSError *error,id result);
 
 #define WX_APPID @"wx95837f9bce09e2be"
+#define UM_APPKEY @"5a0e9ec18f4a9d207f000284"
 
 //#define WX_APPID @"wxd0be1cf0ca04364b"
 

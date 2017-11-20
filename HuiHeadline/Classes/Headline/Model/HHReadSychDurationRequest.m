@@ -11,6 +11,7 @@
 @implementation HHReadSychDurationRequest
 
 - (instancetype)init {
+    
     if (self = [super init]) {
         self.channel = [HHUserManager sharedInstance].currentUser.channel;
         self.token = [HHUserManager sharedInstance].sychDurationResponse.token;

@@ -62,6 +62,8 @@
 @property (nonatomic, assign)int virifyCodeCountdown;
 
 @property (nonatomic, assign)NSTimeInterval lastSychAdTime;
+///每次同步用户阅读的文章数
+@property (nonatomic, assign)int newsCount;
 
 //当前用户对应的频道列表
 @property (nonatomic, strong)NSMutableArray<NSString *> *channels;

@@ -12,8 +12,9 @@
 #import "HHHeadlineListReadAwardViewController.h"
 #import "HHReadSychDurationResponse.h"
 #import "HHHeadlineNavController.h"
+#import "HHReadWKWebView.h"
 
-@interface HHHeadlineListWebViewController () < UIScrollViewDelegate, HHHeadlineShareCollectionViewDelegate>
+@interface HHHeadlineListWebViewController () < UIScrollViewDelegate, HHHeadlineShareCollectionViewDelegate, UIViewControllerPreviewingDelegate>
 
 ///模糊背景图
 @property (nonatomic, strong)UIView *backGView;
@@ -43,6 +44,40 @@
         [(HHHeadlineNavController *)self.navigationController setAppear:NO];
     }
     
+    HHUserManager.sharedInstance.newsCount++;
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(touch:) name:@"notiScreenTouch" object:nil];
+    
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    
+    [super viewDidDisappear:animated];
+    
+    [HHUserManager.sharedInstance.timer invalidate];
+    HHUserManager.sharedInstance.timer = nil;
+    
+    [NSNotificationCenter.defaultCenter removeObserver:self name:@"notiScreenTouch" object:nil];
+}
+
+- (void)touch:(NSNotification *)notification {
+    
+    if (notification.userInfo && notification.userInfo[@"event"]) {
+        UIEvent *event = notification.userInfo[@"event"];
+        UITouch *touch = event.allTouches.anyObject;
+        if (touch.phase == UITouchPhaseBegan) {
+            
+            [self.actionInfo increaseDownMotionEvent:touch];
+            
+        } else if (touch.phase == UITouchPhaseMoved) {
+            
+      
+            [self.actionInfo increaseMoveMotionEvent:touch];
+        }
+        
+    }
+    
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -53,8 +88,6 @@
     self.webView.scrollView.delegate = nil;
     
     [self.progressView removeFromSuperview];
-    [HHUserManager.sharedInstance.timer invalidate];
-    HHUserManager.sharedInstance.timer = nil;
     
 }
 
@@ -66,6 +99,13 @@
     [self initProgressView];
     
     [super viewDidLoad];
+}
+
+- (AntifraudReadActionInfo *)actionInfo {
+    if (!_actionInfo) {
+        _actionInfo = [AntifraudReadActionInfo new];
+    }
+    return _actionInfo;
 }
 
 
@@ -98,7 +138,10 @@
     
     [self initTime];
     
+    
 }
+
+
 
 - (void)addGuideView {
     
@@ -141,6 +184,10 @@
     int readTime = [HHUserManager sharedInstance].readTime;
     if (readTime) {
         _circleProgress.progressView.notAnimated = YES;
+        if (readTime > self.totalTime) {
+            HHUserManager.sharedInstance.readTime = self.totalTime;
+            readTime = HHUserManager.sharedInstance.readTime;
+        }
     }
     _circleProgress.progressView.progress = (float)readTime / (float)self.totalTime;
 }
@@ -150,7 +197,6 @@
 - (void)initNavigation {
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
     
     self.backItem = [[UIBarButtonItem alloc] initWithCustomView:[HHNavigationBackViewCreater customBarItemWithTarget:self action:@selector(back)]];
     self.navigationItem.leftBarButtonItem = self.backItem;
@@ -185,8 +231,10 @@
 }
 
 - (void)sychDuration:(void(^)(NSError *error,HHReadSychDurationResponse *response))callback {
+    
     if (self.totalTime >= 10) {
-        [HHHeadlineNetwork sychDurationWithDuration:self.totalTime callback:^(NSError *error, id result) {
+        
+        [HHHeadlineNetwork sychDurationWithDuration:self.totalTime count:[HHUserManager sharedInstance].newsCount actionInfo:self.actionInfo  callback:^(NSError *error, id result) {
             
             callback(error,result);
         }];
@@ -236,15 +284,16 @@
 }
 
 
-
 - (void)initWebView {
 
-    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) ];
+    self.webView = [[HHReadWKWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) ];
     self.webView.scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.webView.scrollView.canCancelContentTouches = NO;
     [self.view addSubview:self.webView];
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(0, 0, 0, 0));
     }];
+    
     
     [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
     self.webView.navigationDelegate = self;
@@ -254,6 +303,8 @@
     [self loadRequest];
   
 }
+
+
 
 - (void)loadRequest {
     

@@ -183,7 +183,9 @@
         
     } else {
         
-        self.verifyLabel.userInteractionEnabled = NO;
+        self.countdown = 60;
+        [self startTimer];
+        
         [self sendSms:self.phoneTF.textField.text];
         
     }
@@ -198,10 +200,7 @@
             Log(error);
         } else {
             [HHHeadlineAwardHUD showMessage:msg animated:YES duration:2.0];
-            if ([msg isEqualToString:k_sendsms_success]) {
-                self.countdown = 60;
-                [self startTimer];
-            }
+            
         }
     }];
 }

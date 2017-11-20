@@ -51,6 +51,8 @@
     [self showNav:YES];
     
     [(HHHeadlineNavController *)self.navigationController setAppear:YES];
+    
+   
 }
 
 

@@ -42,6 +42,7 @@
 ///高度缓存 优化性能
 @property (nonatomic, strong)NSCache *heightCache;
 
+@property (nonatomic, assign)BOOL freshTag;
 
 @end
 
@@ -141,8 +142,8 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     [self reloadHeader:YES];
     ///任务
     [self reloadTableViewData:^{
+        
         [self.tableView.mj_header endRefreshing];
-        [HHHeadlineAwardHUD hideHUDAnimated:YES];
     }];
     
 }
@@ -491,15 +492,22 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     
-    
     CGPoint offset = self.tableView.contentOffset;
 
     if (offset.y < -20) {
         
-        [HHHeadlineAwardHUD showHUDWithText:@"正在刷新..." animated:YES];
-        [self refresh];
-        
         offset.y = -20;
+        
+        if (!self.freshTag) {
+            
+            self.freshTag = YES;
+            NSLog(@"111");
+            [HHHeadlineAwardHUD showHUDWithText:@"正在刷新..." animated:YES];
+            [self refresh];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self.freshTag = NO;
+            });
+        }
 
     }
     self.tableView.contentOffset = offset;

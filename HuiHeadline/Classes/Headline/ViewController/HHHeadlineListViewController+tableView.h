@@ -8,6 +8,6 @@
 
 #import "HHHeadlineListViewController.h"
 
-@interface HHHeadlineListViewController (tableView) <UITableViewDelegate, UITableViewDataSource>
+@interface HHHeadlineListViewController (tableView) <UITableViewDelegate, UITableViewDataSource, UIViewControllerPreviewingDelegate>
 
 @end

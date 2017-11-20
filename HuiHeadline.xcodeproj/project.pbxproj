@@ -87,6 +87,9 @@
 		5B6354EE1FBE7D6F00FF25EF /* CCPActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6354E61FBE7D6F00FF25EF /* CCPActionSheetView.m */; };
 		5B6354EF1FBE7D6F00FF25EF /* UIView+CCPExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6354E81FBE7D6F00FF25EF /* UIView+CCPExtension.m */; };
 		5B6354F01FBE7D6F00FF25EF /* CCPScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6354EB1FBE7D6F00FF25EF /* CCPScrollView.m */; };
+		5B6354F31FC27DAF00FF25EF /* HHReadAnalyseUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6354F21FC27DAF00FF25EF /* HHReadAnalyseUtil.m */; };
+		5B6354F61FC2884200FF25EF /* HHReadWKWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6354F51FC2884200FF25EF /* HHReadWKWebView.m */; };
+		5B6354F91FC2925800FF25EF /* HHApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6354F81FC2925800FF25EF /* HHApplication.m */; };
 		5B7BFEB51F8B116700A615F9 /* HHAdModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFEB41F8B116700A615F9 /* HHAdModel.m */; };
 		5B7BFEB81F8B5A6600A615F9 /* HHBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFEB71F8B5A6600A615F9 /* HHBaseModel.m */; };
 		5B7BFEBB1F8C61C200A615F9 /* HHHeadlineNewsBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFEBA1F8C61C200A615F9 /* HHHeadlineNewsBaseTableViewCell.m */; };
@@ -390,6 +393,12 @@
 		5B6354E81FBE7D6F00FF25EF /* UIView+CCPExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CCPExtension.m"; sourceTree = "<group>"; };
 		5B6354EA1FBE7D6F00FF25EF /* CCPScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCPScrollView.h; sourceTree = "<group>"; };
 		5B6354EB1FBE7D6F00FF25EF /* CCPScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCPScrollView.m; sourceTree = "<group>"; };
+		5B6354F11FC27DAF00FF25EF /* HHReadAnalyseUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadAnalyseUtil.h; sourceTree = "<group>"; };
+		5B6354F21FC27DAF00FF25EF /* HHReadAnalyseUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHReadAnalyseUtil.m; sourceTree = "<group>"; };
+		5B6354F41FC2884200FF25EF /* HHReadWKWebView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHReadWKWebView.h; sourceTree = "<group>"; };
+		5B6354F51FC2884200FF25EF /* HHReadWKWebView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHReadWKWebView.m; sourceTree = "<group>"; };
+		5B6354F71FC2925800FF25EF /* HHApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHApplication.h; sourceTree = "<group>"; };
+		5B6354F81FC2925800FF25EF /* HHApplication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHApplication.m; sourceTree = "<group>"; };
 		5B7BFEB31F8B116700A615F9 /* HHAdModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHAdModel.h; sourceTree = "<group>"; };
 		5B7BFEB41F8B116700A615F9 /* HHAdModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HHAdModel.m; sourceTree = "<group>"; };
 		5B7BFEB61F8B5A6600A615F9 /* HHBaseModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HHBaseModel.h; sourceTree = "<group>"; };
@@ -1025,6 +1034,8 @@
 				5BA5EB4B1F6779FC0066A06A /* LaunchScreen.storyboard */,
 				5BA5EB541F677ADA0066A06A /* AppDelegate.h */,
 				5BA5EB551F677ADA0066A06A /* AppDelegate.m */,
+				5B6354F71FC2925800FF25EF /* HHApplication.h */,
+				5B6354F81FC2925800FF25EF /* HHApplication.m */,
 				5BA5EB561F677ADA0066A06A /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -1096,6 +1107,8 @@
 				5BA5EBF91F6FA6730066A06A /* HHHeadlineAwardHUD.m */,
 				5BDEB66D1F79F402005B931C /* HHHeadlineNetwork.h */,
 				5BDEB66E1F79F402005B931C /* HHHeadlineNetwork.m */,
+				5B6354F11FC27DAF00FF25EF /* HHReadAnalyseUtil.h */,
+				5B6354F21FC27DAF00FF25EF /* HHReadAnalyseUtil.m */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1218,6 +1231,8 @@
 		5BA5EBB31F6A6F740066A06A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				5B6354F41FC2884200FF25EF /* HHReadWKWebView.h */,
+				5B6354F51FC2884200FF25EF /* HHReadWKWebView.m */,
 				5BA5EC1A1F71006C0066A06A /* HHeadlineAwardView.h */,
 				5BA5EC1B1F71006C0066A06A /* HHeadlineAwardView.m */,
 				5BA5EC321F7213DA0066A06A /* HHHeadlineAwardInstructionView.h */,
@@ -1890,6 +1905,7 @@
 				5BA5EBDB1F6F80380066A06A /* HHAdNetwork.m in Sources */,
 				5B6354EC1FBE7D6F00FF25EF /* CCPActionSheetCell.m in Sources */,
 				5BE9877C1FAB02ED00710AA1 /* HHPurchaseResponse.m in Sources */,
+				5B6354F91FC2925800FF25EF /* HHApplication.m in Sources */,
 				5BA5EB931F67AF8A0066A06A /* HHHeadlineTimer.m in Sources */,
 				5BA5EB9F1F691FF80066A06A /* HHHeadlineSegmentViewController.m in Sources */,
 				5B3B97C61FB1B16500BC1500 /* HHMineInvitedOneImageTableViewCell.m in Sources */,
@@ -1941,6 +1957,7 @@
 				5B047E571F988B4F008E2CEC /* HHMineSettingCellModel.m in Sources */,
 				5B047E6F1F9ED6C7008E2CEC /* HHTextFieldAndLineView.m in Sources */,
 				5BE987681FA9B60F00710AA1 /* HHIncomeDetailViewController.m in Sources */,
+				5B6354F31FC27DAF00FF25EF /* HHReadAnalyseUtil.m in Sources */,
 				5B0DFE191FA09B52003C3771 /* HHTaskCellModel.m in Sources */,
 				5BF7A34D1F8DF65900D0DEF9 /* HHHeadlineReadAwardTableViewCell.m in Sources */,
 				5BCF732B1F7DE19C00936567 /* CollectionReusableView.m in Sources */,
@@ -1972,6 +1989,7 @@
 				5BA5EC301F7119420066A06A /* HHHeadlineNewsBigImgTableViewCell.m in Sources */,
 				5B3B97CD1FB5504A00BC1500 /* UITabBar+Badge.m in Sources */,
 				5BE9876B1FA9BECD00710AA1 /* HHIncomDetailResponse.m in Sources */,
+				5B6354F61FC2884200FF25EF /* HHReadWKWebView.m in Sources */,
 				5BA5EBC21F6B70310066A06A /* HHHeadlineChannelListHeaderView.m in Sources */,
 				5B2E45301F9058AF00361485 /* HHReadSychDurationResponse.m in Sources */,
 				5BAA9D491FA2D0970033041B /* HHActivityTaskDetailWebViewController.m in Sources */,

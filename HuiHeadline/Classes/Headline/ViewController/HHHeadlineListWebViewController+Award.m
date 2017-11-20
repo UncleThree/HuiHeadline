@@ -76,10 +76,16 @@ static int timerInterval = 0;
 - (void)award_sychDuration:(void (^)(void))callback {
     
     [self sychDuration:^(NSError *error, HHReadSychDurationResponse *response) {
+        
+        HHUserManager.sharedInstance.newsCount = 1;
+        
+        
         if (error) {
             NSLog(@"sychDuration error:%@",error);
         } else if (response.state == 0) {
             //成功
+            self.actionInfo = nil;
+            
             [self submitIncomeWithCoins:response.incCredit];
         
             [self startTimerWithTimerInterval:timerInterval];
@@ -92,6 +98,7 @@ static int timerInterval = 0;
         } else if (response.state == 1) {
             [HHHeadlineAwardHUD showMessage:@"今日阅读收益已达上限！" animated:YES duration:2];
         }
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.sychLock = NO;
         });
@@ -105,12 +112,16 @@ static int timerInterval = 0;
     //提交之后再清0
     self.circleProgress.progressView.progress = 0;
     HHUserManager.sharedInstance.readTime = 0;
+    
+    //动画
     CGPoint center = CGPointMake(PROGRESS_KWIDTH / 2, Y(self.circleProgress) + PROGRESS_KWIDTH / 2);
     [HHHeadlineAwardHUD showImageView:@"计时奖励" coins:coins animation:YES originCenter:center addToView:self.view duration:2.0];
     
-    
 
 }
+
+
+
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "HHAwardPerHourResponse.h"
 #import "HHAdModel.h"
+#import "HHReadAnalyseUtil.h"
 
 //typedef void(^Block)(NSError *error,id result);
 
@@ -33,7 +34,9 @@
                          callback:(void(^)(NSError *error,HHAwardPerHourResponse *response))callback;
 ///同步阅读时长
 + (void)sychDurationWithDuration:(int)duration
-                        callback:(Block)callback;
+                           count:(int)count
+                      actionInfo:(AntifraudReadActionInfo *)actionInfo
+                        callback:(Block)callback ;
 ///同步视频时长
 + (void)sychVideoDurationWithDuration:(int)duration
                              callback:(void(^)(id error , HHReadSychDurationResponse *response))callback;

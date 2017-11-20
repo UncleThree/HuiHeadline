@@ -13,6 +13,7 @@
 #import "WXApi.h"
 #import "WechatService.h"
 #import "AlipayService.h"
+#import <UMMobClick/MobClick.h>
 
 @interface AppDelegate () <WXApiDelegate>
 
@@ -21,11 +22,14 @@
 @implementation AppDelegate
 
 
-
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    ///wechat
     [WXApi registerApp:WX_APPID];
+    ///UMeng
+    UMConfigInstance.appKey = UM_APPKEY;
+    UMConfigInstance.channelId = @"App Store";
+    [MobClick startWithConfigure:UMConfigInstance];
     
     [self loadAppWithLaunchAD:YES];
     return YES;

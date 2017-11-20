@@ -164,7 +164,9 @@
         
     } else {
         
-        self.verifyLabel.userInteractionEnabled = NO;
+        self.countdown = 60;
+        [self startTimer];
+
         [self sendSms:self.phoneTF.textField.text];
         
     }
@@ -173,16 +175,14 @@
 
 - (void)sendSms:(NSString *)phone {
     
+    
     [HHLoginNetwork sendSms:phone type:(SendSmsTypeBIND_PHONE_AGAIN) handler:^(NSString *msg, id error) {
         self.verifyLabel.userInteractionEnabled = YES;
         if (error) {
             Log(error);
         } else {
             [HHHeadlineAwardHUD showMessage:msg animated:YES duration:2.0];
-            if ([msg isEqualToString:k_sendsms_success]) {
-                self.countdown = 60;
-                [self startTimer];
-            }
+            
         }
     }];
 }

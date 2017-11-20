@@ -379,12 +379,17 @@ static NSString *newkey = nil;
 }
 
 + (void)sychDurationWithDuration:(int)duration
+                           count:(int)count
+                      actionInfo:(AntifraudReadActionInfo *)actionInfo
                         callback:(Block)callback {
     
     NSLog(@"同步阅读时长请求:%zd",duration);
     HHReadSychDurationRequest *sychDurationRequest = [[HHReadSychDurationRequest alloc] init];
     sychDurationRequest.duration = duration;
+    sychDurationRequest.count = count;
+    sychDurationRequest.readActionInfo = actionInfo;
     NSDictionary *paramaters = [sychDurationRequest mj_keyValues];
+    NSLog(@"%@",paramaters);
     [HHNetworkManager postRequestWithUrl:k_sync_duration parameters:paramaters isEncryptedJson:YES otherArg:nil handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
             HHReadSychDurationResponse *response = [HHReadSychDurationResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];

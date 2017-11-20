@@ -10,6 +10,7 @@
 #import "HHHeadlineNewsDetailProgressView.h"
 #import <WebKit/WebKit.h>
 #import "HHBaseViewController.h"
+#import "HHReadAnalyseUtil.h"
 
 @class HHReadSychDurationResponse;
 
@@ -24,8 +25,7 @@
 @property (nonatomic, strong)WKWebView *webView;
 @property (nonatomic, strong)UIProgressView *progressView;
 
-
-//圈圈
+//
 @property (nonatomic, strong)HHHeadlineNewsDetailProgressView *circleProgress;
 
 ///共多少秒提交奖励
@@ -41,5 +41,6 @@
 ///同步时长
 - (void)sychDuration:(void(^)(NSError *error,HHReadSychDurationResponse *response))callback;
 
+@property (nonatomic, strong)AntifraudReadActionInfo *actionInfo;
 
 @end

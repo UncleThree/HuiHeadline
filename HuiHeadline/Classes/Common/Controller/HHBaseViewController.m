@@ -9,6 +9,7 @@
 #import "HHBaseViewController.h"
 #import "HHDeviceUtils.h"
 #import "Reachability.h"
+#import <UMMobClick/MobClick.h>
 
 @interface HHBaseViewController ()
 
@@ -24,6 +25,18 @@
 @implementation HHBaseViewController
 
 
+- (void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:@"onePiece"];
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:@"onePiece"];
+}
 
 - (void)viewDidLoad {
     

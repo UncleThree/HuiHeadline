@@ -65,7 +65,7 @@
     NSDictionary *paramaters = @{
                                  @"value":@(gender)
                                  };
-    [HHNetworkManager postRequestWithUrl:k_account_update_nickName parameters:paramaters isEncryptedJson:NO otherArg:@{@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_account_update_gender parameters:paramaters isEncryptedJson:NO otherArg:@{@"requestType":@"json"} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {

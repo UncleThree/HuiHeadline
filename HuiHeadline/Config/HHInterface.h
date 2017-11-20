@@ -37,8 +37,8 @@
 
 
 //#define k_base_url @"http://192.168.0.114:8080/frontend"
-#define k_base_url @"http://192.168.0.247:9780/frontend"
-//#define k_base_url @"http://api.cashtoutiao.com/frontend"
+//#define k_base_url @"http://192.168.0.247:9780/frontend"
+#define k_base_url @"http://api.cashtoutiao.com/frontend"
 
 
 
