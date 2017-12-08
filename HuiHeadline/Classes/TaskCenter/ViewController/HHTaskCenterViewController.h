@@ -16,7 +16,7 @@
 
 - (void)reloadHeader:(BOOL)forced;
 
-- (void)reloadTableViewData:(void(^)())callback  ;
+- (void)reloadTableViewData ;
 
 
 @end

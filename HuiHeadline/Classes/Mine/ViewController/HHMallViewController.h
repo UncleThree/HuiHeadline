@@ -23,6 +23,6 @@
 
 @property (nonatomic, weak)id <HHMallTableViewDelegate> delegate;
 
-@property (nonatomic, assign)NSInteger category;
+@property (nonatomic, assign)ProductCategoryType category;
 
 @end

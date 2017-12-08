@@ -47,7 +47,7 @@
 - (void)layout {
     
     [self.imgV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.mas_equalTo(CGFLOAT(40));
+        make.width.height.mas_equalTo(CGFLOAT_W(50));
         make.centerX.equalTo(self.contentView);
         make.centerY.equalTo(self.contentView).with.offset(-10);
         

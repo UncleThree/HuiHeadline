@@ -35,8 +35,23 @@
         UINavigationController *navi3 = [[UINavigationController alloc] initWithRootViewController:[HHMineViewController defaultMineVC]];
         
         CYLTabBarController *tbc = [[CYLTabBarController alloc] init];
-        [self customTabBarForController:tbc];
-        [tbc setViewControllers:@[navi0,navi1,navi2,navi3]];
+        NSArray *titles = @[@"头条", @"视频", @"任务中心", @"我的"];
+        NSArray *controllers = @[navi0,navi1,navi2,navi3];
+        if (G.$.bs) {
+            titles = @[@"头条", @"视频", @"我的"];
+            controllers = @[navi0,navi1,navi3];
+        }
+        NSMutableArray *tabBarItemsAttributes = [NSMutableArray array];
+        for (NSString *title in titles) {
+            NSDictionary *dict =  @{
+                                    CYLTabBarItemTitle:title,
+                                    CYLTabBarItemImage:title,
+                                    CYLTabBarItemSelectedImage:[title stringByAppendingString:@"_点击"],
+                                    };
+            [tabBarItemsAttributes addObject:dict];
+        }
+        tbc.tabBarItemsAttributes = tabBarItemsAttributes.copy;
+        [tbc setViewControllers:controllers];
         self = (id)tbc;
         self.tabBar.tintColor = HUIRED;
         self.tabBar.translucent = NO;
@@ -91,21 +106,7 @@
 }
 
 
-- (void)customTabBarForController:(CYLTabBarController *)tbc {
-    NSArray *titles = @[@"头条", @"视频", @"任务中心", @"我的"];
-    NSMutableArray *tabBarItemsAttributes = [NSMutableArray array];
-    for (NSString *title in titles) {
-        NSDictionary *dict =  @{
-                              CYLTabBarItemTitle:title,
-                              CYLTabBarItemImage:title,
-                              CYLTabBarItemSelectedImage:[title stringByAppendingString:@"_点击"],
-                              };
-        [tabBarItemsAttributes addObject:dict];
-    }
-    tbc.tabBarItemsAttributes = tabBarItemsAttributes.copy;
 
-    
-}
 
 
 

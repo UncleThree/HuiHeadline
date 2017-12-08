@@ -23,7 +23,8 @@
     }
     @try {
         float averagePressure = (_downAvgPressure * (_downCount - 1) + touch.force ) / _downCount;
-        _downAvgPressure = averagePressure;
+        
+        _downAvgPressure =  floor(averagePressure * 1000000000 ) / 1000000000;
         
         NSMutableSet *set = nil;
         if (!_toolTypes) {
@@ -35,12 +36,14 @@
         _toolTypes = [set sortedArrayUsingDescriptors:@[]];
         
     } @catch (NSException *error) {
+        
         NSLog(@"%@",error);
         
     }
     
     
 }
+
 
 
 - (void)increaseMoveMotionEvent:(UITouch *)touch {
@@ -50,8 +53,9 @@
         return;
     }
     @try {
+        
         float averageMovePressure = (_moveAvgPressure * (_moveCount - 1) + touch.force) / _moveCount;
-        _moveAvgPressure = averageMovePressure;
+        _moveAvgPressure =   floor(averageMovePressure * 1000000000 ) / 1000000000;;
         
     } @catch (NSException *error) {
         

@@ -30,7 +30,7 @@
     
     self.backgroundColor = [UIColor clearColor];
     self.contentView.backgroundColor = [UIColor clearColor];
-    self.redPoint = [[UIView alloc] initWithFrame:CGRectMake(12, 0, 5, 5)];
+    self.redPoint = [[UIView alloc] initWithFrame:CGRectMake(12, 11, 5, 5)];
     self.redPoint.backgroundColor = HUIRED;
     self.redPoint.layer.cornerRadius = 2.5;
     [self.contentView addSubview:self.redPoint];
@@ -46,7 +46,7 @@
 
 - (void)setReadAward:(HHReadAward *)readAward {
     
-    self.redPoint.center = CGPointMake(self.redPoint.center.x, self.contentView.center.y);
+//    self.redPoint.center = CGPointMake(self.redPoint.center.x, self.contentView.center.y);
     [self.label mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.redPoint.mas_right).with.offset(10);
         make.top.bottom.equalTo(self.contentView);

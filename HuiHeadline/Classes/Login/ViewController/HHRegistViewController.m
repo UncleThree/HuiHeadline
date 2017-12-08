@@ -8,7 +8,7 @@
 
 #import "HHRegistViewController.h"
 #import <CoreText/CoreText.h>
-#import "HHActivityTaskDetailWebViewController.h"
+#import "CustomBrowserViewController.h"
 
 @interface HHRegistViewController ()
 
@@ -256,7 +256,7 @@
     CGFloat index = point.x  / charWidth;
     if (index >= length - 4  && index <= length - 1 ) {
         
-        HHActivityTaskDetailWebViewController *userAgreementVC = [HHActivityTaskDetailWebViewController new];
+        CustomBrowserViewController *userAgreementVC = [CustomBrowserViewController new];
         userAgreementVC.URLString = @"http://toutiao.huadongmedia.com/user-service.html";
         userAgreementVC.activityTitle = @"惠头条用户服务协议";
         [self.navigationController pushViewController:userAgreementVC animated:YES];

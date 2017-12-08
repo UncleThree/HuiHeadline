@@ -87,7 +87,6 @@
     self.passwordTF.textField.tintColor = BLACK_153;
     self.passwordTF.textField.font = font;
     self.passwordTF.textField.returnKeyType = UIReturnKeyDone;
-    self.passwordTF.textField.keyboardType = UIKeyboardTypeNumberPad;
     self.passwordTF.textField.delegate = self;
     [self.view addSubview:self.passwordTF];
     
@@ -109,7 +108,7 @@
     self.bindPhoneButton = [[UIButton alloc] initWithFrame:CGRectMake(leftPad, MaxY(self.passwordTF) + CGFLOAT(30), W(self.phoneTF), 40)];
     self.bindPhoneButton.backgroundColor = HUIRED;
     [self.bindPhoneButton setTitle:@"绑定手机号" forState:(UIControlStateNormal)];
-    self.bindPhoneButton.layer.cornerRadius = 8;
+    self.bindPhoneButton.layer.cornerRadius = 5;
     self.bindPhoneButton.tintColor = [UIColor whiteColor];
     [self.bindPhoneButton addTarget:self action:@selector(bindPhoneAgainAction) forControlEvents:(UIControlEventTouchUpInside)];
     [self.view addSubview:self.bindPhoneButton];

@@ -24,13 +24,13 @@ static HHHeadlineSegmentViewController *vc = nil;
 
 + (HHHeadlineNavController *)defaultSegmentVC {
     static HHHeadlineNavController *navi = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
         vc = [[HHHeadlineSegmentViewController alloc] init];
         vc.dataSource = vc;
         vc.addDelegate = (id)vc;
         navi = [[HHHeadlineNavController alloc] initWithRootViewController:vc];
-    });
+//    });
     return navi;
 }
 
@@ -110,6 +110,7 @@ static HHHeadlineSegmentViewController *vc = nil;
 }
 
 - (NSMutableArray *)getOtherChannels {
+    
     NSMutableArray *other = [NSMutableArray arrayWithArray:HHUserManager.sharedInstance.allChannels.copy];
     for (NSString *channle in [HHUserManager sharedInstance].channels) {
         [other removeObject:channle];

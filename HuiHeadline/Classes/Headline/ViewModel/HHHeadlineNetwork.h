@@ -10,6 +10,9 @@
 #import "HHAwardPerHourResponse.h"
 #import "HHAdModel.h"
 #import "HHReadAnalyseUtil.h"
+#import "HHSychAdExposureResponse.h"
+#import "HHSychAdAwardResponse.h"
+#import "HHHotRecommend.h"
 
 //typedef void(^Block)(NSError *error,id result);
 
@@ -44,7 +47,22 @@
 ///同步广告曝光
 /// 五个广告/超过2分钟曝光一次 
 + (void)sychListAdExposureWithMap:(NSDictionary<NSString *,NSNumber *> *)map
-                         callback:(void(^)(id error, HHResponse *response))callback;
+                         callback:(void(^)(id error, HHSychAdExposureResponse *response))callback;
+
++ (void)sychExposureList:(NSArray *)exposureReportList;
+
++ (void)sychClickList:(NSArray *)clickReportList;
+
++ (void)getShareUrl:(NSString *)url
+           callback:(void(^)(id error, NSString *url))callback;
+
++ (void)sychAdClickAwardWithToken:(long)token
+                          channel:(NSString *)channel
+                         callback:(void(^)(id error , HHSychAdAwardResponse *response))callback ;
+
++ (void)requestHotSearch:(void(^)(id error, NSArray<HHHotRecommend *> *hots))callback;
+
+
 
 
 @end

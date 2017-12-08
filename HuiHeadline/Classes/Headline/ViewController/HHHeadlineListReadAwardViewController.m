@@ -47,6 +47,8 @@
 #define yellowCellPad 10.0
 - (void)initTableView {
     
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    
     CGFloat tableHeight = 0;
     for (int i = 0; i < self.descriptions.count; i++) {
         
@@ -80,7 +82,11 @@
     self.incomeTableView.delegate = self;
     self.incomeTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.incomeTableView.bounces = NO;
-    self.incomeTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 20)];
+    self.incomeTableView.backgroundColor = [UIColor clearColor];
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 20)];
+    footer.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.incomeTableView.tableFooterView = footer;
+    self.incomeTableView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:self.incomeTableView];
     
     [self.incomeTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -116,6 +122,7 @@
         }
         [self requestForReadIncome];
     }];
+    
 }
 
 
@@ -201,7 +208,8 @@
     
     if ([tableView isEqual:self.incomeTableView]) {
         
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, W(tableView), 12)];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, W(tableView), 20)];
+        view.backgroundColor = [UIColor groupTableViewBackgroundColor];
         return view;
     }
     return nil;
@@ -209,7 +217,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
-    return [tableView isEqual:self.incomeTableView] ? 12 : 0.1;
+    return [tableView isEqual:self.incomeTableView] ? 20 : 0.0;
     
 }
 

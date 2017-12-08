@@ -28,6 +28,7 @@ static HHUserManager *userManager = nil;
 @synthesize weixinAccount = _weixinAccount;
 @synthesize today = _today;
 @synthesize hasClick = _hasClick;
+@synthesize awardedAdChannels = _awardedAdChannels;
 
 + (instancetype)sharedInstance {
     
@@ -278,6 +279,21 @@ static HHUserManager *userManager = nil;
 
 
 
+- (void)setAwardedAdChannels:(NSMutableArray<NSString *> *)awardedAdChannels {
+    
+    
+    [self saveToUserDefaultsWithKey:@"AWARDED_AD_CHANNELS" object:awardedAdChannels];
+}
+
+- (NSMutableArray<NSString *> *)awardedAdChannels {
+    
+    NSArray *array = [self objectForBindedKeyInUserDefaults:@"AWARDED_AD_CHANNELS"];
+    if (!_awardedAdChannels) {
+        _awardedAdChannels = [NSMutableArray array];
+    }
+    _awardedAdChannels = array.mutableCopy;
+    return _awardedAdChannels;
+}
 
 
 #pragma mark Util

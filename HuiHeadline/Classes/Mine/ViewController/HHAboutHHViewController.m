@@ -7,7 +7,7 @@
 //
 
 #import "HHAboutHHViewController.h"
-#import "HHActivityTaskDetailWebViewController.h"
+#import "CustomBrowserViewController.h"
 
 @interface HHAboutHHViewController ()
 
@@ -58,7 +58,7 @@
 - (void)initUI {
     
     CGFloat width = 80;
-    self.huiImgV = [[UIImageView alloc] initWithFrame:CGRectMake((KWIDTH - width) / 2, MaxY(self.navigationView) + 40, width, width)];
+    self.huiImgV = [[UIImageView alloc] initWithFrame:CGRectMake((KWIDTH - width) / 2, MaxY(self.navigationView) + 80, width, width)];
     self.huiImgV.image = [UIImage imageNamed:@"huiheadline"];
     [self.view addSubview:self.huiImgV];
     
@@ -77,7 +77,7 @@
     self.titleLabel.font = Font(19);
     [self.view addSubview:self.titleLabel];
     
-    self.subTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.titleLabel) + 5, KWIDTH, 20)];
+    self.subTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.titleLabel) + 10, KWIDTH, 20)];
     self.subTitleLabel.textAlignment = 1;
     self.subTitleLabel.textColor = RGB(230, 53, 40);
     self.subTitleLabel.text = @"看资讯也可以赚钱";
@@ -85,7 +85,7 @@
     [self.view addSubview:self.subTitleLabel];
     
     
-    self.webLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, KHEIGHT - 20 - 85, KWIDTH, 20)];
+    self.webLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, KHEIGHT - 20 - 100, KWIDTH, 20)];
     self.webLabel.textAlignment = 1;
     self.webLabel.textColor = BLACK_51;
     self.webLabel.text = @"官网：www.cashtoutiao.com";
@@ -94,7 +94,7 @@
     self.webLabel.userInteractionEnabled = YES;
     [self.webLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(gotoWebsite)]];
     
-    self.userProLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, Y(self.webLabel) - 20, KWIDTH, 20)];
+    self.userProLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, Y(self.webLabel) - 30, KWIDTH, 20)];
     self.userProLabel.textAlignment = 1;
     self.userProLabel.textColor = BLACK_51;
     self.userProLabel.text = @"《用户使用条款和隐私协议》";
@@ -107,7 +107,7 @@
 
 - (void)gotoUserProtocol {
     
-    HHActivityTaskDetailWebViewController *webView = [HHActivityTaskDetailWebViewController new];
+    CustomBrowserViewController *webView = [CustomBrowserViewController new];
     webView.activityTitle = @"惠头条用户服务协议";
     webView.URLString = k_user_protocol;
     self.hidesBottomBarWhenPushed = YES;
@@ -117,7 +117,7 @@
 
 - (void)gotoWebsite {
     
-    HHActivityTaskDetailWebViewController *webView = [HHActivityTaskDetailWebViewController new];
+    CustomBrowserViewController *webView = [CustomBrowserViewController new];
     webView.activityTitle = @"惠头条官方网站";
     webView.URLString = @"http://www.cashtoutiao.com";
     self.hidesBottomBarWhenPushed = YES;

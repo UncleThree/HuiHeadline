@@ -9,6 +9,7 @@
 #import "HHVideoDetailBottomView.h"
 #import "HHHeadlineNewsBaseTableViewCell.h"
 #import "HHHeadlineNewsLeftRightTableViewCell.h"
+#import "HHAdAwardManager.h"
 
 @interface HHVideoDetailBottomView ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -90,6 +91,7 @@ static NSString *identifier3 = @"VIDEO_AD_CELL3";
 
 - (void)requstAds {
     
+    NSLog(@"视频页广告请求");
     [HHHeadlineNetwork requestForAdList:^(NSError *error, id result) {
         
         if (error) {
@@ -98,12 +100,17 @@ static NSString *identifier3 = @"VIDEO_AD_CELL3";
             if (result && [result isKindOfClass:[NSArray class]]) {
                 
                 [self.adData addObjectsFromArray:result];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.backTableView reloadData];
-                });
+                if ([(NSArray *)result count]) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.backTableView reloadData];
+                    });
+                }
             }
         }
-        self.requesting = NO;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.requesting = NO;
+        });
+        
     }];
 }
 
@@ -118,7 +125,7 @@ static NSString *identifier3 = @"VIDEO_AD_CELL3";
             [self requstAds];
         } else {
             
-            NSLog(@"111");
+            
         }
     }
     return _ad;
@@ -144,10 +151,19 @@ static NSString *identifier3 = @"VIDEO_AD_CELL3";
     self.ad = nil;
 
     HHHeadlineNewsLeftRightTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier1 forIndexPath:indexPath];
+    if (self.ad) {
+        ListAdEncourageInfo *info = [[HHAdAwardManager sharedInstance] getEncourageInfoMap:self.ad.type];
+        if (info && info.credit) {
+            self.ad.AdAwards = [NSString stringWithFormat:@"+%zd金币", info.credit];
+        } else {
+            self.ad.AdAwards = nil;
+        }
+    }
     [cell setModel:self.ad];
     if (self.ad && self.delegate && [self.delegate respondsToSelector:@selector(exposure:)] && !self.ad.exporsed) {
-        self.ad.exporsed = YES;
+        
         [self.delegate exposure:self.ad];
+        
     }
     cell.backgroundColor = [UIColor clearColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;

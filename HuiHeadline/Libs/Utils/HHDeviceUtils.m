@@ -12,20 +12,41 @@
 #import <CoreTelephony/CTCarrier.h>
 #import "Reachability.h"
 #import "sys/utsname.h"
+#import <UMMobClick/MobClick.h>
 
 @implementation HHDeviceUtils
 
-
++ (NSString *)IDFA {
+    
+    return [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+}
 
 + (DeviceId *)getDeviceID {
     
     DeviceId *deviceId = [[DeviceId alloc] init];
-    deviceId.did = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];;
+    deviceId.did = [self IDFA];
     deviceId.mac = @"020000000";
     deviceId.pid = nil;
-    deviceId.imsi = nil;
+    deviceId.imsi = [self getIMSI];
     return deviceId;
     
+}
+
+
++ (NSString *)getIMSI{
+    
+    CTTelephonyNetworkInfo *info = [[CTTelephonyNetworkInfo alloc] init];
+    
+    CTCarrier *carrier = [info subscriberCellularProvider];
+    
+    NSString *mcc = [carrier mobileCountryCode];
+    NSString *mnc = [carrier mobileNetworkCode];
+    
+    if (!mcc || !mnc) {
+        return @"";
+    }
+    NSString *imsi = [NSString stringWithFormat:@"%@%@", mcc, mnc];
+    return imsi;
 }
 
 + (Device *)getDevice {
@@ -131,12 +152,32 @@
 + (NSDictionary *)deviceExtra {
     
     return @{
-             @"model":@"",
-             @"manufacturer":@"",
-             @"osVersion":@"",
-             @"macAddress":@"",
+             @"imsi":[self getIMSI],
+             @"osVersion":[UIDevice currentDevice].systemVersion,
+             @"model":[self deviceVersion],
+             @"isRoot":@([MobClick isJailbroken]),
              };
     
 }
+
+
+
++ (NSDictionary *)appExtra {
+    
+    return @{
+             
+             @"appVersion":APP_VER,
+             @"appChannel":[self appChannel]
+             
+             };
+    
+}
+
++ (NSString *)appChannel {
+    
+    return [[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.cashtoutiao.ios"] ? @"App Store" : @"not App Store";
+}
+
+
 
 @end

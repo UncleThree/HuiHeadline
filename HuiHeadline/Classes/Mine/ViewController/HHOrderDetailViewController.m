@@ -95,7 +95,9 @@ static NSString *orderAddress = @"ORDER_ADDRESS_CELL_ID";
 
 - (void)requestOrderDetail {
     
-    [HHHeadlineAwardHUD showHUDWithText:@"" animated:1];
+    if (!self.detailOrderInfo) {
+        [HHHeadlineAwardHUD showHUDWithText:@"" animated:1];
+    }
     [HHMineNetwork getOrderDetailInfo:self.orderId callback:^(id error, HHOrderInfo *orderInfo) {
         [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (error) {
@@ -180,7 +182,7 @@ kRemoveCellSeparator
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:stateName forIndexPath:indexPath];
             cell.textLabel.text = self.detailOrderInfo.stateName;
             cell.textLabel.textColor = BLACK_51;
-            cell.textLabel.font = Font(17);
+            cell.textLabel.font = Font(15);
             cell.textLabel.text = [NSString stringWithFormat:@"订单号：%zd", self.detailOrderInfo.orderId];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
@@ -188,7 +190,7 @@ kRemoveCellSeparator
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:orderAddress forIndexPath:indexPath];
             cell.textLabel.text = self.detailOrderInfo.stateName;
             cell.textLabel.textColor = BLACK_51;
-            cell.textLabel.font = Font(17);
+            cell.textLabel.font = Font(15);
             cell.textLabel.text = [self addressString];
             cell.textLabel.numberOfLines = 0;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -223,24 +225,32 @@ kRemoveCellSeparator
     if (self.detailOrderInfo) {
         NSString *tstr = nil;
         NSString *dstr = nil;
-        if (self.detailOrderInfo.productCategory == alipy_category ) {
+        if (self.detailOrderInfo.productCategory == VIRTUAL_WITHDRAW_TO_ALIPAY ) {
             tstr = @"支付宝：";
             NSString *account = [self.detailOrderInfo.address mj_JSONObject][@"account"];
             NSString *name = [self.detailOrderInfo.address mj_JSONObject][@"name"];
             dstr = [[account stringByAppendingString:@" "] stringByAppendingString:name];
-        } else if (self.detailOrderInfo.productCategory == wechat_category) {
+        } else if (self.detailOrderInfo.productCategory == VIRTUAL_WITHDRAW_TO_WECHAT_WALLET) {
             tstr = @"微信钱包：";
             NSString *phone = [self.detailOrderInfo.address mj_JSONObject][@"phone"];
             NSString *realName = [self.detailOrderInfo.address mj_JSONObject][@"realName"];
             dstr = [[phone stringByAppendingString:@" "] stringByAppendingString:realName];
+            
         } else if (self.detailOrderInfo.productCategory == REAL_CAREFULLY_CHOSEN_DAILY_NECCESSARY) {
             tstr = @"收货人：";
             HHUserDeliveryAddress *address = [HHUserDeliveryAddress mj_objectWithKeyValues:[self.detailOrderInfo.address mj_JSONObject]];
             dstr = [NSString stringWithFormat:@" %@\n%@%@%@%@",address.userPhone,address.addressProvince,address.addressCity,address.addressZone, address.addressStreet];
             
+        } else if (self.detailOrderInfo.productCategory == VIRTUAL_RECHARGE_PHONE_BILL) {
+            
+            tstr = @"手机号码：";
+            NSString *phone = self.detailOrderInfo.address;
+            dstr = phone;
+            
+            
         } else {
             
-            
+            NSLog(@"暂未处理");
         }
         return [tstr stringByAppendingString:dstr];
         

@@ -13,9 +13,19 @@
 
 + (void)hideHUDAnimated:(BOOL)animated;
 
+
++ (void)showHUDWithText:(NSString *)text
+              addToView:(UIView *)view
+               animated:(BOOL)animated
+                timeout:(NSInteger)timeout;
+
 + (void)showHUDWithText:(NSString *)text
               addToView:(UIView *)view
                animated:(BOOL)animated;
+
++ (void)showHUDWithText:(NSString *)text
+               animated:(BOOL)animated
+                timeout:(NSInteger)timeout;
 
 + (void)showHUDWithText:(NSString *)text
                animated:(BOOL)animated;

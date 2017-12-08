@@ -35,7 +35,7 @@
     
     self.contentView.backgroundColor = RGB(242, 242, 242);
     
-    self.line = [[UIView alloc] initWithFrame:CGRectMake(12, 0, 1, HEIGHT)];
+    self.line = [[UIView alloc] initWithFrame:CGRectMake(12, 0, 0.5, HEIGHT)];
     self.line.backgroundColor = RGB(230, 230, 230);
     [self.contentView addSubview:self.line];
     
@@ -68,11 +68,11 @@
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:model.title attributes:@{KEY_FONT:Font(15),KEY_COLOR:RGB(102, 102, 102)}];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:5];//调整行间距
+    [paragraphStyle setLineSpacing:4];//调整行间距
+    
     [string addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [model.title length])];
     [string addAttribute:KEY_COLOR value:HUIRED range:[model.title rangeOfString:@"（每个视频下的白色区域）"]];
     self.titleLabel.attributedText = string;
-    
     
     
     self.line.frame = CGRectMake(X(self.line), 0, 1, [model heightForModel]);
@@ -86,7 +86,7 @@
     }];
     
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.line).with.offset(13);
+        make.left.equalTo(self.line).with.offset(12);
         make.top.bottom.equalTo(self.contentView);
         make.right.equalTo(self.button.mas_left).with.offset(-12);
     }];
@@ -114,14 +114,14 @@
     NSInteger taskId = isNewbie ? self.model.taskId : self.model.dailyTaskId;
     
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(activityTaskTitle:url:)] && !isNewbie && taskId > 101 ) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(activityTaskTitle:url:visit:)] && !isNewbie && taskId > 300 ) {
         
-        [self.delegate activityTaskTitle:self.model.activityTitle url:self.model.url];
+        [self.delegate activityTaskTitle:self.model.activityTitle url:self.model.url visit:self.model.visit];
         
     }
-    else if (self.delegate && [self.delegate respondsToSelector:@selector(taskTableViewCellDidClickTaskId:isNewbie:title:url:)]) {
+    else if (self.delegate && [self.delegate respondsToSelector:@selector(taskTableViewCellDidClickTaskId:isNewbie:title:url:visit:)]) {
         
-        [self.delegate taskTableViewCellDidClickTaskId:taskId isNewbie:isNewbie title:button.currentTitle url:self.model.url];
+        [self.delegate taskTableViewCellDidClickTaskId:taskId isNewbie:isNewbie title:button.currentTitle url:self.model.url visit:self.model.visit];
     }
     
    

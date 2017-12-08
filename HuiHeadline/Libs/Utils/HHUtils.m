@@ -51,7 +51,7 @@
 //手机号有效性
 + (BOOL)isMobileNumber:(NSString *)str {
     
-    NSString *MOBILE = @"^1(3[0-9]|4[57]|5[0-35-9]|8[0-9]|7[0678])\\d{8}$";
+    NSString *MOBILE = @"^1(3[0-9]|4[0-9]|5[0-9]|8[0-9]|7[0-9])\\d{8}$";
     NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
     return [regextestmobile evaluateWithObject:str];
 }
@@ -236,5 +236,34 @@
     }
     
 }
+
+
++ (NSString *)JudgePhoneNumber:(NSString *)phoneNum
+{
+//    NSString * MOBILE = @"^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$";
+    NSString * CM = @"^134[0-8]\\d{7}$|^(?:13[5-9]|147|15[0-27-9]|178|1703|1705|1706|18[2-478])\\d{7,8}$";
+    NSString * CU = @"^(?:13[0-2]|145|15[56]|176|1704|1707|1708|1709|171|18[56])\\d{7,8}|$";
+    NSString * CT = @"^(?:133|153|1700|1701|1702|177|173|18[019])\\d{7,8}$";
+    // NSString * PHS = @"^0(10|2[0-5789]|\\d{3})\\d{7,8}$";
+//    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    NSPredicate *regextestcm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CM];
+    NSPredicate *regextestcu = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CU];
+    NSPredicate *regextestct = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CT];
+    if ([regextestcm evaluateWithObject:phoneNum] == YES){
+        //移动
+        return @"中国移动";
+    }else if ([regextestct evaluateWithObject:phoneNum] == YES){
+        //电信
+        return @"中国电信";
+    }else if ([regextestcu evaluateWithObject:phoneNum] == YES){
+        //联通
+        return @"中国联通";
+    }else{
+        //可能还有未收录全的三大运营商号码，无法识别，后期会添加
+        
+        return @"位置运营商";
+    }
+}
+
 
 @end

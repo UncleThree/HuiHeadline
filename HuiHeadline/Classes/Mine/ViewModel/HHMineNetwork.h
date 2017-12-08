@@ -22,6 +22,7 @@
 #import "HHInvitedConstributionSummaryResponse.h"
 #import "HHInvitedSummaryResponse.h"
 #import "HHStateResponse.h"
+#import "HHUserMessageListResponse.h"
 //0, "全部"
 //6, "阅读收益"
 //3, "广告收益"
@@ -125,7 +126,9 @@ typedef enum : NSUInteger {
 + (void)versionCheck:(void(^)(id error,HHResponse *response))callback;
 
 
-
+///my messages
++ (void)requestMyMessagesWithMessageId:(NSInteger)messageId
+                              callback:(void(^)(id error, NSArray<HHUserMessage *> *messages))callback;
 
 @end
 

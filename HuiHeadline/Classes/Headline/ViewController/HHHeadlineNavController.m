@@ -9,6 +9,7 @@
 #import "HHHeadlineNavController.h"
 #import "HHHeadlineAwardHUD.h"
 #import "UITabBar+Badge.h"
+#import "HHSearchViewController.h"
 
 @interface HHHeadlineNavController () <MBProgressHUDDelegate>
 
@@ -30,7 +31,6 @@
     
     if ([HHUserManager sharedInstance].loginId) {
         [self checkNewDay];
-        [self checkHourAward];
     }
     
     
@@ -42,16 +42,13 @@
     
     [super viewDidDisappear:animated];
     
-   
-    
-    
     
 }
 
 - (void)checkNewDay {
     
     
-    if (![[HHDateUtil today] isEqualToString:HHUserManager.sharedInstance.today]) {
+    if (![[HHDateUtil today] isEqualToString:HHUserManager.sharedInstance.today] && !G.$.bs) {
         
         HHUserManager.sharedInstance.today = [HHDateUtil today];
         [self.tabBarController.tabBar showBadgeOnItemIndex:2];
@@ -65,11 +62,14 @@
     [super viewDidLoad];
     
     [self addTitleView];
-    [self addLeft];
-    [self addTimeLabel];
-    [self startTimer];
     
+    if (!G.$.bs) {
+        [self addLeft];
+        [self addTimeLabel];
+        [self startTimer];
+    }
     
+//    [self addSearchButton];
     
 }
 
@@ -77,7 +77,7 @@
 
 - (void)addTitleView {
     
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT(20))];
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_W(20))];
     imgView.image = [UIImage imageNamed:@"titleView.png"];
     imgView.contentMode = UIViewContentModeScaleAspectFill;
     imgView.center = self.navigationBar.center;
@@ -109,15 +109,43 @@
     self.timeLabel = timeLabel;
     self.timeLabel.userInteractionEnabled = YES;
     [self.timeLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickLeft)]];
+    
+    
+    
+    
+}
+
+- (void)addSearchButton {
+    
+    UIImage *image = [UIImage imageNamed:@"df_search"];
+    CGFloat width = 23;
+    CGFloat height = image.size.height / image.size.width * width;
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(KWIDTH - 12 - width, 0, width, height)];
+    button.center = CGPointMake(centerX(button), centerY(self.alarmImgv));
+    [button addTarget:self action:@selector(searchAction) forControlEvents:(UIControlEventTouchUpInside)];
+    [button setImage:image forState:(UIControlStateNormal)];
+    [self.navigationBar addSubview:button];
 }
 
 - (void)clickLeft {
     
     [HHHeadlineAwardHUD showInstructionView];
+} 
 
+- (void)searchAction {
+    
+    UINavigationController *nav = [HHSearchViewController defaultVC];
+    
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
+
+
 - (void)checkHourAward {
+    
+    if (G.$.bs) {
+        return;
+    }
     
     int hour = [HHDateUtil formatterHour];
     if (hour == [HHUserManager sharedInstance].lastPerHourAwardTime) {
@@ -154,8 +182,7 @@
     CGPoint center = CGPointMake(22, self.navigationBar.center.y);
     
     [HHHeadlineAwardHUD showImageView:@"弹框" coins:coins animation:YES originCenter:center addToView:self.view duration:1.0];
-    
-//    [HHHeadlineAwardHUD showMyViewWithCoins:coins originCenter:center addToView:self.view duration:1];
+
 }
 
 - (void)startTimer {
@@ -189,7 +216,10 @@
         
         [self startTimer];
        
-        [self checkHourAward];
+        if (self.appear) {
+            [self checkHourAward];
+        }
+        
         
     }
     

@@ -22,7 +22,7 @@
 
 @implementation HHIncomeDetailTableViewCell
 
-#define cell_height 60
+#define cell_height 80
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
@@ -32,29 +32,33 @@
     return self;
 }
 
+
 - (void)initUI {
     
-    CGFloat imgWidth = 35;
+    CGFloat imgWidth = 45;
+    
     self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(20, (cell_height - imgWidth) / 2, imgWidth, imgWidth)];
     self.imgV.layer.cornerRadius = imgWidth / 2;
     [self.contentView addSubview:self.imgV];
     
     
-    self.tLabel = [[UILabel alloc] initWithFrame:CGRectMake(MaxX(self.imgV) + 16, 10, 150, 20)];
+    self.tLabel = [[UILabel alloc] initWithFrame:CGRectMake(MaxX(self.imgV) + 16, 12, 150, 20)];
     self.tLabel.textColor = BLACK_51;
-    self.tLabel.font = Font(19);
+    self.tLabel.font = Font(17);
     [self.contentView addSubview:self.tLabel];
     
-    self.dLabel = [[UILabel alloc] initWithFrame:CGRectMake(X(self.tLabel), MaxY(self.tLabel) + 5, KWIDTH - 20 - X(self.tLabel), 20)];
+    self.dLabel = [[UILabel alloc] initWithFrame:CGRectMake(X(self.tLabel), MaxY(self.tLabel) + 10, KWIDTH - 20 - X(self.tLabel), 20)];
     self.dLabel.textColor = BLACK_51;
-    self.dLabel.font = Font(14);
+    self.dLabel.font = Font(15);
     [self.contentView addSubview:self.dLabel];
     
     self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(MaxX(self.tLabel), Y(self.tLabel), KWIDTH - MaxX(self.tLabel) - 20, 20)];
     self.timeLabel.textColor = BLACK_153;
-    self.timeLabel.font = Font(14);
+    self.timeLabel.font = Font(15);
     self.timeLabel.textAlignment = 2;
     [self.contentView addSubview:self.timeLabel];
+    
+    
     
 }
 

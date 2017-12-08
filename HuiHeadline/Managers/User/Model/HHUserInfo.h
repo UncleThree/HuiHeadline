@@ -29,6 +29,17 @@
  Date registerTime;
  */
 
+@interface HHUserCity : NSObject
+
+@property (nonatomic, copy) NSString *province;
+
+@property (nonatomic, copy) NSString *city;
+
+@property (nonatomic, copy) NSString *country;
+
+
+@end
+
 @interface HHUserInfo : NSObject
 
 @property (nonatomic, assign) long user_id;
@@ -42,11 +53,13 @@
 //1男2女
 @property (nonatomic, assign) short gender;
 @property (nonatomic, copy) NSString *genderString;
-@property (nonatomic, copy) NSString *city;
+@property (nonatomic, strong) HHUserCity *city;
 @property (nonatomic, copy) NSString *briefIntroduction;
 @property (nonatomic, copy) NSString *birthday;
 @property (nonatomic, assign)int state;
 @property (nonatomic, assign)long registerTime;
+@property (nonatomic, copy) NSString *recommendedCode;
+
 ///2017-11-15号之前注册的账户不显示新手任务
 @property (nonatomic, assign)BOOL isNew;
 

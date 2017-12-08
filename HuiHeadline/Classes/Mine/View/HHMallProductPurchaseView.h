@@ -19,6 +19,7 @@
 
 @property (nonatomic, weak)id <HHMallPurchaseViewDelegate>delegate;
 
+///当前选中的product
 @property (nonatomic, strong)HHProductOutline *product;
 
 - (instancetype)initWithFrame:(CGRect)frame ;

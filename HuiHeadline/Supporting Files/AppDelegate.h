@@ -8,13 +8,23 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum : NSUInteger {
+    
+    InstallTypeFirst = 0,
+    InstallTypeUpdate = 1,
+    InstallTypeNormal = 2,
+    
+} InstallType;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 - (BOOL)firstAward;
 - (BOOL)firstLoad;
-- (BOOL)isFirstLoadOrUpdate;
+- (BOOL)firstVideo;
+- (InstallType)isFirstLoadOrUpdate;
+- (BOOL)firstShareCircle;
 
 @end
 

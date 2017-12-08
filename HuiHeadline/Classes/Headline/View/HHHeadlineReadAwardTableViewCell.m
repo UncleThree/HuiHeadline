@@ -39,11 +39,11 @@
     self.fourthLabel.backgroundColor = [UIColor whiteColor];
     
     
-    self.redView.layer.borderWidth = 1;
-    self.redView.layer.borderColor = RGB(224, 224, 224).CGColor;
+    self.redView.layer.borderWidth = 0.5;
+    self.redView.layer.borderColor = RGB(235, 235, 235).CGColor;
     
-    self.contentView.layer.borderWidth = 1;
-    self.contentView.layer.borderColor = RGB(224, 224, 224).CGColor;
+    self.contentView.layer.borderWidth = 0.5;
+    self.contentView.layer.borderColor = RGB(235, 235, 235).CGColor;
     
 }
 

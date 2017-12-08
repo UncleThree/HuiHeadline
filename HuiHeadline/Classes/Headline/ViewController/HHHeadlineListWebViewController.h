@@ -20,6 +20,8 @@
 
 @property(nonatomic,copy)NSString *URLString;
 
+@property(nonatomic,copy)NSString *shareTitle;
+
 @property (nonatomic, strong)UIBarButtonItem *backItem;
 
 @property (nonatomic, strong)WKWebView *webView;
@@ -42,5 +44,17 @@
 - (void)sychDuration:(void(^)(NSError *error,HHReadSychDurationResponse *response))callback;
 
 @property (nonatomic, strong)AntifraudReadActionInfo *actionInfo;
+
+@property (nonatomic, assign)NSInteger secondsPerNews;
+
+@property (nonatomic, assign)BOOL hasAlert;
+
+@property (nonatomic, assign)BOOL newsLoaded;
+
+@property (nonatomic, assign)NSTimeInterval startTime;
+
+@property (nonatomic, assign)NSTimeInterval endTime;
+
+@property (nonatomic, assign)NSUInteger touchCount;
 
 @end

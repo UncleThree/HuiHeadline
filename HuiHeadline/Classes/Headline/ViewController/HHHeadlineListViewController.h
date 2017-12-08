@@ -20,6 +20,7 @@ static NSString *bigImgCell = @"HHHeadlineNewsBigImgTableViewCell";
 
 @interface  HHHeadlineListViewController : HHBaseViewController
 
+@property (nonatomic, strong)UITableView *tableView;
 //头条 社会 。。。
 @property (nonatomic, copy)NSString *type;
 

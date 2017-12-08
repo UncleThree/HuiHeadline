@@ -56,7 +56,7 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
     [self setCategory:self.category];
 }
 
-- (void)setCategory:(NSInteger)category {
+- (void)setCategory:(ProductCategoryType)category {
     
     _category = category;
     
@@ -78,16 +78,16 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
     
 }
 
-- (void)getAccount:(NSInteger)category
+- (void)getAccount:(ProductCategoryType)category
           callback:(void(^)())callback {
     
-    if (category == alipy_category) {
+    if (category == VIRTUAL_WITHDRAW_TO_ALIPAY) {
         
         if ([HHUserManager sharedInstance].alipayAccount) {
             
             self.firModel = [HHMineNormalCellModel new];
             self.firModel.imgName = @"zhifubao";
-            self.firModel.text = [NSString stringWithFormat:@"%@ %@", [HHUserManager sharedInstance].alipayAccount.account, [HHUserManager sharedInstance].alipayAccount.name];
+            self.firModel.text = [NSString stringWithFormat:@"%@  %@", [HHUserManager sharedInstance].alipayAccount.account, [HHUserManager sharedInstance].alipayAccount.name];
             callback();
         } else {
             
@@ -99,20 +99,20 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
                     [HHUserManager sharedInstance].alipayAccount = response.alipayAccount;
                     self.firModel = [HHMineNormalCellModel new];
                     self.firModel.imgName = @"zhifubao";
-                    self.firModel.text = [NSString stringWithFormat:@"%@ %@", response.alipayAccount.account, response.alipayAccount.name];
+                    self.firModel.text = [NSString stringWithFormat:@"%@  %@", response.alipayAccount.account, response.alipayAccount.name];
                     
                 }
                 callback();
             }];
         }
-    } else if (category == wechat_category) {
+    } else if (category == VIRTUAL_WITHDRAW_TO_WECHAT_WALLET) {
         
         HHWeixinAccount *weixinAccount = HHUserManager.sharedInstance.weixinAccount;
         if (weixinAccount && weixinAccount.realName && weixinAccount.phone) {
             
             self.firModel = [HHMineNormalCellModel new];
             self.firModel.imgName = @"icon_weixin";
-            self.firModel.text = [NSString stringWithFormat:@"%@ %@", [HHUserManager sharedInstance].weixinAccount.phone, [HHUserManager sharedInstance].weixinAccount.realName];
+            self.firModel.text = [NSString stringWithFormat:@"%@  %@", [HHUserManager sharedInstance].weixinAccount.phone, [HHUserManager sharedInstance].weixinAccount.realName];
             callback();
             
         } else {
@@ -124,7 +124,7 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
                     [HHUserManager sharedInstance].weixinAccount = response.weixinAccount;
                     self.firModel = [HHMineNormalCellModel new];
                     self.firModel.imgName = @"icon_weixin";
-                    self.firModel.text = [NSString stringWithFormat:@"%@ %@", response.weixinAccount.phone, response.weixinAccount.realName];
+                    self.firModel.text = [NSString stringWithFormat:@"%@  %@", response.weixinAccount.phone, response.weixinAccount.realName];
                     
                 }
                 callback();
@@ -133,7 +133,21 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
         
         
         
+    } else if (category == VIRTUAL_RECHARGE_PHONE_BILL) {
+        NSString *phone = HHUserManager.sharedInstance.currentUser.userInfo.phone;
+        if (phone) {
+            
+            self.firModel = [HHMineNormalCellModel new];
+            self.firModel.imgName = @"icon_shouji";
+            self.firModel.text = [NSString stringWithFormat:@"%@  %@", phone, [HHUtils JudgePhoneNumber:phone]];
+            callback();
+        } else {
+            [self defaultPhone];
+            
+        }
+        
     }
+        
     
     
     
@@ -149,6 +163,14 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
     self.firModel = [HHMineNormalCellModel new];
     self.firModel.imgName = @"icon_weixinweibangding";
     self.firModel.text = @"您尚未设置微信账户";
+}
+
+- (void)defaultPhone {
+    
+    self.firModel = [HHMineNormalCellModel new];
+    self.firModel.imgName = @"icon_shoujiweibangding";
+    self.firModel.text = @"您尚未设置手机号码";
+    
 }
 
 
@@ -193,8 +215,13 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
 - (void)initTableView {
     
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, H(self.view)) style:(UITableViewStylePlain)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 0) style:(UITableViewStylePlain)];
     [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view);
+        make.left.right.equalTo(self.view);
+        make.bottom.equalTo(self.view).with.offset(-CGFLOAT(70));
+    }];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -242,7 +269,6 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
         CGFloat height = lines * 100 + 20 * 2 + 20;
         return self.products.count > 0 ? height : 0;
         
-//        return KHEIGHT - H(self.navigationController.navigationBar) - 60 - 60 - 80 - 70 - 12;
         
     } else if (indexPath.section == 2) {
         
@@ -326,7 +352,7 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
 - (void)mallpurchaseViewPurchase:(HHProductOutline *)product {
     
     NSString *address = nil;
-    if (self.category == alipy_category) {
+    if (self.category == VIRTUAL_WITHDRAW_TO_ALIPAY) {
         
         if (![HHUserManager sharedInstance].alipayAccount) {
             
@@ -335,16 +361,26 @@ static NSString *arrive_identifier = @"ARRIVE_TIME_IDENTIFIER";
         }
         address = HHUserManager.sharedInstance.alipayAccount.mj_JSONString;
         
-    } else if (self.category == wechat_category) {
+    } else if (self.category == VIRTUAL_WITHDRAW_TO_WECHAT_WALLET) {
         if (!HHUserManager.sharedInstance.weixinAccount || !HHUserManager.sharedInstance.weixinAccount.realName || !HHUserManager.sharedInstance.weixinAccount.phone ) {
             
             [HHHeadlineAwardHUD showMessage:@"请设置您的微信账户" hideTouch:YES animated:YES duration:2];
             return;
         }
         address = HHUserManager.sharedInstance.weixinAccount.mj_JSONString;
+    } else if (self.category == VIRTUAL_RECHARGE_PHONE_BILL) {
+        
+        NSString *phone = HHUserManager.sharedInstance.currentUser.userInfo.phone;
+        if (!HHUserManager.sharedInstance.currentUser.userInfo.phone) {
+            [HHHeadlineAwardHUD showMessage:@"请先绑定您的手机号" hideTouch:YES animated:YES duration:2];
+            return;
+        }
+        address = phone;
+        
     }
     
     [HHMineNetwork purchaseWithProductId:product.productOutlineId count:1 address:address message:@"" callState:0 voiceCode:@"" callback:^(id error, HHPurchaseResponse *response) {
+        
         if (error) {
             
             [HHHeadlineAwardHUD showMessage:error animated:YES duration:3];

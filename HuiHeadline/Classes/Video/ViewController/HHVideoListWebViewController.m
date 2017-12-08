@@ -39,9 +39,10 @@
     
     [super viewDidAppear:animated];
     
-    if ([(AppDelegate *)UIApplication.sharedApplication.delegate firstLoad]) {
+    if ([(AppDelegate *)UIApplication.sharedApplication.delegate firstVideo] && !G.$.bs) {
         [HHHeadlineAwardHUD showVideoReminderView];
     }
+    
 }
 
 
@@ -158,6 +159,7 @@
         detailWebVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:detailWebVC animated:YES];
         detailWebVC.hidesBottomBarWhenPushed = NO;
+        
         decisionHandler(WKNavigationActionPolicyCancel);
     }
 }

@@ -71,7 +71,9 @@ static WechatService *wechat = nil;
         [WXApi sendReq:req];
     }
     else {
-        [self setupAlertController];
+        
+        callback(@"您尚未安装微信！",nil);
+        
     }
 }
 
@@ -116,10 +118,6 @@ static WechatService *wechat = nil;
 }
 
 
-#pragma mark - 设置弹出提示语
-- (void)setupAlertController {
-    
-    [HHHeadlineAwardHUD showMessage:@"您尚未安装微信！" hideTouch:NO animated:YES duration:2];
-}
+
 
 @end

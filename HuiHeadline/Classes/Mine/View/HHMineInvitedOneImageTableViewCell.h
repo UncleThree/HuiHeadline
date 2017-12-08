@@ -10,11 +10,12 @@
 
 @protocol HHMineInvitedImageTableViewCellDelegate <NSObject>
 
+@optional
 - (void)invitedCellFillCode;
 
 - (void)invitedCellstNow;
 
-
+@required
 - (void)clickBanner:(NSString *)link;
 
 @end

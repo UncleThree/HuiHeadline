@@ -79,6 +79,9 @@
 - (void)setModel:(HHInvitedItem *)model {
     
     _model = model;
+    if (!model) {
+        return;
+    }
     if (model.isBanner) {
         [self initImgV1:model buttonNumber:0 callback:nil];
         self.imgV1.userInteractionEnabled = YES;
@@ -99,9 +102,13 @@
 - (void)initImgV1:(HHInvitedItem *)model
      buttonNumber:(int)buttonNumber
          callback:(void(^)())callback{
-    
+    if (!model.imgUrl) {
+        return;
+    }
     [self.imgV1 sd_setImageWithURL:URL([model imgUrl]) completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-        
+        if (!image) {
+            return;
+        }
         self.imgV1.frame = CGRectMake(0, 0, KWIDTH, image.size.height / image.size.width * KWIDTH);
         self.imgV1.image = image;
         if (buttonNumber == 1) {

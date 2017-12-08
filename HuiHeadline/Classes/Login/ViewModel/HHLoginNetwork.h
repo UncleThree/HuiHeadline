@@ -61,6 +61,5 @@ typedef enum : NSUInteger {
 ///请求阅读收益规则
 + (void)requestReadConfig;
 
-
-
++ (void)requestBSJson:(void(^)(BOOL bs))callback;
 @end

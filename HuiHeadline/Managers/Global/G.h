@@ -15,8 +15,10 @@
 
 @property (nonatomic, strong)NSCache *taskCenterCache;
 
+@property (nonatomic, strong)NSString *blackBox;
+
 + (instancetype)$;
 
-
+@property (nonatomic, assign)BOOL bs;
 
 @end

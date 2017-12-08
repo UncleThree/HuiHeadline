@@ -38,7 +38,7 @@
 - (void)initUI {
     
     self.label = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, KWIDTH / 2, 20)];
-    self.label.font = Font(17);
+    self.label.font = K_Font(15);
     self.label.textColor = BLACK_51;
     self.label.center = CGPointMake(self.label.center.x, cell_height/ 2);
     [self.contentView addSubview:self.label];

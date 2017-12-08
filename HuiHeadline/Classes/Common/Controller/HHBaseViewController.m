@@ -108,8 +108,8 @@
 - (void)refresh {
     
     if ([HHDeviceUtils formatConnectionType]) {
-        
-        [self.backView removeFromSuperview];
+        if (self.backView)
+            [self.backView removeFromSuperview];
     }
     
 }

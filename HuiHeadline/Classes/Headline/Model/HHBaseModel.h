@@ -10,8 +10,8 @@
 
 typedef enum : NSUInteger {
     
-    HeadlineTypeSmallPic = 0, //三张图
-    HeadlineTypeThreePic = 1,  //左边图
+    HeadlineTypeSmallPic = 0, //
+    HeadlineTypeThreePic = 1,  //
     HeadlineTypeBigPic   = 2 //大图 广告
     
 } HeadlineType;

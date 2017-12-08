@@ -29,6 +29,10 @@
 
 @property (nonatomic, assign)BOOL exporsed;
 
+@property (nonatomic, assign)BOOL listExporsed;
+
+@property (nonatomic, assign)BOOL clicked;
+
 // 钱包图片和+200金币的Label 设为nil或者不设置代表没有
 @property (nonatomic, copy)NSString *AdAwards;
 

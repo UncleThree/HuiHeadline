@@ -10,6 +10,13 @@
 
 @implementation HHFontManager
 
++ (CGSize)sizeWithAttributeText:(NSAttributedString *)text maxSize:(CGSize)maxSize
+{
+    if (!text)
+        return CGSizeMake(0, 0);
+    return [text.string boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:[text attributesAtIndex:0 effectiveRange:NULL] context:nil].size;
+}
+
 + (CGSize)sizeWithText:(NSString *)text font:(UIFont *)font maxSize:(CGSize)maxSize
 {
     NSDictionary *attrs = @{NSFontAttributeName : font};

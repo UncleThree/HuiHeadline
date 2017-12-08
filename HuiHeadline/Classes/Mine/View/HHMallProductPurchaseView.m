@@ -46,7 +46,7 @@
     CGFloat buttonHeight = CGFLOAT(42);
     self.convertButton = [[UIButton alloc] initWithFrame:CGRectMake(KWIDTH - 20 - buttonWidth, (height - buttonHeight) / 2, buttonWidth, buttonHeight)];
     self.convertButton.titleLabel.font = Font(18);
-    self.convertButton.layer.cornerRadius = 5;
+//    self.convertButton.layer.cornerRadius = 5;
     [self.convertButton setTitle:@"立即兑换" forState:(UIControlStateNormal)];
     self.convertButton.backgroundColor = HUIRED;
     [self.convertButton setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];

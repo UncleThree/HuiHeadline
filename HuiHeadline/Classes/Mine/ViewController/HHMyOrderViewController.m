@@ -178,6 +178,7 @@ static NSString *totalCreditCellIdentifier = @"totalCreditCellIdentifier";
                     
                 }
             } else {
+                
                 self.lastTime = orders.lastObject.createTime;
                
             }
@@ -245,7 +246,7 @@ kRemoveCellSeparator
     label.text = self.footerString;
     label.textAlignment = 1;
     [view addSubview:label];
-    view.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1.0];
+    view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     return view;
     
 }

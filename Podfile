@@ -14,6 +14,7 @@ target 'HuiHeadline' do
   pod 'UMengAnalytics'
   pod 'ZZCircleProgress'
   pod 'FDFullscreenPopGesture'
+  pod 'PYSearch'
 end
 
 # AFNetworking (3.1.0)

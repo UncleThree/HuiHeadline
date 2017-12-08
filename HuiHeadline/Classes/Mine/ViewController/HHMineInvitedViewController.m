@@ -16,7 +16,7 @@
 #import "HHMineInvitedOneImageTableViewCell.h"
 #import "HHMineInvitedCreditViewController.h"
 #import "HHMineInvitedPersonViewController.h"
-#import "HHActivityTaskDetailWebViewController.h"
+#import "CustomBrowserViewController.h"
 
 @interface HHMineInvitedViewController () <UITableViewDataSource, UITableViewDelegate, MyInVitedCodeCellDelegate, HHMineInvitedImageTableViewCellDelegate>
 
@@ -56,6 +56,10 @@
     [self initTableView];
     
     [super viewDidLoad];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
     
     [self requestData];
 }
@@ -101,42 +105,14 @@
     
     _model = model;
     if (model.headerItem.imgUrl && model.ruleItems.count == 3) {
-
-        [self checkCache:model.headerItem.imgUrl callback:^{
-            [self checkCache:model.ruleItems[0].imgUrl callback:^{
-                [self checkCache:model.ruleItems[1].imgUrl callback:^{
-                    [self checkCache:model.ruleItems[2].imgUrl callback:^{
-                        [self checkCache:model.bottomItems[0].imgUrl callback:^{
-                            callback();
-                        }];
-                        
-                    }];
-                }];
-            }];
-        }];
-    }
-    
-}
-
-- (void)checkCache:(NSString *)url
-          callback:(void(^)())callback{
-    
-    if (![[SDImageCache sharedImageCache] imageFromCacheForKey:url]) {
-        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:URL(url) options:(SDWebImageDownloaderHighPriority) progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
         
-            if (image && finished) {
-                ///写入缓存
-                [[SDImageCache sharedImageCache] storeImage:image forKey:url completion:^{
-                    callback();
-                }];
-            }
-            
-        }];
-    } else {
-        callback();
+        NSArray *arr = @[model.headerItem.imgUrl, model.ruleItems[0].imgUrl,model.ruleItems[1].imgUrl,model.ruleItems[2].imgUrl,model.bottomItems[0].imgUrl ];
+        [AsyncImageUtil cachePictures:arr callback:callback];
+        
     }
     
 }
+
 
 - (void)setResponse:(HHInvitedFetchSummaryResponse *)response {
     
@@ -370,7 +346,7 @@ kRemoveCellSeparator
 
 - (void)clickBanner:(NSString *)link {
     
-    HHActivityTaskDetailWebViewController *webVC = [HHActivityTaskDetailWebViewController new];
+    CustomBrowserViewController *webVC = [CustomBrowserViewController new];
     webVC.URLString = link;
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:webVC animated:YES];
@@ -392,7 +368,7 @@ kRemoveCellSeparator
         }
     }
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardFrameChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardFrameChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
     
 }
@@ -405,7 +381,7 @@ kRemoveCellSeparator
         if (!url) {
             return ;
         }
-        if (![url containsString:k_appstore_link] && ![url containsString:k_android_link]) {
+        if (![url containsString:k_ios_link] && ![url containsString:k_android_link]) {
             
             [HHHeadlineAwardHUD showMessage:@"该二维码格式不正确" animated:YES duration:2];
             return;
@@ -468,15 +444,54 @@ kRemoveCellSeparator
 
 - (void)invitedCellstNow {
     
+//    [self alert];8
+    
+    NSString *textToShare = [NSString stringWithFormat:@"看新闻，赚零花，填我邀请码：%@", self.response.userInviteInfo.code];
+    NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"share_logo" ofType:@"png"]];
+    NSURL *urlToShare = [NSURL URLWithString:k_ios_link];
+    NSArray *activityItems = @[textToShare, urlToShare, imgData];
+    
+    
+    
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
+    //关闭系统的一些activity类型
+    activityVC.excludedActivityTypes = @[
+                                         UIActivityTypePostToFacebook,
+                                         UIActivityTypePostToTwitter,
+                                         UIActivityTypePrint,
+                                         UIActivityTypeAirDrop,
+                                         UIActivityTypeAssignToContact,
+                                         UIActivityTypeSaveToCameraRoll,
+                                         UIActivityTypeAddToReadingList,
+                                         UIActivityTypePostToFlickr,
+                                         UIActivityTypePostToVimeo,
+                                         UIActivityTypeOpenInIBooks
+                                         ];
+    
+    
+    [self presentViewController:activityVC animated:YES completion:nil];
+    
+}
+
+
+- (UIActivityViewController *)customActivityVC {
+    
+    
+    
+    
+    return nil;
+    
+}
+
+- (void)alert {
+    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"把惠头条推荐给您的家人朋友，下载并填写您的邀请码，就能躺着赚钱啦！" preferredStyle:(UIAlertControllerStyleAlert)];
     UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"我知道了" style:(UIAlertActionStyleCancel) handler:^(UIAlertAction * _Nonnull action) {
         
     }];
     [alert addAction:action1];
     [self presentViewController:alert animated:YES completion:nil];
-    
 }
-
 
 
 #pragma mark MyInVitedCodeCellDelegate

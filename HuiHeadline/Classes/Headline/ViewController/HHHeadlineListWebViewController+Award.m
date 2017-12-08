@@ -13,6 +13,9 @@ static BOOL once = NO;
 
 static int timerInterval = 0;
 
+
+
+
 @implementation HHHeadlineListWebViewController (Award) 
 
 
@@ -24,7 +27,7 @@ static int timerInterval = 0;
 
 - (void)startTimerWithTimerInterval:(int)interval {
     
-    if (HHUserManager.sharedInstance.timer) {
+    if (HHUserManager.sharedInstance.timer || G.$.bs) {
         return;
     }
     self.boolUserScroll = NO;
@@ -71,20 +74,42 @@ static int timerInterval = 0;
     
 }
 
-
+- (void)alertMessage {
+    
+    if (self.hasAlert || G.$.bs) {
+        return;
+    }
+    
+    NSString *message = [NSString stringWithFormat:@"同一页面的阅读有效时长最多为%zd秒，到其他页面继续获取阅读积分吧", HHUserManager.sharedInstance.readConfig.maxSecondsPerNews];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:message message:@"" preferredStyle:(UIAlertControllerStyleAlert)];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"我知道了" style:(UIAlertActionStyleCancel) handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+//    #ff0000
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
+    self.hasAlert = YES;
+}
 
 - (void)award_sychDuration:(void (^)(void))callback {
     
+    if (HHUserManager.sharedInstance.readConfig.maxSecondsPerNews && (self.secondsPerNews >= HHUserManager.sharedInstance.readConfig.maxSecondsPerNews)) {
+        [self alertMessage];
+        self.sychLock = NO;
+        return;
+    }
+    
     [self sychDuration:^(NSError *error, HHReadSychDurationResponse *response) {
-        
-        HHUserManager.sharedInstance.newsCount = 1;
-        
         
         if (error) {
             NSLog(@"sychDuration error:%@",error);
         } else if (response.state == 0) {
             //成功
+            
+            self.secondsPerNews += response.incCredit;
+            
             self.actionInfo = nil;
+            HHUserManager.sharedInstance.newsCount = 1;
             
             [self submitIncomeWithCoins:response.incCredit];
         
@@ -142,37 +167,6 @@ static int timerInterval = 0;
     
 }
 
-
-
-
-
-
-- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void(^)(WKNavigationActionPolicy))decisionHandler {
-    
-    decisionHandler(WKNavigationActionPolicyAllow);
-    
-    if ([navigationAction.request.URL.absoluteString containsString:@"openapp"]) {
-        [[UIApplication sharedApplication] openURL:navigationAction.request.URL]; 
-    }
-    
-    if ([self.webView canGoBack]) {
-        
-        UIBarButtonItem *closeButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(closeAction)];
-        closeButtonItem.tintColor = BLACK_51;
-        self.navigationItem.leftBarButtonItems = @[self.backItem, closeButtonItem];
-        
-    } else {
-        self.navigationItem.leftBarButtonItem = self.backItem;
-    }
-    
-    
-}
-
-- (void)closeAction {
-    
-    [self.navigationController popViewControllerAnimated:YES];
-
-}
 
 
 

@@ -14,7 +14,7 @@ static int timerInterval = 0;
 
 - (void)startTimer {
     
-    if (HHUserManager.sharedInstance.videoTimer) {
+    if (HHUserManager.sharedInstance.videoTimer || G.$.bs) {
         return;
     }
     HHUserManager.sharedInstance.videoTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(addProgress) userInfo:nil repeats:YES];
@@ -24,6 +24,7 @@ static int timerInterval = 0;
 }
 
 - (void)addProgress {
+    
     
     if (timerInterval && timerInterval % 10 == 0) {
         

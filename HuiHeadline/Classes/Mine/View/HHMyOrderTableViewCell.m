@@ -58,7 +58,7 @@
         make.top.equalTo(self.saleLabel.mas_bottom);
         make.right.equalTo(self.saleLabel);
         make.height.mas_equalTo(17);
-        make.left.mas_greaterThanOrEqualTo(self.saleLabel.mas_left);
+        make.left.greaterThanOrEqualTo(self.saleLabel.mas_left);
     }];
     
     if (!self.lineView) {
@@ -143,7 +143,7 @@
         make.left.equalTo(self.orderImgV.mas_right).with.offset(10);
         make.top.equalTo(self.orderImgV);
         make.right.equalTo(self.saleLabel.mas_left).with.offset(-10);
-        make.bottom.lessThanOrEqualTo(self.orderImgV).with.offset(-17-10);
+        make.bottom.lessThanOrEqualTo(self.orderImgV).with.offset(- 17 -5);
     }];
     
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {

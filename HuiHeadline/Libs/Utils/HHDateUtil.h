@@ -20,6 +20,8 @@
 ///1900-01-01 00:00:00
 + (NSString *)detailTimeFormat:(long)interval;
 
++ (NSString *)ymd:(long)interval;
+
 //like this : @[@"1900年01月01日",@"下午00:00",@"2"]
 + (NSArray *)incomeDetailTimerFormatter:(long)time;
 

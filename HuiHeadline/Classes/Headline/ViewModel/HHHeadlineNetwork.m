@@ -13,6 +13,10 @@
 #import "HHReadSychDurationRequest.h"
 #import "HHReadSychDurationResponse.h"
 #import "HHTopNewsModel.h"
+#import "HHReadShareResponse.h"
+#import "HHFMDeviceManager.h"
+
+
 
 @implementation HHHeadlineNetwork
 
@@ -193,7 +197,8 @@ static NSString *newkey = nil;
 }
 
 + (void)requestForAdList:(Block)callback {
-    NSLog(@"ad");
+    
+    
     [self requestForAdPositions:^(NSError *error, HHAdStrategy *result) {
         if (error) {
             NSLog(@"---%@",error);
@@ -269,7 +274,9 @@ static NSString *newkey = nil;
                 }
             }
             if (!resultModels.count) {
-                NSLog(@"广告没有请求到");
+                NSLog(@"后端广告为空");
+                
+                
             }
             callback(nil, resultModels.copy);
         }];
@@ -389,7 +396,7 @@ static NSString *newkey = nil;
     sychDurationRequest.count = count;
     sychDurationRequest.readActionInfo = actionInfo;
     NSDictionary *paramaters = [sychDurationRequest mj_keyValues];
-    NSLog(@"%@",paramaters);
+    NSLog(@" 同步参数: %@",paramaters);
     [HHNetworkManager postRequestWithUrl:k_sync_duration parameters:paramaters isEncryptedJson:YES otherArg:nil handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
             HHReadSychDurationResponse *response = [HHReadSychDurationResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
@@ -425,7 +432,7 @@ static NSString *newkey = nil;
 }
 
 + (void)sychListAdExposureWithMap:(NSDictionary<NSString *,NSNumber *> *)map
-                         callback:(void(^)(id error, HHResponse *response))callback
+                         callback:(void(^)(id error, HHSychAdExposureResponse *response))callback
 {
     
     
@@ -434,11 +441,117 @@ static NSString *newkey = nil;
         if (error) {
             callback(error,nil);
         } else {
-            HHResponse *response = [HHResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+            
+            HHSychAdExposureResponse *response = [HHSychAdExposureResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
             callback(nil,response);
         }
 
     }];
 }
+
++ (void)sychExposureList:(NSArray *)exposureReportList {
+    
+    for (NSString *url in exposureReportList) {
+        
+        [HHNetworkManager GET:url parameters:nil handler:^(id error, id result) {
+           
+            NSLog(@"%@ %@", error, result);
+        }];
+    }
+    
+    
+}
+
++ (void)sychClickList:(NSArray *)clickReportList {
+    
+    for (NSString *url in clickReportList) {
+        
+        [HHNetworkManager GET:url parameters:nil handler:^(id error, id result) {
+            
+//            NSLog(@"%@ %@", error, result);
+        }];
+    }
+    
+    
+}
+
++ (void)getShareUrl:(NSString *)url
+           callback:(void(^)(id error, NSString *url))callback {
+    
+    //userId
+    [HHNetworkManager postRequestWithUrl:k_get_share_url parameters:@{@"timestamp":@([[NSDate date] timeIntervalSince1970] * 1000),@"url":url } isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
+        
+        if (error) {
+            
+            callback(error,nil);
+            
+        } else {
+            
+            HHReadShareResponse *response = [HHReadShareResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+            if (response.statusCode == 200) {
+                callback(nil, response.url);
+            } else {
+                callback(response.msg, nil);
+            }
+            
+        }
+        
+    }];
+    
+    
+}
+
+
++ (void)sychAdClickAwardWithToken:(long)token
+                          channel:(NSString *)channel
+                         callback:(void(^)(id error , HHSychAdAwardResponse *response))callback {
+    
+    [HHNetworkManager postRequestWithUrl:k_sych_ad_award parameters:@{@"token":@(token),@"channel":channel } isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
+        
+        if (error) {
+            
+            callback(error,nil);
+            
+        } else {
+            
+            HHSychAdAwardResponse *response = [HHSychAdAwardResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+            if (response.statusCode == 200) {
+                callback(nil, response);
+            } else {
+                callback(response.msg, nil);
+            }
+            
+        }
+        
+    }];
+    
+    
+    
+}
+
++ (void)requestHotSearch:(void(^)(id error, NSArray<HHHotRecommend *> *hots))callback {
+    
+    [HHNetworkManager GET:k_search_hot parameters:nil handler:^(id error, id result) {
+        
+        if (error) {
+            
+            callback(error,nil);
+            
+        } else {
+            
+            NSArray *hotArr = [result mj_JSONObject];
+            NSArray *hots = [HHHotRecommend mj_objectArrayWithKeyValuesArray:hotArr];
+            callback(nil, hots);
+            
+        }
+        
+    }];
+    
+}
+
+
+
+
+
 
 @end

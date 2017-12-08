@@ -13,6 +13,8 @@
 
 @property (nonatomic, strong)UIView *navigationView;
 
+@property (nonatomic, strong)UIView *backView;
+
 @property (nonatomic, strong)HHTextFieldAndLineView *oldPasTF;
 
 @property (nonatomic, strong)HHTextFieldAndLineView *nePasTF;
@@ -62,7 +64,12 @@
     CGFloat pad = 20;
     
     self.view.backgroundColor = RGB(241, 241, 241);
-    self.oldPasTF  = [[HHTextFieldAndLineView alloc] initWithFrame:CGRectMake(pad, MaxY(self.navigationView) + 20, KWIDTH - pad * 2, 40)];
+    
+    self.backView = [[UIView alloc] initWithFrame:CGRectMake(0, MaxY(self.navigationView) + 20, KWIDTH , 120 + 60)];
+    self.backView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.backView];
+    
+    self.oldPasTF  = [[HHTextFieldAndLineView alloc] initWithFrame:CGRectMake(pad, MaxY(self.navigationView) + 40, KWIDTH - pad * 2, 40)];
     self.oldPasTF.textField.placeholder = @"请输入旧密码";
     self.oldPasTF.textField.font = Font(15);
     self.oldPasTF.textField.textColor = BLACK_51;
@@ -93,7 +100,7 @@
     self.submitButton = [[UIButton alloc] initWithFrame:CGRectMake(pad, MaxY(self.confirmTF) + CGFLOAT(30), W(self.oldPasTF), 40)];
     self.submitButton.backgroundColor = HUIRED;
     [self.submitButton setTitle:@"提交" forState:(UIControlStateNormal)];
-    self.submitButton.layer.cornerRadius = 8;
+    self.submitButton.layer.cornerRadius = 5;
     self.submitButton.tintColor = [UIColor whiteColor];
     [self.submitButton addTarget:self action:@selector(submit) forControlEvents:(UIControlEventTouchUpInside)];
     [self.view addSubview:self.submitButton];

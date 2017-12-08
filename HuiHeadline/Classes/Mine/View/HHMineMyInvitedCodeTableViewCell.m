@@ -97,7 +97,7 @@
     if (!invitedCode) {
         return;
     }
-    NSString *url = [k_appstore_link stringByAppendingString:[NSString stringWithFormat:@"#code=%@",invitedCode]];
+    NSString *url = [k_ios_link stringByAppendingString:[NSString stringWithFormat:@"#code=%@",invitedCode]];
     [self createQRCodeImage:url];
     
     NSAttributedString *attStr = [[NSAttributedString alloc] initWithString:invitedCode attributes:@{NSKernAttributeName:@2.0f}];

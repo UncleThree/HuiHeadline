@@ -12,16 +12,20 @@
 #import "HHTaskTableViewCell.h"
 #import "HHTaskCellModel.h"
 #import "HHTaskTableViewHeaderView.h"
-#import "HHActivityTaskDetailWebViewController.h"
+#import "CustomBrowserViewController.h"
 #import "WechatService.h"
 #import "HHMineBindPhoneViewController.h"
+#import "HHMineRebindPhoneViewController.h"
 #import "HHMineInvitedViewController.h"
 #import "HHMallSegmentViewController.h"
-#import "UIView+XDRefresh.h"
-
 #import "CCPScrollView.h"
+#import "HHMineInvitedOneImageTableViewCell.h"
+#import "ActivityModel.h"
+#import "OpenActivityUtil.h"
+#import "ImageYS.h"
+#import <Social/Social.h>
 
-@interface HHTaskCenterViewController ()<UITableViewDataSource, UITableViewDelegate, HHTaskCenterHeaderViewDelegate, HHTaskCellModelDelegate>
+@interface HHTaskCenterViewController ()<UITableViewDataSource, UITableViewDelegate, HHTaskCenterHeaderViewDelegate, HHTaskCellModelDelegate, HHMineInvitedImageTableViewCellDelegate>
 
 @property (nonatomic, strong)CCPScrollView *scrollView;
 
@@ -37,12 +41,22 @@
 
 @property (nonatomic, strong)NSMutableArray<HHTaskCellModel *> *dailyCellModels;
 
-@property (nonatomic, strong)UIView *statusBarView;
+@property (nonatomic,strong)HHInvitedItem *bannerModel;
+
+
 
 ///高度缓存 优化性能
 @property (nonatomic, strong)NSCache *heightCache;
 
 @property (nonatomic, assign)BOOL freshTag;
+
+@property (nonatomic, assign)NSUInteger experienceTime;
+
+@property (nonatomic, assign)NSTimeInterval dyTaskStartTime;
+
+@property (nonatomic, assign)NSInteger currentDynamicTaskId;
+
+@property (nonatomic, copy)NSString *myInviteCode;
 
 @end
 
@@ -51,12 +65,6 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 @implementation HHTaskCenterViewController
 
 
-
-
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    
-    return UIStatusBarStyleLightContent;
-}
 
 + (instancetype)defaultTaskCenterVC {
     
@@ -85,12 +93,6 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     
     [self.tabBarController.tabBar hideBadgeOnItemIndex:2];
     
-    if (!self.statusBarView) {
-        self.statusBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, STATUSBAR_HEIGHT)];
-        self.statusBarView.backgroundColor = RGB(230, 53, 40);
-        [UIApplication.sharedApplication.keyWindow addSubview:self.statusBarView];
-        [UIApplication.sharedApplication.keyWindow bringSubviewToFront:self.statusBarView];
-    }
     
     if (self.scrollView) {
         [self.scrollView addTimer];
@@ -101,9 +103,6 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    [self.statusBarView removeFromSuperview];
-    self.statusBarView = nil;
-    
     if (self.scrollView) {
         [self.scrollView removeTimer];
     }
@@ -112,14 +111,27 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 }
 
 
+- (void)viewDidDisappear:(BOOL)animated {
     
+    [super viewDidDisappear:animated];
+    [NSNotificationCenter.defaultCenter removeObserver:self name:@"applicationDidBecomeActive" object:nil];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+}
     
 
-///刷新之后放在刷新中
 - (void)viewDidAppear:(BOOL)animated {
     
     [super viewDidAppear:animated];
     
+    [self refresh];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(becomeActive) name:@"applicationDidBecomeActive" object:nil];
+    
+    ///滑动返回没有奖励的Bug
+    [self becomeActive];
 
 }
 
@@ -127,11 +139,10 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 
 - (void)viewDidLoad {
     
+    
     [self initTableView];
     
     [super viewDidLoad];
-    
-    [self refresh];
     
     
 }
@@ -141,10 +152,7 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     ///签到信息
     [self reloadHeader:YES];
     ///任务
-    [self reloadTableViewData:^{
-        
-        [self.tableView.mj_header endRefreshing];
-    }];
+    [self reloadTableViewData];
     
 }
 
@@ -155,6 +163,7 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     
     if (!forced) {
         [self initHeaderView];
+        
         return;
     }
     if ([HHUserManager sharedInstance].loginId) {
@@ -167,12 +176,7 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     
 }
 
-///任务信息
-- (void)reloadTableViewData:(void(^)())callback  {
-    
-    if (!self.dailyCellModels.count) {
-        [HHHeadlineAwardHUD showHUDWithText:@"" animated:YES];
-    }
+- (void)requestNewBieTask:(void(^)())callback {
     
     ///新手任务
     [HHTaskCenterNetwork requstNewBieTaskList:^(id error, NSArray<HHUserNewbieTask *> *tasks) {
@@ -182,33 +186,82 @@ static HHTaskCenterViewController *taskCenterVC = nil;
             HHUserManager.sharedInstance.newbieTasks = tasks;
         }
         [self initNewbieModels:HHUserManager.sharedInstance.newbieTasks];
+        callback();
+    }];
+}
+
+- (void)requstDailyTask:(void(^)())callback {
+ 
+    ///日常任务
+    [HHTaskCenterNetwork requestDailyTaskList:^(id error, HHUserDailyTaskResponse *response) {
+        if (error) {
+            NSLog(@"%@",error);
+        } else {
+            HHUserManager.sharedInstance.dailyTaskResponse = response;
+        }
+        [self initDailyModels:HHUserManager.sharedInstance.dailyTaskResponse];
+        callback();
         
-        ///日常任务
-        [HHTaskCenterNetwork requestDailyTaskList:^(id error, HHUserDailyTaskResponse *response) {
-            if (error) {
-                NSLog(@"%@",error);
-            } else {
-                HHUserManager.sharedInstance.dailyTaskResponse = response;
-            }
-            [self initDailyModels:HHUserManager.sharedInstance.dailyTaskResponse];
-            [self.tableView reloadData];
-            [HHHeadlineAwardHUD hideHUDAnimated:YES];
-            if (callback) {
-                callback();
-            }
-        }];
+    }];
+}
+
+- (void)requestBanner:(void(^)())callback {
+    
+    [HHTaskCenterNetwork getBannerInfoWithPosition:3 callback:^(id error, BannerInfo *bannerInfo) {
+        if (error) {
+            NSLog(@"%@",error);
+        } else {
+            
+            HHUserManager.sharedInstance.taskBannerInfo = bannerInfo;
+            [self initBannerModel:bannerInfo callback:callback];
+        }
     }];
     
+}
+
+///任务信息
+- (void)reloadTableViewData  {
     
+    if (!self.dailyCellModels.count) {
+        [HHHeadlineAwardHUD showHUDWithText:@"" animated:YES];
+    }
     
+    [self requestBanner:^{
+        [self.tableView reloadData];
+    }];
+    [self requestNewBieTask:^{
+        
+        [self.tableView reloadData];
+    }];
+    [self requstDailyTask:^{
+        
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
+        
+    }];
     
 }
+
+- (void)initBannerModel:(BannerInfo *)bannerInfo
+               callback:(void(^)())callback{
+    
+    if (!self.bannerModel) {
+        self.bannerModel = [[HHInvitedItem alloc] init];
+    }
+    self.bannerModel.imgUrl = bannerInfo.picture;
+    self.bannerModel.targetLinkUrl = bannerInfo.url;
+    self.bannerModel.isBanner = YES;
+    [AsyncImageUtil checkCache:self.bannerModel.imgUrl callback:callback];
+    
+}
+
 
 
 - (void)initDailyModels:(HHUserDailyTaskResponse *)response {
     
     NSArray<HHUserDailyTask *> *dailyTasks = response.dailyTaskList;
-//    NSArray<HHUserDynamicTask *> *dynamicTasks = response.dynamicTaskList;
+    NSArray<HHUserDynamicTask *> *dynamicTasks = response.dynamicTaskList;
     NSArray<HHUserActivityTask *> *activityTasks = response.activityTaskList;
     
     if (!self.dailyHeaderModels) {
@@ -220,15 +273,13 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     [self.dailyHeaderModels removeAllObjects];
     [self.dailyCellModels removeAllObjects];
     
-    NSInteger dynamicTaskReward = 0;
-    NSInteger dynamicTaskState = 0;
+    NSMutableDictionary *dynamicTaskDict = @{}.mutableCopy;
     
     for (HHUserDailyTask *dailyTask in dailyTasks) {
         
         if (dailyTask.taskId > 6 || dailyTask.taskId < 1) {
-            if (dailyTask.taskId == 101) {
-                dynamicTaskReward = dailyTask.reward;
-                dynamicTaskState = dailyTask.state;
+            if (dailyTask.taskId > 100 && dailyTask.taskId <= 300) {
+                [dynamicTaskDict setObject:@{@"reward":@(dailyTask.reward),@"state":@(dailyTask.state)} forKey:@(dailyTask.taskId)];
             }
             continue;
         }
@@ -241,8 +292,9 @@ static HHTaskCenterViewController *taskCenterVC = nil;
         
         HHTaskCellModel *model = [[HHTaskCellModel alloc] init];
         model.dailyTaskId = dailyTask.taskId;
-        model.title = [dailyTask taskRewardDescription];
-        model.state = [dailyTask state];
+        model.title = dailyTask.taskRewardDescription;
+        model.state = dailyTask.state;
+        model.visit = dailyTask.visit;
         switch (model.state) {
             case 0:
                 model.subText = [dailyTask btnDes];
@@ -257,59 +309,69 @@ static HHTaskCenterViewController *taskCenterVC = nil;
                 headerModel.completed = YES;
                 break;
         }
-        
-        if ([G.$.taskCenterCache objectForKey:[NSString stringWithFormat:@"daily%zd",model.dailyTaskId]]) {
+        if ([[G.$.taskCenterCache objectForKey:[NSString stringWithFormat:@"daily%zd",model.dailyTaskId]] boolValue]) {
             model.show = YES;
             headerModel.open = YES;
         }
-        ///暂时去掉分享任务
-        if ([headerModel.title containsString:@"分享"]) {
-            continue;
+        
+        if (model.dailyTaskId == SHARE_FRIEND_CIRCLE || model.dailyTaskId == SHARE_WEIXIN_GROUP) {
+            ///暂时去掉分享任务
+//            continue;
         }
         [self.dailyHeaderModels addObject:headerModel];
         [self.dailyCellModels addObject:model];
         
         
     }
-//    for (HHUserDynamicTask *dynamicTask in dynamicTasks) {
-//        HHTaskSectionHeaderModel *sectionModel = [[HHTaskSectionHeaderModel alloc] init];
-//        sectionModel.dailyTaskId = 101;
-//        sectionModel.title = [dynamicTask title];
-//        sectionModel.reward = [NSString stringWithFormat:@"+%zd",dynamicTaskReward];
-//        sectionModel.open = NO;
-//        sectionModel.type = 2;
-//        
-//        
-//        HHTaskCellModel *model = [[HHTaskCellModel alloc] init];
-//        model.dailyTaskId = 101;
-//        model.title = dynamicTask.rewardDes;
-//        model.state = dynamicTaskState;
-//        model.show = NO;
-//        model.url = dynamicTask.url;
-//        switch (model.state) {
-//            case 0:
-//                model.subText = dynamicTask.buttonDes;
-//                break;
-//            case 1:
-//                model.subText = @"立即领取";
-//                model.show = YES;
-//                sectionModel.open = YES;
-//                break;
-//            case 2:
-//                model.subText = @"已完成";
-//                break;
-//        }
-//        if ([G.$.taskCenterCache objectForKey:[NSString stringWithFormat:@"daily%zd",model.dailyTaskId]]) {
-//            model.show = YES;
-//            sectionModel.open = YES;
-//        }
-//        [self.dailyHeaderModels addObject:sectionModel];
-//        [self.dailyCellModels addObject:model];
-//
-//    }
+    if (dynamicTasks.count > 0 && !G.$.bs) {
+        for (HHUserDynamicTask *dynamicTask in dynamicTasks) {
+            
+            if (![dynamicTaskDict.allKeys containsObject:@(dynamicTask.Id)]) {
+                continue;
+            }
+            HHTaskSectionHeaderModel *sectionModel = [[HHTaskSectionHeaderModel alloc] init];
+            sectionModel.dailyTaskId = dynamicTask.Id;
+            sectionModel.title = [dynamicTask title];
+            sectionModel.reward = [NSString stringWithFormat:@"+%zd",[[[dynamicTaskDict objectForKey:@(dynamicTask.Id)] objectForKey:@"reward"] integerValue] ];
+            sectionModel.open = NO;
+            sectionModel.type = 2;
+            
+            self.experienceTime = dynamicTask.experienceTime;
+            
+            HHTaskCellModel *model = [[HHTaskCellModel alloc] init];
+            model.dailyTaskId = dynamicTask.Id;
+            model.title = dynamicTask.rewardDes;
+            model.state = [[[dynamicTaskDict objectForKey:@(dynamicTask.Id)] objectForKey:@"state"] integerValue];
+            model.show = NO;
+            model.url = dynamicTask.url;
+            model.visit = dynamicTask.visit;
+            switch (model.state) {
+                case 0:
+                    model.subText = dynamicTask.buttonDes;
+                    break;
+                case 1:
+                    model.subText = @"立即领取";
+                    model.show = YES;
+                    sectionModel.open = YES;
+                    break;
+                case 2:
+                    model.subText = @"已完成";
+                    sectionModel.completed = YES;
+                    break;
+            }
+            if ([[G.$.taskCenterCache objectForKey:[NSString stringWithFormat:@"daily%zd",model.dailyTaskId]] boolValue]) {
+                model.show = YES;
+                sectionModel.open = YES;
+            }
+            [self.dailyHeaderModels addObject:sectionModel];
+            [self.dailyCellModels addObject:model];
+            
+        }
+    }
+
     
     NSInteger activityTaskId = 777;
-    NSArray *descs = @[[NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES]];
+    NSArray *descs = @[[NSSortDescriptor sortDescriptorWithKey:@"order" ascending:NO]];
     activityTasks = [activityTasks sortedArrayUsingDescriptors:descs];
     for (HHUserActivityTask *activityTask in activityTasks) {
         
@@ -327,12 +389,14 @@ static HHTaskCenterViewController *taskCenterVC = nil;
         model.subText = activityTask.buttonDes;
         model.url = activityTask.url;
         model.activityTitle = activityTask.title;
-        if ([G.$.taskCenterCache objectForKey:[NSString stringWithFormat:@"daily%zd",model.dailyTaskId]]) {
+        model.visit = activityTask.visit;
+        
+        if ([[G.$.taskCenterCache objectForKey:[NSString stringWithFormat:@"daily%zd",model.dailyTaskId]] boolValue]) {
             model.show = YES;
             sectionModel.open = YES;
         }
-        [self.dailyHeaderModels insertObject:sectionModel atIndex:activityTask.order];
-        [self.dailyCellModels insertObject:model atIndex:activityTask.order];
+        [self.dailyHeaderModels insertObject:sectionModel atIndex:activityTask.order - 1];
+        [self.dailyCellModels insertObject:model atIndex:activityTask.order - 1];
         
     }
     if (self.dailyHeaderModels.count) {
@@ -394,10 +458,7 @@ static HHTaskCenterViewController *taskCenterVC = nil;
             model.show = YES;
             headerModel.open = YES;
         }
-        ///暂时去掉分享任务
-        if ([headerModel.title containsString:@"分享"]) {
-            continue;
-        }
+
         [self.newbieHeaderModels addObject:headerModel];
         [self.newbieCellModels addObject:model];
         
@@ -421,11 +482,13 @@ static HHTaskCenterViewController *taskCenterVC = nil;
             NSLog(@"%@",error);
         } else {
             
-            [HHUserManager sharedInstance].signRecordResponse = response;
+            if ([[response mj_JSONObject] isEqualToDictionary:[HHUserManager.sharedInstance.signRecordResponse mj_JSONObject]] && self.headerView) {
+                return ;
+            } else {
+                [HHUserManager sharedInstance].signRecordResponse = response;
+            }
         }
-        if ([[response mj_JSONObject] isEqualToDictionary:[HHUserManager.sharedInstance.signRecordResponse mj_JSONObject]] && self.headerView) {
-            return ;
-        }
+        
         [self initHeaderView];
         
     }];
@@ -437,20 +500,23 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     self.headerView = nil;
     [self.scrollView removeTimer];
 
-    
-    self.headerView = [[HHTasKCenterHeaderView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 730 / 3 + 5 - (LARGE ? 0 : (NORMAL ? 5 : 10))) response:[HHUserManager sharedInstance].signRecordResponse];
+    CGFloat pad = G.$.bs ? 0 : 20;
+    self.headerView = [[HHTasKCenterHeaderView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 715 / 3 - (LARGE ? 0 : (NORMAL ? 5 : 10)) + pad) response:[HHUserManager sharedInstance].signRecordResponse];
     self.headerView.delegate = self;
     
-    self.scrollView = [[CCPScrollView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 25)];
+    self.scrollView = [[CCPScrollView alloc] initWithFrame:CGRectMake(0, STATUSBAR_HEIGHT, KWIDTH, 25)];
     
     self.scrollView.titleArray = @[@""];
     
     self.scrollView.BGColor = [UIColor colorWithWhite:0.1 alpha:0.1];
     
-    [self.headerView addSubview:self.scrollView];
+    if (!G.$.bs) {
+        [self.headerView addSubview:self.scrollView];
+    }
     
     self.tableView.tableHeaderView = self.headerView;
     
+
 }
 
 
@@ -464,55 +530,35 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.insets(UIEdgeInsetsMake(0, 0, 0, 0));
+        make.left.right.bottom.equalTo(self.view);
+        make.top.equalTo(self.view).with.offset(-STATUSBAR_HEIGHT);
     }];
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 //    self.tableView.bounces = NO;
     self.tableView.sectionFooterHeight = 0;
     self.tableView.showsVerticalScrollIndicator = NO;
     [self.tableView registerClass:[HHTaskTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHTaskTableViewCell class])];
+    [self.tableView registerClass:[HHMineInvitedOneImageTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMineInvitedOneImageTableViewCell class])];
+    
+    _tableView.estimatedRowHeight = 0.0f;
+    _tableView.estimatedSectionHeaderHeight = 0;
+    _tableView.estimatedSectionFooterHeight = 0;
     
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     header.lastUpdatedTimeLabel.hidden = YES;
+    [header setTitle:@"下拉刷新" forState:MJRefreshStateIdle];
+    [header setTitle:@"释放刷新" forState:MJRefreshStatePulling];
+    [header setTitle:@"加载中..." forState:MJRefreshStateRefreshing];
     self.tableView.mj_header = header;
     
-//    [self.view XD_refreshWithObject:self.tableView atPoint:CGPointMake(10, Y(self.view) -20 - 30 ) downRefresh:^{
-//        //开始刷新
-//        [self reloadHeader:YES];
-//        [self reloadTableViewData:^{
-//            [self.view XD_endRefresh];
-//        }];
-//
-//    }];
     
+
     
 }
 
 
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-    
-    CGPoint offset = self.tableView.contentOffset;
-
-    if (offset.y < -20) {
-        
-        offset.y = -20;
-        
-        if (!self.freshTag) {
-            
-            self.freshTag = YES;
-            NSLog(@"111");
-            [HHHeadlineAwardHUD showHUDWithText:@"正在刷新..." animated:YES];
-            [self refresh];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                self.freshTag = NO;
-            });
-        }
-
-    }
-    self.tableView.contentOffset = offset;
-    
-}
 
 
 
@@ -520,56 +566,84 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    return (self.newbieCellModels.count > 0) + self.newbieCellModels.count + (self.dailyCellModels.count > 0) + self.dailyCellModels.count;
+    return 1 + (self.newbieCellModels.count > 0) + self.newbieCellModels.count + (self.dailyCellModels.count > 0) + self.dailyCellModels.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
     return 1;
 }
 
+- (CGFloat)heightForBanner {
+    
+    if (self.bannerModel) {
+        UIImage *image = [[SDImageCache sharedImageCache] imageFromCacheForKey:self.bannerModel.imgUrl];
+        if (image) {
+            return image.size.height / image.size.width * KWIDTH;
+        }
+    }
+    return 0;
+}
+
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.section == 0 || (self.newbieCellModels.count > 0 && indexPath.section == self.newbieCellModels.count + 1) ) {
-        
+
+    if (indexPath.section == 0 ) {
+
+        return HHUserManager.sharedInstance.taskBannerInfo ? [self heightForBanner] : 0;
+    }
+    if (indexPath.section == 1 || (self.newbieCellModels.count > 0 && indexPath.section == self.newbieCellModels.count + 2) ) {
+
         return 0;
-        
+
     } else  {
-        
+
         HHTaskCellModel *model = nil;
-        BOOL isNewbie = self.newbieCellModels.count && indexPath.section < self.newbieCellModels.count + 1 ;
+        BOOL isNewbie = self.newbieCellModels.count && indexPath.section < self.newbieCellModels.count + 2 ;
         if (isNewbie) {
-            
-            model = self.newbieCellModels[indexPath.section - 1];
-            
+
+            model = self.newbieCellModels[indexPath.section - 2];
+
         } else {
-            model = self.dailyCellModels[indexPath.section - 1 - (self.newbieCellModels.count > 0) - self.newbieCellModels.count];
+            model = self.dailyCellModels[indexPath.section - 2 - (self.newbieCellModels.count > 0) - self.newbieCellModels.count];
         }
-        
-        NSNumber *key = [NSNumber numberWithInteger:indexPath.section];
-        CGFloat cacheHeight = [[self.heightCache objectForKey:key] floatValue];
-        
-        if (model.show) {
-            if (cacheHeight) {
-                return cacheHeight;
-            } else {
-                CGFloat height = [model heightForModel];
-                [self.heightCache setObject:[NSNumber numberWithFloat:height] forKey:key];
-                return height;
-            }
-        } else {
-            
+
+        if (!model.show) {
             return 0;
         }
-        
-        
+        NSNumber *key = [NSNumber numberWithInteger:indexPath.section];
+        CGFloat cacheHeight = [[self.heightCache objectForKey:key] floatValue];
+        if (cacheHeight) {
+            return cacheHeight;
+        } else {
+            CGFloat height = [model heightForModel];
+            [self.heightCache setObject:[NSNumber numberWithFloat:height] forKey:key];
+            return height;
+        }
     }
+
+
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     
+    return [UIView new];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     
+    if (section == 0 && HHUserManager.sharedInstance.taskBannerInfo) {
+        return CGFLOAT(12);
+    }
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
+    if (section == 0) {
+        return HHUserManager.sharedInstance.taskBannerInfo ? CGFLOAT(12) : 0;
+    }
     
     return 50;
     
@@ -577,18 +651,26 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    if (indexPath.section == 0) {
+        
+        HHMineInvitedOneImageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHMineInvitedOneImageTableViewCell class]) forIndexPath:indexPath];
+        cell.model = self.bannerModel;
+        cell.delegate = self;
+        return cell;
+    }
     
-    if (indexPath.section == 0 || ( self.newbieCellModels.count && indexPath.section == self.newbieCellModels.count + 1) ) {
+    if (indexPath.section == 1 || ( self.newbieCellModels.count && indexPath.section == self.newbieCellModels.count + 2) ) {
         
         return [UITableViewCell new];
+        
     } else {
         
         
         HHTaskTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([HHTaskTableViewCell class]) forIndexPath:indexPath];
-        if (self.newbieCellModels.count && indexPath.section < self.newbieCellModels.count + 1) {
-            cell.model = self.newbieCellModels[indexPath.section - 1];
+        if (self.newbieCellModels.count && indexPath.section < self.newbieCellModels.count + 2) {
+            cell.model = self.newbieCellModels[indexPath.section - 2];
         } else {
-            cell.model = self.dailyCellModels[indexPath.section - 1 - (self.newbieCellModels.count > 0) - self.newbieCellModels.count];
+            cell.model = self.dailyCellModels[indexPath.section - 2 - (self.newbieCellModels.count > 0) - self.newbieCellModels.count];
         }
         cell.delegate = self;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -599,12 +681,14 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    if (section == 0 || (self.newbieCellModels.count && section == self.newbieCellModels.count + 1 ) ) {
-        
-        
+    if (section == 0) {
+        return [UIView new];
+    }
+    
+    if (section == 1 || (self.newbieCellModels.count && section == self.newbieCellModels.count + 2) ) {
         
         NSString *title = @"";
-        if (self.newbieCellModels.count && section == 0) {
+        if (self.newbieCellModels.count && section == 1) {
             title = @"新手任务";
         } else {
             title = @"日常任务";
@@ -612,22 +696,25 @@ static HHTaskCenterViewController *taskCenterVC = nil;
         HHTaskTableViewHeaderView *header = [[HHTaskTableViewHeaderView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 50) title:title];
         header.backgroundColor = [UIColor whiteColor];
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, H(header) - 0.5, KWIDTH, 0.5)];
-        line.backgroundColor = RGB(220, 220, 220);
+        line.backgroundColor = SEPRATE_COLOR;
         [header addSubview:line];
         return header;
         
     } else {
         HHTaskTableViewSectionHeaderView *sectionHeader = nil;
-        if (self.newbieCellModels.count && section < self.newbieCellModels.count + 1) {
-            sectionHeader = [[HHTaskTableViewSectionHeaderView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 50) model:self.newbieHeaderModels[section - 1]];
+        if (self.newbieCellModels.count && section < self.newbieCellModels.count + 2) {
+            sectionHeader = [[HHTaskTableViewSectionHeaderView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 50) model:self.newbieHeaderModels[section - 2]];
         } else {
-            sectionHeader = [[HHTaskTableViewSectionHeaderView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 50) model:self.dailyHeaderModels[section - 1 - (self.newbieCellModels.count > 0) - self.newbieHeaderModels.count]];
+            sectionHeader = [[HHTaskTableViewSectionHeaderView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 50) model:self.dailyHeaderModels[section - 2 - (self.newbieCellModels.count > 0) - self.newbieHeaderModels.count]];
         }
         sectionHeader.backgroundColor = [UIColor whiteColor];
         sectionHeader.userInteractionEnabled = YES;
         sectionHeader.tag = 99 + section;
         [sectionHeader addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapSectionHeader:)]];
         
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, H(sectionHeader) - 0.5, KWIDTH, 0.5)];
+        line.backgroundColor = SEPRATE_COLOR;
+        [sectionHeader addSubview:line];
         
         return sectionHeader;
     }
@@ -648,26 +735,25 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 - (void)selectHeaderAtIndex:(NSUInteger)index {
     
     
-    
     HHTaskSectionHeaderModel *sectionModel = nil;
     HHTaskCellModel *cellModel = nil;
-    BOOL isNewbie = self.newbieHeaderModels.count && index <= self.newbieHeaderModels.count;
+    BOOL isNewbie = self.newbieHeaderModels.count && index  < self.newbieHeaderModels.count + 2;
     BOOL open = NO;
     if (isNewbie) {
         
-        sectionModel = self.newbieHeaderModels[index - 1];
+        sectionModel = self.newbieHeaderModels[index - 2];
         sectionModel.open =  !sectionModel.open;
-        [self.newbieHeaderModels replaceObjectAtIndex:index - 1 withObject:sectionModel];
+        [self.newbieHeaderModels replaceObjectAtIndex:index - 2 withObject:sectionModel];
         
-        cellModel = self.newbieCellModels[index - 1];
+        cellModel = self.newbieCellModels[index - 2];
         cellModel.show =  !cellModel.show;
-        [self.newbieCellModels replaceObjectAtIndex:index - 1 withObject:cellModel];
+        [self.newbieCellModels replaceObjectAtIndex:index - 2 withObject:cellModel];
         
         open = cellModel.show;
         
     } else {
-        NSInteger count = 1 + (self.newbieCellModels.count > 0);
-        sectionModel = self.dailyHeaderModels[index - self.newbieHeaderModels.count - count];
+        NSInteger count = 2 + (self.newbieCellModels.count > 0);
+        sectionModel = self.dailyHeaderModels[index  - self.newbieHeaderModels.count - count];
         sectionModel.open =  !sectionModel.open;
         [self.dailyHeaderModels replaceObjectAtIndex:index - self.newbieHeaderModels.count - count withObject:sectionModel];
         
@@ -678,39 +764,58 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     }
     
     [self cacheClickState:cellModel isNewbie:isNewbie];
-    [self.tableView reloadData];
+
     
     NSInteger section = [[self.tableView indexPathsForVisibleRows] lastObject].section;
     
+    
+//    [UIView performWithoutAnimation:^{
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:(UITableViewRowAnimationNone)];
+//    }];
+    
     if (section == index && open) {
         
-//        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
         
     }
     
 }
 
 - (void)cacheClickState:(HHTaskCellModel *)cellModel isNewbie:(BOOL)isNewbie {
-    if (cellModel.show) {
-        if (isNewbie) {
-            [G.$.taskCenterCache setObject:@YES forKey:[NSString stringWithFormat:@"%@%zd",@"newbie",cellModel.taskId]];
-        } else {
-            [G.$.taskCenterCache setObject:@YES forKey:[NSString stringWithFormat:@"%@%zd",@"daily",cellModel.dailyTaskId]];
-        }
+    
+    
+    if (isNewbie) {
+        [G.$.taskCenterCache setObject:@(cellModel.show) forKey:[NSString stringWithFormat:@"%@%zd",@"newbie",cellModel.taskId]];
+    } else {
+        [G.$.taskCenterCache setObject:@(cellModel.show) forKey:[NSString stringWithFormat:@"%@%zd",@"daily",cellModel.dailyTaskId]];
+    }
+
+}
+
+#pragma mark HHMineInvitedImageTableViewCellDelegate
+
+- (void)clickBanner:(NSString *)link {
+    
+    if ([link containsString:@"{"]) {
+        
+        ActivityModel *model = [ActivityModel mj_objectWithKeyValues:[link mj_JSONObject]];
+        [OpenActivityUtil pushViewControllerWithModel:model originVC:self hideBottom:YES];
         
     } else {
-        
-        if (isNewbie) {
-            [G.$.taskCenterCache removeObjectForKey:[NSString stringWithFormat:@"%@%zd", @"newbie" ,cellModel.taskId]];
-        } else {
-            [G.$.taskCenterCache removeObjectForKey:[NSString stringWithFormat:@"%@%zd", @"daily",cellModel.dailyTaskId]];
-        }
-        
+        CustomBrowserViewController *webVC = [CustomBrowserViewController new];
+        webVC.URLString = link;
+        self.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:webVC animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
     }
+    
+    
+    
 }
 
 
 #pragma mark UITableViewDelegate
+
 
 
 
@@ -742,14 +847,13 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 
 - (void)taskCenterHeaderViewClickHowToMakeMoney {
     
-    HHActivityTaskDetailWebViewController *webVC = [HHActivityTaskDetailWebViewController new];
+    CustomBrowserViewController *webVC = [CustomBrowserViewController new];
     webVC.activityTitle = @"惠头条常见问题";
     webVC.URLString =  k_common_problem;
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:webVC animated:YES];
     self.hidesBottomBarWhenPushed = NO;
     
-
 }
 
 #pragma mark HHTaskModelDelegate
@@ -760,7 +864,8 @@ static HHTaskCenterViewController *taskCenterVC = nil;
 - (void)taskTableViewCellDidClickTaskId:(NSInteger)taskId
                                isNewbie:(BOOL)isNewbie
                                   title:(NSString *)title
-                                    url:(NSString *)url{
+                                    url:(NSString *)url
+                                  visit:(BOOL)visit{
     if (isNewbie) {
         switch (taskId) {
             case BIND_PHONE:
@@ -769,8 +874,10 @@ static HHTaskCenterViewController *taskCenterVC = nil;
                     
                     [self draw:taskId isNewbie:isNewbie];
                     return;
+                }  else {
+                    [self bindPhone:NO];
                 }
-                [self bindPhone];
+                
                 
                 break;
             }
@@ -780,16 +887,20 @@ static HHTaskCenterViewController *taskCenterVC = nil;
                     
                     [self draw:taskId isNewbie:isNewbie];
                     return;
+                } else if (([title isEqualToString:@"已完成"] )) {
+                    if (visit)
+                    [self bindWechat];
+                } else {
+                    [self bindWechat];
                 }
-                [self bindWechat];
                 
                 break;
             }
             case READ_ONE:
-                [self drawToIndex:0 isNewbie:isNewbie taskId:taskId title:title];
+                [self drawToIndex:0 isNewbie:isNewbie taskId:taskId title:title visit:visit];
                 break;
             case VIDEO_ONE:
-                [self drawToIndex:1 isNewbie:isNewbie taskId:taskId title:title];
+                [self drawToIndex:1 isNewbie:isNewbie taskId:taskId title:title visit:visit];
                 break;
             case WITHDRAW_CASH:
                 
@@ -801,7 +912,7 @@ static HHTaskCenterViewController *taskCenterVC = nil;
                     [self.navigationController pushViewController:vc animated:YES];
                     self.hidesBottomBarWhenPushed = NO;
                     
-                } else {
+                }   else {
                     [self alertAction];
                 }
                 
@@ -826,15 +937,21 @@ static HHTaskCenterViewController *taskCenterVC = nil;
                     
                     [self draw:taskId isNewbie:isNewbie];
                     return;
+                } else if ([title isEqualToString:@"已完成"] ) {
+                    if (visit)
+                    [self pushInvitedVC];
+                } else {
+                    [self pushInvitedVC];
                 }
-                [self pushInvitedVC];
+                
                 
                 break;
             }
             case NEWS_SHARE:
             {
                 
-                [self drawToIndex:0 isNewbie:isNewbie taskId:taskId title:title];
+                [self drawToIndex:0 isNewbie:isNewbie taskId:taskId title:title visit:visit];
+                
                 break;
             }
             case SHARE_FRIEND_CIRCLE:
@@ -844,11 +961,24 @@ static HHTaskCenterViewController *taskCenterVC = nil;
                     [self draw:taskId isNewbie:isNewbie];
                     return;
                 }
-                if ([title isEqualToString:@"立即收徒"]) {
+                else if ([title isEqualToString:@"已完成"] ) {
+                    if (visit)
+                        [self shareToWechat:YES callback:nil];
+                }
+                else {
                     
-                    [self pushInvitedVC];
-                } else {
-                    NSLog(@"分享到朋友圈收徒");
+                    [self shareToWechat:YES callback:^(BOOL success) {
+                        if (success) {
+                            [self completeDailyTaskWithTaskId:taskId callback:^(BOOL success) {
+                                if (success) {
+                                    [self reloadTableViewData];
+                                } else {
+                                    
+                                }
+                            }];
+                        }
+                    }];
+                    
                     
                 }
                 break;
@@ -860,30 +990,78 @@ static HHTaskCenterViewController *taskCenterVC = nil;
                     [self draw:taskId isNewbie:isNewbie];
                     return;
                 }
-                if ([title isEqualToString:@"立即收徒"]) {
-                    
-                    [self pushInvitedVC];
-                } else {
-                    NSLog(@"分享微信群");
+                else if ([title isEqualToString:@"已完成"] ) {
+                    if (visit)
+                        [self shareToWechat:NO callback:nil];
+                }  else {
+                    [self shareToWechat:NO callback:^(BOOL success) {
+                        if (success) {
+                            [self completeDailyTaskWithTaskId:taskId callback:^(BOOL success) {
+                                if (success) {
+                                    [self reloadTableViewData];
+                                } else {
+                                    
+                                }
+                            }];
+                        }
+                    }];
                 }
                 
                 break;
             }
             case READ_FIVE:
             {
-                [self drawToIndex:0 isNewbie:isNewbie taskId:taskId title:title];
+                [self drawToIndex:0 isNewbie:isNewbie taskId:taskId title:title visit:visit];
                 break;
             }
             case VIDEO_FIVE:
             {
-                [self drawToIndex:1 isNewbie:isNewbie taskId:taskId title:title];
+                [self drawToIndex:1 isNewbie:isNewbie taskId:taskId title:title visit:visit];
                 
                 break;
             }
-            case AD_LIST_101:
-            {
-                if (url) {
-                    [[UIApplication sharedApplication] openURL:URL(url)];
+            default: {
+                
+                if (taskId > 100 && taskId <= 200) {
+                    
+                    if ([title isEqualToString:@"立即领取"]) {
+                        [self draw:taskId isNewbie:isNewbie];
+                        
+                        
+                    }  else if ([title isEqualToString:@"已完成"]) {
+                        
+                        if (visit)
+                            [self pushToSafary:url];
+                    }
+                    else {
+                        
+                        [self pushToSafary:url];
+                        self.dyTaskStartTime = [[NSDate date] timeIntervalSince1970];
+                        self.currentDynamicTaskId = taskId;
+                    }
+                    
+                }
+                else if (taskId > 200 && taskId <= 300) {
+                    
+                    if ([title isEqualToString:@"立即领取"]) {
+                        
+                        [self draw:taskId isNewbie:isNewbie];
+                        
+                    } else if ([title isEqualToString:@"已完成"] ) {
+                       
+                        if (visit)
+                        [self pushToWebVC:url title:@"惠头条"];
+                        
+                    }  else {
+                        
+                        [self pushToWebVC:url title:@"惠头条"];
+                        self.dyTaskStartTime = [[NSDate date] timeIntervalSince1970];
+                        self.currentDynamicTaskId = taskId;
+                    }
+                }
+                else {
+                    
+                    NSLog(@"WTF::%zd",taskId);
                 }
                 break;
             }
@@ -894,6 +1072,259 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     
     
 }
+
+- (void)requestMyInvitCode:(void(^)(NSString *code))callback {
+    
+    [HHHeadlineAwardHUD showHUDWithText:@"请稍后..." animated:YES];
+    [HHMineNetwork requestInviteFetchSummary:^(id error, HHInvitedFetchSummaryResponse *response) {
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
+        if (response && response.userInviteInfo.code) {
+            callback(response.userInviteInfo.code);
+        } else {
+            callback(nil);
+        }
+    }];
+}
+
+- (void)shareToWechat:(BOOL)isCircle
+             callback:(void(^)(BOOL success))callback{
+    
+    if (self.myInviteCode) {
+        
+        [self presentShareVCWithCode:self.myInviteCode isCircle:isCircle callback:callback];
+        return;
+    }
+    
+    [self requestMyInvitCode:^(NSString *code) {
+        if (!code) {
+            [HHHeadlineAwardHUD showMessage:@"获取邀请码失败，请稍后再试" animated:YES duration:2.5];
+        } else {
+            self.myInviteCode = code;
+            [self presentShareVCWithCode:code isCircle:isCircle callback:callback];
+        }
+        
+    }];
+    
+    
+}
+
+- (void)alertFirstCircleShareMessage:(void(^)())callback {
+    
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"邀请码已经复制到剪切板，您可以在微信朋友圈分享页面长按粘贴您的邀请码然后发表~" preferredStyle:(UIAlertControllerStyleAlert)];
+    
+    UIAlertAction *shareAction = [UIAlertAction actionWithTitle:@"朕知道了" style:(UIAlertActionStyleCancel) handler:^(UIAlertAction * _Nonnull action) {
+        if (callback) {
+            callback();
+        }
+    }];
+    
+    [alert addAction:shareAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+    
+}
+
+- (void)copyToPastbBoard:(NSString *)string {
+    
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = string;
+}
+
+- (void)share:(NSArray *)activityItems callback:(void (^)(BOOL))callback {
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
+    
+    activityVC.completionWithItemsHandler = ^(UIActivityType  _Nullable activityType, BOOL completed, NSArray * _Nullable returnedItems, NSError * _Nullable activityError) {
+        
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+        if ([activityType isEqualToString:@"com.tencent.xin.sharetimeline"] && completed) {
+            if (callback) {
+                callback(YES);
+            }
+            
+        } else {
+            if (callback) {
+                callback(NO);
+            }
+        }
+    };
+    
+    activityVC.excludedActivityTypes = @[
+                                         UIActivityTypePostToFacebook,
+                                         UIActivityTypePostToTwitter,
+                                         UIActivityTypePrint,
+                                         UIActivityTypeAirDrop,
+                                         UIActivityTypeAssignToContact,
+                                         UIActivityTypeSaveToCameraRoll,
+                                         UIActivityTypeAddToReadingList,
+                                         UIActivityTypePostToFlickr,
+                                         UIActivityTypePostToVimeo,
+                                         UIActivityTypeOpenInIBooks
+                                         ];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    [self presentViewController:activityVC animated:YES completion:nil];
+}
+
+- (void)presentShareVCWithCode:(NSString *)code
+                      isCircle:(BOOL)isCircle
+                      callback:(void(^)(BOOL success))callback {
+    
+    NSString *textToShare = [NSString stringWithFormat:@"看新闻，赚零花，填我邀请码：%@ \n↓↓点击下载领取↓↓\n%@", code, k_ios_link];
+    NSData *imgData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"share_logo" ofType:@"png"]];
+    NSURL *urlToShare = [NSURL URLWithString:k_ios_link];
+    
+    UIImage *image1 = [UIImage imageNamed:@"share_wx_bg.jpg"];
+    UIImage *image2 = [UIImage imageNamed:@"share_wx_two_bg.jpg"];
+    UIImage *image3 = [UIImage imageNamed:@"share_wx_tir_bg.jpg"];
+    NSArray *imgArr = [ImageYS getJPEGImagerImgArr:@[image1, image2, image3]];
+    
+    
+    
+    NSArray *activityItems = nil;
+    if (isCircle) {
+        activityItems = imgArr;
+        if (activityItems.count == 3) {
+            activityItems = @[UIImagePNGRepresentation(activityItems[0]),UIImagePNGRepresentation(activityItems[1]),UIImagePNGRepresentation(activityItems[2]) ];
+        }
+        
+    } else {
+        activityItems = @[textToShare, imgData, urlToShare];
+        
+        
+    }
+    if (isCircle) {
+        
+        [self copyToPastbBoard:textToShare];
+        
+        if ([(AppDelegate *)UIApplication.sharedApplication.delegate firstShareCircle]) {
+            
+            [self alertFirstCircleShareMessage:^{
+                [self share:activityItems callback:callback];
+            }];
+            
+        } else {
+            
+            [HHHeadlineAwardHUD showMessage:@"邀请码已复制到剪切板" animated:YES duration:2];
+            [self share:activityItems callback:callback];
+            
+        }
+        
+        
+    } else {
+        
+        [self share:activityItems callback:callback];
+    }
+    
+    
+    
+}
+
+- (void)becomeActive {
+    
+    NSTimeInterval current = [[NSDate date] timeIntervalSince1970];
+    if (self.currentDynamicTaskId && self.experienceTime && self.dyTaskStartTime && (current - self.dyTaskStartTime) * 1000 >= self.experienceTime) {
+        
+        [self completeDailyTaskWithTaskId:self.currentDynamicTaskId callback:^(BOOL success) {
+            
+            self.dyTaskStartTime = 0;
+            if (success) {
+                [self reloadTableViewData];
+            }
+        }];
+        
+    } else {
+        self.dyTaskStartTime = 0;
+    }
+    
+}
+
+- (void)completeDailyTaskWithTaskId:(NSInteger)taskId
+                           callback:(void(^)(BOOL success))callback {
+    
+    [HHTaskCenterNetwork dailyTaskCompleted:taskId callback:^(id error, HHResponse *response) {
+        if (response && response.statusCode == 200) {
+            
+            if (callback) {
+                callback(YES);
+            }
+            
+        } else {
+            if (callback) {
+                callback(NO);
+            }
+        }
+        
+    }];
+    
+}
+
+- (void)activityTaskTitle:(NSString *)title url:(NSString *)url visit:(BOOL)visit {
+    
+    
+    [self pushToWebVC:url title:title];
+}
+
+- (void)pushToSafary:(NSString *)url
+{
+    
+    if (url) {
+        [[UIApplication sharedApplication] openURL:URL(url)];
+        
+    }
+}
+
+- (void)pushToWebVC:(NSString *)url
+              title:(NSString *)title{
+    if (!url) {
+        return;
+    }
+    CustomBrowserViewController *webVC = [CustomBrowserViewController new];
+    webVC.callback = ^{
+        [self becomeActive];
+    };
+    webVC.URLString = url;
+    webVC.activityTitle = title;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:webVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
+}
+
+
+
+- (void)drawToIndex:(NSUInteger )index
+           isNewbie:(BOOL)isNewbie
+             taskId:(NSInteger)taskId
+              title:(NSString *)title
+              visit:(BOOL)visit{
+    
+    if ([title isEqualToString:@"立即领取"]) {
+        [self draw:taskId isNewbie:isNewbie];
+    } else if ([title isEqualToString:@"已完成"]) {
+        
+        if (visit)
+            [G.$.rootVC setSelectedIndex:index];
+    } else {
+        [G.$.rootVC setSelectedIndex:index];
+    }
+    
+    
+}
+
+- (void)draw:(NSInteger)taskId isNewbie:(BOOL)isNewbie {
+    
+    [HHTaskCenterNetwork drawTaskReward:isNewbie taskId:taskId callback:^(id error, HHUserDrawTaskRewardResponse *response) {
+        if (error) {
+            NSLog(@"%@",error);
+        } else {
+            [HHHeadlineAwardHUD showImageView:@"领取成功" coins:response.reward animation:NO originCenter:self.view.center addToView:self.view duration:1.0];
+            
+        }
+        [self reloadTableViewData];
+    }];
+}
+
+
+
 
 - (void)alertAction {
     
@@ -916,19 +1347,25 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     self.hidesBottomBarWhenPushed = NO;
 }
 
-- (void)bindPhone {
+- (void)bindPhone:(BOOL)hasBind {
     
-    HHMineBindPhoneViewController *bindPhoneVC = [[HHMineBindPhoneViewController alloc] init];
-    bindPhoneVC.callback = ^(NSString *phone) {
+    void (^callback)(NSString *phone) = ^(NSString *phone) {
         
         HHUserModel *user = [HHUserManager sharedInstance].currentUser;
         user.userInfo.phone = phone;
         [HHUserManager sharedInstance].currentUser = user;
-        [self reloadTableViewData:nil];
+        [self reloadTableViewData];
     };
+    
+    UIViewController *vc = nil;
+    
+    HHMineBindPhoneViewController *bindPhoneVC = [[HHMineBindPhoneViewController alloc] init];
+    bindPhoneVC.callback = callback;
     bindPhoneVC.countdown = [HHUserManager sharedInstance].virifyCodeCountdown;
+    vc = bindPhoneVC;
+    
     self.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:bindPhoneVC animated:YES];
+    [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
     
 }
@@ -938,53 +1375,23 @@ static HHTaskCenterViewController *taskCenterVC = nil;
     [[WechatService sharedWechat] bindToWechat:^(id error, id result) {
         
         [HHHeadlineAwardHUD showMessage:error?:result animated:YES duration:2];
-        [self reloadTableViewData:nil];
+        [self reloadTableViewData];
     }];
 }
 
-- (void)activityTaskTitle:(NSString *)title url:(NSString *)url {
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    if (!url) {
-        return;
-    }
-    HHActivityTaskDetailWebViewController *webVC = [HHActivityTaskDetailWebViewController new];
-    webVC.URLString = url;
-    webVC.activityTitle = title;
-    self.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:webVC animated:YES];
-    self.hidesBottomBarWhenPushed = NO;
-}
-
-
-
-- (void)drawToIndex:(NSUInteger )index
-           isNewbie:(BOOL)isNewbie
-             taskId:(NSInteger)taskId
-              title:(NSString *)title{
-    
-    if ([title isEqualToString:@"立即领取"]) {
-        [self draw:taskId isNewbie:isNewbie];
-    } else if ([title isEqualToString:@"已完成"]) {
-        NSLog(@"已完成 不作处理");
+    CGFloat y = scrollView.contentOffset.y;
+    if (y + 20 > H(self.headerView)) {
+     
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     } else {
-        [G.$.rootVC setSelectedIndex:index];
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     }
-    
     
 }
 
-- (void)draw:(NSInteger)taskId isNewbie:(BOOL)isNewbie {
-    
-    [HHTaskCenterNetwork drawTaskReward:isNewbie taskId:taskId callback:^(id error, HHUserDrawTaskRewardResponse *response) {
-        if (error) {
-            NSLog(@"%@",error);
-        } else {
-            [HHHeadlineAwardHUD showImageView:@"领取成功" coins:0 animation:NO originCenter:self.view.center addToView:self.view duration:1.0];
-            
-        }
-        [self reloadTableViewData:nil];
-    }];
-}
 
 
 

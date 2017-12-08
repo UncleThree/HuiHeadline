@@ -94,7 +94,7 @@ static AlipayService *ali = nil;
                        
                    } else {
                        
-                       [HHHeadlineAwardHUD showMessage:@"支付宝授权失败" animated:YES duration:2];
+                       self.handler(@"支付宝授权失败", nil);
                    }
                }];
             
@@ -125,7 +125,7 @@ static AlipayService *ali = nil;
             
         } else {
             
-            [HHHeadlineAwardHUD showMessage:@"支付宝授权失败" animated:YES duration:2];
+            self.handler(@"支付宝授权失败", nil);
         }
     }];
     

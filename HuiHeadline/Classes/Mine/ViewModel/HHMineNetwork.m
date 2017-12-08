@@ -173,8 +173,13 @@
 + (void)recommendWithCode:(NSString *)code
                  callback:(void(^)(id error, HHResponse *response))callback{
     
-    NSLog(@"%@", code);
-    [HHNetworkManager postRequestWithUrl:k_invite parameters:@{@"code":code} isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
+    NSLog(@"邀请码%@", code);
+    NSDictionary *parameters = @{
+                                 @"code":code,
+                                 @"blackbox":FMDeviceManager.sharedManager->getDeviceInfo()
+                                 
+                                 };
+    [HHNetworkManager postRequestWithUrl:k_invite parameters:parameters isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error,nil);
         } else {
@@ -343,7 +348,9 @@
                                  @"address":address,
                                  @"message":message,
                                  @"callState":@(callState),
-                                 @"voiceCode":voiceCode
+                                 @"voiceCode":voiceCode,
+                                 @"blackbox":FMDeviceManager.sharedManager->getDeviceInfo(),
+                                 
                                  };
     [HHNetworkManager postRequestWithUrl:k_product_purchase parameters:paramaters isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
@@ -534,7 +541,7 @@
 
 + (void)versionCheck:(void(^)(id error,HHResponse *response))callback {
     
-    [HHNetworkManager postRequestWithUrl:k_check_version parameters:nil isEncryptedJson:YES otherArg:@{@"appendUserInfo":@1} handler:^(NSString *respondsStr, NSError *error) {
+    [HHNetworkManager postRequestWithUrl:k_check_version parameters:nil isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
         if (error) {
             callback(error, nil);
         } else {
@@ -544,6 +551,25 @@
     }];
 }
 
+
++ (void)requestMyMessagesWithMessageId:(NSInteger)messageId
+                              callback:(void(^)(id error, NSArray<HHUserMessage *> *messages))callback {
+    
+    [HHNetworkManager postRequestWithUrl:k_get_message parameters:@{@"id":messageId ? @(messageId) : [NSNull null]} isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
+        if (error) {
+            callback(error, nil);
+        } else {
+            
+            HHUserMessageListResponse *response = [HHUserMessageListResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+            if (response.statusCode == 200) {
+                callback(nil,response.userMessageList);
+            } else {
+                callback(response.msg, nil);
+            }
+        }
+    }];
+    
+}
 
 
 @end

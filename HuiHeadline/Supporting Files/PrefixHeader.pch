@@ -26,6 +26,7 @@
 #import "HHStatusBarUtil.h"
 #import "UIImage+Scale.h"
 #import "HHUtils.h"
+#import "FMDeviceManager.h"
 
 #import "HHResponse.h"
 #import "HHInterface.h"        //url接口
@@ -34,6 +35,10 @@
 #import "HHNetworkManager.h"   //网络请求封装类
 #import "G.h"
 #import "UITabBar+Badge.h"
+#import "UIColor+HexString.h"
+#import "HHDeviceUtils.h"
+#import "AsyncImageUtil.h"
+#import "ProductCategory.h"
 
 #import "HHConst.h"
 

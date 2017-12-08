@@ -95,7 +95,7 @@
     self.bindPhoneButton = [[UIButton alloc] initWithFrame:CGRectMake(leftPad, MaxY(self.verifyTF) + CGFLOAT(30), W(self.phoneTF), 40)];
     self.bindPhoneButton.backgroundColor = HUIRED;
     [self.bindPhoneButton setTitle:@"重新绑定手机号" forState:(UIControlStateNormal)];
-    self.bindPhoneButton.layer.cornerRadius = 8;
+    self.bindPhoneButton.layer.cornerRadius = 5;
     self.bindPhoneButton.tintColor = [UIColor whiteColor];
     [self.bindPhoneButton addTarget:self action:@selector(bindPhoneAgainAction) forControlEvents:(UIControlEventTouchUpInside)];
     [self.view addSubview:self.bindPhoneButton];

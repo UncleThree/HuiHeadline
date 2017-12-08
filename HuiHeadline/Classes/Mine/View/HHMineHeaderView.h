@@ -19,6 +19,8 @@
 
 @property (nonatomic, weak)id <HHMineHeaderViewDelegate>delegate;
 
+@property (nonatomic, strong)UIImageView *backImgV;
+
 - (instancetype)initWithFrame:(CGRect)frame user:(HHUserModel *)user;
 
 - (instancetype)initWithFrame:(CGRect)frame

@@ -20,7 +20,6 @@
 
 @property (nonatomic, strong)UITableView *tableView;
 
-@property (nonatomic, strong)UIView *statusBarView;
 
 @end
 
@@ -33,7 +32,7 @@ static HHMineViewController *mineVC = nil;
 
 
 
-#define HEADER_HEIGHT CGFLOAT(200)
+#define HEADER_HEIGHT 210
 
 + (instancetype)defaultMineVC {
     
@@ -84,9 +83,11 @@ static HHMineViewController *mineVC = nil;
 }
 
 - (void)initHeaderView {
+    
     self.headerView = nil;
     self.headerView = [[HHMineHeaderView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, HEADER_HEIGHT) user:[HHUserManager sharedInstance].currentUser summary:[HHUserManager sharedInstance].creditSummary];
     self.headerView.delegate = self;
+    
     [self.tableView reloadData];
 }
 
@@ -117,26 +118,13 @@ static HHMineViewController *mineVC = nil;
     }];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    
-    return UIStatusBarStyleLightContent;
-}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
     
-    
-    
-    if (!self.statusBarView) {
-        self.statusBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, STATUSBAR_HEIGHT)];
-        self.statusBarView.backgroundColor = RGB(196, 57, 53);
-        [UIApplication.sharedApplication.keyWindow addSubview:self.statusBarView];
-        [UIApplication.sharedApplication.keyWindow bringSubviewToFront:self.statusBarView];
-    }
-    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    
     
     
 }
@@ -146,8 +134,7 @@ static HHMineViewController *mineVC = nil;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    [self.statusBarView removeFromSuperview];
-    self.statusBarView = nil;
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -156,7 +143,12 @@ static HHMineViewController *mineVC = nil;
     
     [self realoadHeaderData:YES];
     
+    [self requestBannerAd];
+    
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
+
 
 
 - (void)viewDidLoad {
@@ -165,35 +157,36 @@ static HHMineViewController *mineVC = nil;
     
     [self initTableView];
     
-    [self realoadHeaderData:NO];
+    [self initHeaderView];
     
-//    [self requestBannerAd];
 }
 
 - (void)requestBannerAd {
     
-    [HHMineNetwork requestAds:^(NSError *error, NSArray<HHAdModel *> *result) {
-        
-        if (error) {
-            Log(error);
-        } else {
-            NSLog(@"banner ads : %@",result);
-        }
-        
-    }];
+    
+//    [HHMineNetwork requestAds:^(NSError *error, NSArray<HHAdModel *> *result) {
+//
+//        if (error) {
+//            Log(error);
+//        } else {
+//            NSLog(@"banner ads : %@",result);
+//        }
+//
+//    }];
 }
 
 
 
 - (void)initTableView {
+    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.insets(UIEdgeInsetsMake(0, 0, 0, 0));
+        make.edges.insets(UIEdgeInsetsMake(-STATUSBAR_HEIGHT, 0, 0, 0));
     }];
-    self.tableView.bounces = NO;
+    self.tableView.bounces = YES;
     self.tableView.sectionFooterHeight = 0;
     
     [self.tableView registerClass:[HHMineTableViewCell class] forCellReuseIdentifier:NSStringFromClass([HHMineTableViewCell class])];
@@ -214,6 +207,24 @@ static HHMineViewController *mineVC = nil;
     self.hidesBottomBarWhenPushed = NO;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    if (scrollView == self.tableView) {
+        CGFloat offsetY = scrollView.contentOffset.y;
+        
+        if (offsetY < -STATUSBAR_HEIGHT) {
+            
+            offsetY += STATUSBAR_HEIGHT;
+            CGFloat width = KWIDTH;
+            CGFloat totalOffset = H(self.headerView ) - 10  + ABS(offsetY);
+            CGFloat f = totalOffset / (H(self.headerView) - 10);
+            self.headerView.backImgV.frame = CGRectMake( - (width * f - width) / 2, offsetY, width * f, totalOffset);
+        }
+        
+        
+    }
+    
+}
 
 
 

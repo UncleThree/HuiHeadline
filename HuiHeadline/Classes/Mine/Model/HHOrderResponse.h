@@ -22,7 +22,7 @@
 
 @property (nonatomic, assign)NSInteger originalPrice;
 
-@property (nonatomic, assign)NSInteger productCategory;
+@property (nonatomic, assign)ProductCategoryType productCategory;
 
 @property (nonatomic, assign)NSInteger productId;
 

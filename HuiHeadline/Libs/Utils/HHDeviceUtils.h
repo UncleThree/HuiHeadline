@@ -11,6 +11,8 @@
 
 @interface HHDeviceUtils : NSObject
 
++ (NSString *)IDFA;
+
 + (DeviceId *)getDeviceID ;
 + (Device *)getDevice;
 + (Gps *)getGps;
@@ -18,6 +20,11 @@
 
 + (NSDictionary *)deviceExtra;
 
++ (NSDictionary *)appExtra;
+
 + (int)formatConnectionType;
+
++ (NSString *)appChannel;
+
 
 @end

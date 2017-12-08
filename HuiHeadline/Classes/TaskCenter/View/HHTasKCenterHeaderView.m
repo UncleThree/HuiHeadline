@@ -56,8 +56,10 @@
     
     [self initSignViewWithState:response.state coin:coin];
     
-    [self initHowCreditButton];
-    
+    if (!G.$.bs) {
+        [self initHowCreditButton];
+    }
+
     [self initLineView];
     
     [self initModels:response];
@@ -81,7 +83,7 @@
     self.howCreditButton.layer.cornerRadius = height / 2;
     
     [self.howCreditButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.signView).with.offset(16);
+        make.top.equalTo(self.signView).with.offset(16 + STATUSBAR_HEIGHT);
         make.right.equalTo(self).with.offset(10);
         make.width.mas_equalTo(width);
         make.height.mas_equalTo(height);
@@ -140,7 +142,8 @@
                          coin:(NSString *)coin{
     
     self.backgroundColor = RGB(230, 53, 40);
-        self.signView = [[HHTaskCenterSignView alloc] initWithFrame:CGRectMake(KWIDTH / 2 - SIGN_WIDTH / 2, 40, SIGN_WIDTH, SIGN_WIDTH) state:state coin:coin];
+    CGFloat topPad = G.$.bs ? 10 : 30;
+    self.signView = [[HHTaskCenterSignView alloc] initWithFrame:CGRectMake(KWIDTH / 2 - SIGN_WIDTH / 2, topPad + STATUSBAR_HEIGHT, SIGN_WIDTH, SIGN_WIDTH) state:state coin:coin];
     [self addSubview:self.signView];
     
     self.signView.userInteractionEnabled = YES;

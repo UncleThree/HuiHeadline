@@ -12,12 +12,14 @@
 @protocol HHTaskCellModelDelegate <NSObject>
 
 - (void)activityTaskTitle:(NSString *)title
-                      url:(NSString *)url;
+                      url:(NSString *)url
+                    visit:(BOOL)visit;
 
 - (void)taskTableViewCellDidClickTaskId:(NSInteger)taskId
                                isNewbie:(BOOL)isNewbie
                                   title:(NSString *)title
-                                    url:(NSString *)url;
+                                    url:(NSString *)url
+                                  visit:(BOOL)visit;
 
 @end
 

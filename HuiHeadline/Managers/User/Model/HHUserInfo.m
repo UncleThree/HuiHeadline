@@ -8,6 +8,10 @@
 
 #import "HHUserInfo.h"
 
+@implementation HHUserCity
+
+@end
+
 @implementation HHUserInfo
 
 - (NSString *)description {

@@ -12,6 +12,7 @@
 #import "HHUserNewbieTaskResponse.h"
 #import "HHUserDailyTaskResponse.h"
 #import "HHUserDrawTaskRewardResponse.h"
+#import "HHBannerResponse.h"
 
 @interface HHTaskCenterNetwork : NSObject
 
@@ -28,5 +29,11 @@
 + (void)drawTaskReward:(BOOL)isNewBie
                 taskId:(NSInteger)taskId
               callback:(void(^)(id error, HHUserDrawTaskRewardResponse *response))callback;
+
++ (void)dailyTaskCompleted:(NSInteger)taskId
+                  callback:(void(^)(id error, HHResponse *response))callback;
+
++ (void)getBannerInfoWithPosition:(NSInteger)position
+                         callback:(void(^)(id error, BannerInfo *bannerInfo))callback;
 
 @end

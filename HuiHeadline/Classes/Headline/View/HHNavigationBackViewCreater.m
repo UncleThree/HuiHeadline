@@ -59,7 +59,7 @@
     [navigationView addSubview:view];
     
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, MaxY(navigationView) - 0.5, KWIDTH, 0.5)];
-    line.backgroundColor = BLACK_153;
+    line.backgroundColor = SEPRATE_COLOR;
     [navigationView addSubview:line];
     
     return navigationView;

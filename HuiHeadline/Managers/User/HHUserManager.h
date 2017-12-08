@@ -17,6 +17,7 @@
 #import "HHAlipayAccountResponse.h"
 #import "HHWeixinAccountResponse.h"
 #import "HHProductIndoResponse.h"
+#import "HHBannerResponse.h"
 
 @interface HHUserManager : NSObject
 
@@ -40,6 +41,8 @@
 @property (nonatomic, strong)NSArray<HHUserNewbieTask *> *newbieTasks;
 ///日常任务
 @property (nonatomic, strong)HHUserDailyTaskResponse *dailyTaskResponse;
+///taskBanner
+@property (nonatomic, strong)BannerInfo *taskBannerInfo;
 
 @property (nonatomic, strong)NSArray<HHProductOutline *> *products;
 ///alipayAccount
@@ -74,6 +77,9 @@
 @property (nonatomic, strong)NSMutableArray<NSString *> *video_channels;
 //所有channel
 @property (nonatomic, strong)NSMutableArray<NSString *> *vodeo_allChannels;
+
+///已经获得过奖励的广告channel
+@property (nonatomic, strong)NSMutableArray<NSString *> *awardedAdChannels;
 
 + (instancetype)sharedInstance;
 

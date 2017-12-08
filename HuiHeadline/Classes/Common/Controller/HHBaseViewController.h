@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong)UIView *backView;
 
+@property (nonatomic, strong)id open_data;
 
 - (void)loadBackView;
 

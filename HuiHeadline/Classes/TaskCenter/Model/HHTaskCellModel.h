@@ -26,6 +26,8 @@
 
 @property (nonatomic, copy)NSString *activityTitle;
 
+@property (nonatomic, assign)BOOL visit;
+
 - (CGFloat)heightForModel;
 
 @end

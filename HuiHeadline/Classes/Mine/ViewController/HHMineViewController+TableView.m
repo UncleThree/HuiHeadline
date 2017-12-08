@@ -15,8 +15,9 @@
 #import "HHMallSegmentViewController.h"
 #import "HHMyOrderSegmentViewController.h"
 #import "HHIncomeDetailViewController.h"
-#import "HHActivityTaskDetailWebViewController.h"
+#import "CustomBrowserViewController.h"
 #import "HHAboutHHViewController.h"
+#import "HHMyMessageViewController.h"
 
 @implementation HHMineViewController (TableView)
 
@@ -58,7 +59,7 @@
     
     if (indexPath.section == 0) {
         
-        return CGFLOAT(100);
+        return  G.$.bs ? 0 : 85;
         
     } else if (indexPath.section == 1 || indexPath.section == 2) {
         
@@ -76,8 +77,10 @@
     if (section == 0) {
         
         return self.headerView;
+        
     } else {
-        return [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 10)];
+        
+        return G.$.bs ? [UIView new] : [[UIView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH, 12)];
     }
     
     
@@ -90,11 +93,18 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
+    
     if (section == 0) {
         
         return H(self.headerView) + 10;
+        
     } else {
-        return 10.0f;
+        
+        if (G.$.bs) {
+            return 0.01;
+        }
+        
+        return 12.0f;
     }
 }
 
@@ -103,51 +113,86 @@ kRemoveCellSeparator
 
 #pragma mark UITableViewDelegate
 
+- (void)clearMemory {
+    [HHHeadlineAwardHUD showHUDWithText:@"正在清理..." animated:YES];
+    [HHUtils clearFile:^(NSString *cache) {
+        
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
+        [HHHeadlineAwardHUD showMessage:[NSString stringWithFormat:@"成功清除%@缓存！", cache] animated:YES duration:2];
+    }];
+}
+
+- (void)checkVersion {
+    [HHHeadlineAwardHUD showHUDWithText:@"正在检查当前版本，请稍后" animated:YES];
+    [HHMineNetwork versionCheck:^(id error, HHResponse *response) {
+        [HHHeadlineAwardHUD hideHUDAnimated:YES];
+        if (response.statusCode == 200 && !response.msg) {
+            
+            [HHHeadlineAwardHUD showMessage:@"当前已经是最新版本了" animated:YES duration:2];
+        } else {
+            
+        }
+        
+    }];
+}
+
+- (void)gotoAppStore {
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:k_appstore_link]];
+    
+}
+
+- (void)userProtocol {
+    CustomBrowserViewController *webView = [CustomBrowserViewController new];
+    webView.activityTitle = @"惠头条用户服务协议";
+    webView.URLString = k_user_protocol;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:webView animated:1];
+    self.hidesBottomBarWhenPushed = NO;
+}
+
+- (void)aboutCashtoutiao {
+    
+    HHAboutHHViewController *aboutVC = [HHAboutHHViewController new];
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:aboutVC animated:1];
+    self.hidesBottomBarWhenPushed = NO;
+}
+
+- (void)pushMyMessageVC {
+    
+    HHMyMessageViewController *myMessageVC = [HHMyMessageViewController new];
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:myMessageVC animated:1];
+    self.hidesBottomBarWhenPushed = NO;
+}
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 1) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         
         if (indexPath.row == 0) {
             
-            [HHHeadlineAwardHUD showHUDWithText:@"正在清理..." animated:YES];
-            [HHUtils clearFile:^(NSString *cache) {
-               
-                [HHHeadlineAwardHUD hideHUDAnimated:YES];
-                [HHHeadlineAwardHUD showMessage:[NSString stringWithFormat:@"成功清除%@缓存！", cache] animated:YES duration:2];
-            }];
+            [self clearMemory];
+//            [self pushMyMessage VC];
             
         } else if (indexPath.row == 1) {
             
-            [HHHeadlineAwardHUD showHUDWithText:@"正在检查当前版本，请稍后" animated:YES];
-            [HHMineNetwork versionCheck:^(id error, HHResponse *response) {
-                [HHHeadlineAwardHUD hideHUDAnimated:YES];
-                if (response.statusCode == 200 && !response.msg) {
-                    
-                    [HHHeadlineAwardHUD showMessage:@"当前已经是最新版本了" animated:YES duration:2];
-                } else {
-                    
-                }
-                
-            }];
+            [self checkVersion];
             
         } else if (indexPath.row == 2) {
-            NSLog(@"跳转appStore");
-            NSString *appStoreLink = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%@&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8",@"1313670358"];
-             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appStoreLink]];
+            
+           
+            [self gotoAppStore];
             
         } else if (indexPath.row == 3) {
             
-            HHActivityTaskDetailWebViewController *webView = [HHActivityTaskDetailWebViewController new];
-            webView.activityTitle = @"惠头条用户服务协议";
-            webView.URLString = k_user_protocol;
-            self.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:webView animated:1];
-            self.hidesBottomBarWhenPushed = NO;
+            [self userProtocol];
+            
         } else if (indexPath.row == 4) {
-            HHAboutHHViewController *aboutVC = [HHAboutHHViewController new];
-            self.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:aboutVC animated:1];
-            self.hidesBottomBarWhenPushed = NO;
+            
+            [self aboutCashtoutiao];
         }
     }
     

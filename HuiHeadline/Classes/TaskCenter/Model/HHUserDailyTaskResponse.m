@@ -51,7 +51,7 @@
         }  else if ([self.taskDescription containsString:@"收徒"]) {
             return @"立即收徒";
         } else if ([self.taskDescription containsString:@"分享"]) {
-            return @"立即收徒";
+            return @"立即分享";
         }  else {
             NSLog(@"WTF");
         }
@@ -75,6 +75,13 @@
 
 @end
 
-@implementation HHUserDynamicTask 
+@implementation HHUserDynamicTask
+
++ (NSDictionary *)mj_replacedKeyFromPropertyName {
+    
+    return @{
+             @"Id":@"id"
+             };
+}
 
 @end

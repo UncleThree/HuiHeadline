@@ -23,14 +23,14 @@ static HHVideoSegmentViewController *videoSegmentVC = nil;
 + (UINavigationController *)defaultSegmentVC {
     
     static UINavigationController *navi = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
         videoSegmentVC = [[HHVideoSegmentViewController alloc] init];
         videoSegmentVC.dataSource = videoSegmentVC;
         videoSegmentVC.addDelegate = videoSegmentVC;
         navi = [[UINavigationController alloc] initWithRootViewController:videoSegmentVC];
         
-    });
+//    });
     return navi;
 }
 
@@ -155,7 +155,7 @@ static HHVideoSegmentViewController *videoSegmentVC = nil;
 
 - (CGFloat)menuView:(WMMenuView *)menu itemMarginAtIndex:(NSInteger)index {
     
-    return 12;
+    return 20;
 }
 
 

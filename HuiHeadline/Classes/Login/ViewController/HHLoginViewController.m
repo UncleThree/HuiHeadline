@@ -54,13 +54,13 @@
     
     [super viewDidAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    
+   
 }
 
 
 
-
 - (void)initUI {
+    
     
     self.titleLabel.textColor = HUIRED;
     
@@ -117,14 +117,18 @@
 
 - (void)loginByWechat {
     
-    [HHHeadlineAwardHUD showHUDWithText:@"前往微信授权" addToView:self.view animated:YES];
+    [HHHeadlineAwardHUD showHUDWithText:@"前往微信授权" addToView:self.view animated:YES timeout:8];
     
     [[WechatService sharedWechat] loginToWechat:^(id error, id result) {
+        
         [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (result) {
             
-            G.$.rootVC = [HHRootViewController new];
-            [UIApplication sharedApplication].keyWindow.rootViewController = G.$.rootVC;
+            [HHLoginNetwork requestBSJson:^(BOOL bs) {
+                G.$.rootVC = [HHRootViewController new];
+                [UIApplication sharedApplication].keyWindow.rootViewController = G.$.rootVC;
+            }];
+        
             
         } else {
             
@@ -136,13 +140,16 @@
 
 - (void)loginByAli {
     
-    [HHHeadlineAwardHUD showHUDWithText:@"前往支付宝授权" addToView:self.view animated:YES];
+    [HHHeadlineAwardHUD showHUDWithText:@"前往支付宝授权" addToView:self.view animated:YES timeout:8];
     [[AlipayService sharedAlipay] loginToAli:^(id error, id result) {
+        
         [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (result) {
             
-            G.$.rootVC = [HHRootViewController new];
-            [UIApplication sharedApplication].keyWindow.rootViewController = G.$.rootVC;
+            [HHLoginNetwork requestBSJson:^(BOOL bs) {
+                G.$.rootVC = [HHRootViewController new];
+                [UIApplication sharedApplication].keyWindow.rootViewController = G.$.rootVC;
+            }];
         }  else {
             
             [HHHeadlineAwardHUD showMessage:error animated:YES duration:2];
@@ -155,8 +162,14 @@
 - (void)layout {
     
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).with.offset(CGFLOAT(80));
+        
+        CGFloat topPad = CGFLOAT(80);
+        if (KHEIGHT < 500) {
+            topPad = 30;
+        }
+        make.top.equalTo(self.view).with.offset(topPad);
     }];
+    
     [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(CGFLOAT(180));
     }];
@@ -180,6 +193,7 @@
 
 - (void)loginClick {
     
+    
     if (!self.userNameTextField.text || [self.userNameTextField.text isEqualToString:@""] || !self.passwordTextField.text || [self.passwordTextField.text isEqualToString:@""] ) {
         [HHHeadlineAwardHUD showMessage:@"用户名或密码为空" hideTouch:NO animated:YES duration:2];
         return;
@@ -196,17 +210,21 @@
 
 - (void)loginWithUserName:(NSString *)username
                  password:(NSString *)password {
+
     
-    [HHHeadlineAwardHUD  showHUDWithText:@"请稍后" animated:YES];
+    [HHHeadlineAwardHUD  showHUDWithText:@"请稍后" animated:YES timeout:8];
     [HHLoginNetwork loginRequestWithPhone:username password:password handler:^(NSString *respondsStr, id error) {
         [HHHeadlineAwardHUD hideHUDAnimated:YES];
         if (respondsStr) {
             
             HHUserManager.sharedInstance.userName = username;
             
-            G.$.rootVC = [HHRootViewController new];
-            UIApplication.sharedApplication.keyWindow.rootViewController = G.$.rootVC;
-            
+            [HHLoginNetwork requestBSJson:^(BOOL bs) {
+                
+                G.$.rootVC = [HHRootViewController new];
+                UIApplication.sharedApplication.keyWindow.rootViewController = G.$.rootVC;
+                
+            }];
             
         } else {
             NSLog(@"----login error----");
@@ -229,9 +247,11 @@
         if (error) {
             
         } else {
-            /// 已经有currentUser了
-            G.$.rootVC = [HHRootViewController new];
-            UIApplication.sharedApplication.keyWindow.rootViewController = G.$.rootVC;
+            
+            [HHLoginNetwork requestBSJson:^(BOOL bs) {
+                G.$.rootVC = [HHRootViewController new];
+                UIApplication.sharedApplication.keyWindow.rootViewController = G.$.rootVC;
+            }];
             
         }
     };

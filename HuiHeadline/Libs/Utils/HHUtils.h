@@ -28,5 +28,7 @@
 + (NSString *)getSDCacheSize ;
 
 + (void)clearFile:(void(^)(NSString *cache))callback;
+///运营商
++ (NSString *)JudgePhoneNumber:(NSString *)phoneNum;
     
 @end

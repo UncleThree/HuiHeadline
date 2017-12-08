@@ -101,6 +101,8 @@
     
 }
 
+
+
 + (void)drawTaskReward:(BOOL)isNewBie
                 taskId:(NSInteger)taskId
               callback:(void(^)(id error, HHUserDrawTaskRewardResponse *response))callback {
@@ -131,6 +133,49 @@
     
 }
 
++ (void)dailyTaskCompleted:(NSInteger)taskId
+                  callback:(void(^)(id error, HHResponse *response))callback {
+    NSDictionary *parameters = @{
+                                 @"taskId":@(taskId)
+                                 };
+    [HHNetworkManager postRequestWithUrl:k_user_daily_complete parameters:parameters isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
+        if (error) {
+            callback(error,nil);
+        } else {
+            HHResponse *response = [HHResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+            if (response.statusCode == 200) {
+                callback(nil,response);
+            } else {
+                callback(response.msg, nil);
+            }
+            
+        }
+        
+    }];
+    
+}
+
++ (void)getBannerInfoWithPosition:(NSInteger)position
+                         callback:(void(^)(id error, BannerInfo *bannerInfo))callback {
+    
+    NSDictionary *parameters = @{
+                                 @"position":@(position)
+                                 };
+    [HHNetworkManager postRequestWithUrl:k_banner_info parameters:parameters isEncryptedJson:YES otherArg:@{} handler:^(NSString *respondsStr, NSError *error) {
+        if (error) {
+            callback(error,nil);
+        } else {
+            HHBannerResponse *response = [HHBannerResponse mj_objectWithKeyValues:[respondsStr mj_JSONObject]];
+            if (response.statusCode == 200 && response.banners.count) {
+                callback(nil,response.banners[0]);
+            } else {
+                callback(response.msg, nil);
+            }
+            
+        }
+        
+    }];
+}
 
 
 @end

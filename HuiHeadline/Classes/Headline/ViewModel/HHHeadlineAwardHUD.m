@@ -37,6 +37,17 @@ static UIView *qrScreenView = nil;
 
 + (void)showHUDWithText:(NSString *)text
               addToView:(UIView *)view
+               animated:(BOOL)animated
+                timeout:(NSInteger)timeout {
+    
+    [self showHUDWithText:text addToView:view animated:animated];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [HUD hideAnimated:animated];
+    });
+}
+
++ (void)showHUDWithText:(NSString *)text
+              addToView:(UIView *)view
                animated:(BOOL)animated {
     
     [self hideHUDAnimated:animated];
@@ -47,6 +58,15 @@ static UIView *qrScreenView = nil;
     
 }
 
++ (void)showHUDWithText:(NSString *)text
+               animated:(BOOL)animated
+                timeout:(NSInteger)timeout {
+    
+    [self showHUDWithText:text animated:animated];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+         [HUD hideAnimated:animated];
+    });
+}
 
 + (void)showHUDWithText:(NSString *)text
                animated:(BOOL)animated {
@@ -150,8 +170,8 @@ static UIView *qrScreenView = nil;
     [self hideInstructionView];
     screenView = [[UIView alloc] initWithFrame:UIScreen.mainScreen.bounds];
     screenView.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.6];
-    CGFloat scale = 0.35;
-    insView = [[HHHeadlineAwardInstructionView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH - 36 * 2, KHEIGHT * scale) title:@"时段奖励" message:@"送金币啦，每小时打开惠头条进入首页，均可获得50金币的时段奖励，具体金额以实际获得金币奖励为准！" left:nil right:@"我知道了" target:self rightTarget:self leftAction:nil rightAction:@selector(hideInstructionView)];
+    CGFloat scale = CGFLOAT_W(3.6);
+    insView = [[HHHeadlineAwardInstructionView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH - 36 * 2, KHEIGHT / scale) title:@"时段奖励" message:@"送金币啦，每小时打开惠头条进入首页，均可获得50金币的时段奖励，具体金额以实际获得金币奖励为准！" left:nil right:@"我知道了" target:self rightTarget:self leftAction:nil rightAction:@selector(hideInstructionView)];
     insView.center = CGPointMake(KWIDTH / 2, KHEIGHT / 2);
     insView.layer.cornerRadius = 5;
     [screenView addSubview:insView];
@@ -170,8 +190,8 @@ static UIView *qrScreenView = nil;
     screenView = [[UIView alloc] initWithFrame:UIScreen.mainScreen.bounds];
     screenView.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.6];
     
-    CGFloat scale = 0.25;
-    insView = [[HHHeadlineAwardInstructionView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH - 36 * 2, KHEIGHT * scale) title:@"温馨提示" message:@"您处于未登录状态，请您先登录" left:@"以后再说" right:@"立即登录" target:self rightTarget:target leftAction:@selector(hideLoginErrorView) rightAction:action];
+    CGFloat scale = 4.5;
+    insView = [[HHHeadlineAwardInstructionView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH - 36 * 2, KHEIGHT / scale) title:@"温馨提示" message:@"您处于未登录状态，请您先登录" left:@"以后再说" right:@"立即登录" target:self rightTarget:target leftAction:@selector(hideLoginErrorView) rightAction:action];
     insView.center = CGPointMake(KWIDTH / 2, KHEIGHT / 2);
     insView.layer.cornerRadius = 5;
     [screenView addSubview:insView];
@@ -194,8 +214,8 @@ static UIView *qrScreenView = nil;
     screenView = [[UIView alloc] initWithFrame:UIScreen.mainScreen.bounds];
     screenView.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.6];
     
-    CGFloat scale = 0.40;
-    insView = [[HHHeadlineAwardInstructionView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH - 36 * 2, KHEIGHT * scale) title:@"温馨提示" message:@"点击进入“视频详情页”，边看视频，边领取金币奖励！\n\n注：点击视频底部白色区域进入视频详情页。" left:nil right:@"我知道了" target:nil rightTarget:self leftAction:nil rightAction:@selector(hideLoginErrorView)];
+    CGFloat scale = CGFLOAT_W(3.0);
+    insView = [[HHHeadlineAwardInstructionView alloc] initWithFrame:CGRectMake(0, 0, KWIDTH - 36 * 2, KHEIGHT / scale) title:@"温馨提示" message:@"点击进入“视频详情页”，边看视频，边领取金币奖励！\n\n注：点击视频底部白色区域进入视频详情页。" left:nil right:@"我知道了" target:nil rightTarget:self leftAction:nil rightAction:@selector(hideLoginErrorView)];
     insView.center = CGPointMake(KWIDTH / 2, KHEIGHT / 2);
     insView.layer.cornerRadius = 5;
     [screenView addSubview:insView];
@@ -211,6 +231,9 @@ static UIView *qrScreenView = nil;
     [screenView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideLoginErrorView)]];
     
 }
+
+
+
 + (void)hideLoginErrorView {
     
 
@@ -306,12 +329,10 @@ static UIView *qrScreenView = nil;
     HUDMessage = nil;
     HUDMessage = [MBProgressHUD showHUDAddedTo:[self currentView] animated:NO];
     
-    if (message.length > 20) {
-        HUDMessage.detailsLabel.text = message;
-        HUDMessage.detailsLabel.numberOfLines = 0;
-    } else {
-        HUDMessage.label.text = message;
-    }
+    
+    HUDMessage.label.text = message;
+    HUDMessage.label.numberOfLines = 0;
+
     HUDMessage.contentColor = [UIColor whiteColor];
     HUDMessage.bezelView.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.5];
     HUDMessage.mode = MBProgressHUDModeText;

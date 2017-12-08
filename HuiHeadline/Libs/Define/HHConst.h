@@ -35,7 +35,7 @@
 #define kTitleFont      Font(18)
 
 //子标题字体
-#define kSubtitleFont      Font(15)
+#define kSubtitleFont      Font(13)
 
 #define LARGE KWIDTH >= 414
 #define NORMAL KWIDTH >= 375
@@ -44,6 +44,8 @@
 #define K_Font(size) [UIFont systemFontOfSize:size]
 //中屏幕降低一个fontSize 小屏幕降低两个fontSize 320 375 414 
 #define Font(size)         LARGE ? [UIFont systemFontOfSize:size] : (NORMAL ? [UIFont systemFontOfSize:size - 1] : [UIFont systemFontOfSize:size - 2])
+
+#define big_font(size)         LARGE ? [UIFont systemFontOfSize:size] : (NORMAL ? [UIFont systemFontOfSize:size - 5] : [UIFont systemFontOfSize:size - 10])
 
 //适配屏幕的CGFloat 按照plus的比例适配高度
 #define CGFLOAT(float)  ((CGFloat)(float * (KHEIGHT / 736.0)))
@@ -56,10 +58,12 @@
 #define BLACK_51 RGB(51,51,51)
 #define BLACK_153 RGB(153,153,153)
 #define HUIRED RGB(229,54,39)
-///0.28的黑色背景色
-#define TRAN_BLACK [UIColor colorWithWhite:0 alpha:0.28]
+///0.38的黑色背景色
+#define TRAN_BLACK [UIColor colorWithWhite:0 alpha:0.38]
 
 #define GRAYCELL [UIColor colorWithWhite:0.95 alpha:1]
+
+#define SEPRATE_COLOR [UIColor colorWithWhite:0.92 alpha:1]
 
 #define HUIYELLOW RGB(254,234,119)
 
@@ -81,6 +85,8 @@
 #define Y(view) view.frame.origin.y
 #define W(view) view.frame.size.width
 #define H(view) view.frame.size.height
+#define centerX(view) view.center.x
+#define centerY(view) view.center.y
 
 //URL utf8编码
 
@@ -98,11 +104,13 @@
 //加密KEY
 #define AESKEY @"d2=r?bc-l55hH.87"
 
+#define TOUCH_NOTIFY  @"notiScreenTouch"
+
 //回调
 typedef void(^Block)(NSError *error,id result);
 
 #define WX_APPID @"wx95837f9bce09e2be"
-#define UM_APPKEY @"5a0e9ec18f4a9d207f000284"
+#define UM_APPKEY @"5a164249f43e485b940000f9"
 
 //#define WX_APPID @"wxd0be1cf0ca04364b"
 

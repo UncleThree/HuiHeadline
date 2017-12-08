@@ -52,6 +52,7 @@
     self.subLabel.text = newsModel.subTitle;
     
     [self hideSetTopLabel];
+    [self hideAward];
 }
 
 - (void)setAdModel:(HHAdModel *)adModel {
@@ -66,7 +67,10 @@
     [self.imgV sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"place_image"]];
     
     if (adModel.AdAwards) {
-        [self addAward];
+        [self addAward:adModel];
+    } else {
+        
+        [self hideAward];
     }
     
     [self hideSetTopLabel];
@@ -81,16 +85,19 @@
     [self.imgV sd_setImageWithURL:URL(topModel.pictures) placeholderImage:[UIImage imageNamed:@"place_image"]];
     
     [self addSetTopLabel];
+    [self hideAward];
 }
 
 
 - (void)addSetTopLabel {
     
     if (!self.setTopLabel) {
-        UIFont *font = Font(14);
-        CGFloat height = CGFLOAT(16);
+       
+        UIFont *font = K_Font(12);
         NSString *zd = @"置顶";
-        CGFloat width = [HHFontManager sizeWithText:zd font:font maxSize:CGSizeMake(CGFLOAT_MAX, 25)].width;
+        CGFloat width = [HHFontManager sizeWithText:zd font:font maxSize:CGSizeMake(CGFLOAT_MAX, 20)].width;
+        CGFloat height = [HHFontManager sizeWithText:zd font:font maxSize:CGSizeMake(width, CGFLOAT_MAX)].height;
+        
         self.setTopLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         self.setTopLabel.textColor = HUIRED;
         self.setTopLabel.font = font;
@@ -129,38 +136,47 @@
     }];
 }
 
+- (void)hideAward {
+    
+    [self.walletImgV setHidden:YES];
+    self.awardLabel.hidden = YES;
+}
+
+
 ///添加奖励图标
-- (void)addAward {
+- (void)addAward:(HHAdModel *)adModel {
     
-    self.walletImgV = ({
-        UIImageView *imgV = [[UIImageView alloc] init];
-        imgV.image = [UIImage imageNamed:@"红包"];
-        imgV.contentMode = UIViewContentModeScaleAspectFill;
-        imgV.clipsToBounds = YES;
-        imgV;
-    });
+    if (!self.walletImgV) {
+        UIImage *image = [UIImage imageNamed:@"红包"];
+        self.walletImgV =  [[UIImageView alloc] initWithFrame:CGRectZero];
+        self.walletImgV.image = image;
+        self.walletImgV.contentMode = UIViewContentModeScaleAspectFill;
+        self.walletImgV.clipsToBounds = YES;
+        
+        
+        self.awardLabel =  [[UILabel alloc] initWithFrame:CGRectZero];
+        self.awardLabel.textColor = HUIRED;
+        self.awardLabel.font = Font(14);
+        
+        [self.contentView addSubview:self.awardLabel];
+        [self.contentView addSubview:self.walletImgV];
+    }
     
-    self.awardLabel = ({
-        UILabel *label = [[UILabel alloc] init];
-        label.text = self.adModel.AdAwards;
-        label.textColor = HUIRED;
-        label.font = Font(14);
-        label;
-    });
-    
-    [self.contentView addSubview:self.awardLabel];
-    [self.contentView addSubview:self.walletImgV];
-    
+    self.awardLabel.text = adModel.AdAwards;
+    self.awardLabel.hidden = NO;
+    self.walletImgV.hidden = NO;
     [self layout];
 }
 
 - (void)layout {
+    
     [self.walletImgV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.subLabel.mas_right).with.offset(CGFLOAT(12));
+        
+        make.left.equalTo(self.subLabel.mas_left).with.offset(35);
         make.bottom.equalTo(self.subLabel.mas_bottom).with.offset(2);
         make.height.equalTo(self.subLabel).with.offset(7);
         UIImage *image = self.walletImgV.image;
-        make.width.mas_equalTo(image.size.width / image.size.height * H(self.subLabel) + 7);
+        make.width.mas_equalTo(image.size.width / image.size.height * 20 + 7);
     }];
     
     [self.awardLabel mas_makeConstraints:^(MASConstraintMaker *make) {

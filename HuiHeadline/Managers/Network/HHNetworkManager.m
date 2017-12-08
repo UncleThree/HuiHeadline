@@ -35,6 +35,7 @@ static UIViewController *currentVC = nil;
 //requestType : json
 //appendUserInfo url拼接userId loginId 参数传入 userId loginId
 //appendUserInfoNotParamaters  url拼接userId loginId
+
 + (void)postRequestWithUrl:(NSString *)url
                 parameters:(id)parameters
            isEncryptedJson:(BOOL)isEncryptedJson

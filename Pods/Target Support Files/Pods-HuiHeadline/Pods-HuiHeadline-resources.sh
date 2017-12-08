@@ -85,10 +85,12 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle"
+  install_resource "${PODS_ROOT}/PYSearch/PYSearch/PYSearch.bundle"
   install_resource "${PODS_ROOT}/ZZCircleProgress/ZZCircleProgressDemo/ZZCircleProgress/ZZCircleProgress.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle"
+  install_resource "${PODS_ROOT}/PYSearch/PYSearch/PYSearch.bundle"
   install_resource "${PODS_ROOT}/ZZCircleProgress/ZZCircleProgressDemo/ZZCircleProgress/ZZCircleProgress.bundle"
 fi
 

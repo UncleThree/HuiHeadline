@@ -44,15 +44,17 @@
                      password:(NSString *)password
                        handler:(void(^)(NSString *respondsStr, id error))handler
 {
-    NSString *uuid = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    
     
     NSDictionary *parameter = @{
                                 @"phone":phone,
                                 @"password":password,
-                                @"deviceId":uuid,
-                                @"deviceExtra":[NSNull null],
-                                @"appExtra":[NSNull null]
+                                @"deviceId":UUID,//UUID
+                                @"blackbox":FMDeviceManager.sharedManager->getDeviceInfo(),
+                                @"deviceExtra":[HHDeviceUtils  deviceExtra],
+                                @"appExtra":[HHDeviceUtils  appExtra]
                                 };
+    
     [HHNetworkManager postRequestWithUrl:k_login_url parameters:parameter isEncryptedJson:YES otherArg:nil handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
             
@@ -90,8 +92,9 @@
                                 @"verifyCode":verifyCode,
                                 @"inviteCode":inviteCode,
                                 @"deviceId":uuid,
-                                @"deviceExtra":[NSNull null],
-                                @"appExtra":[NSNull null]
+                                @"blackbox":FMDeviceManager.sharedManager->getDeviceInfo(),
+                                @"deviceExtra":[HHDeviceUtils  deviceExtra],
+                                @"appExtra":[HHDeviceUtils  appExtra]
                                 };
     [HHNetworkManager postRequestWithUrl:k_register_url parameters:parameter isEncryptedJson:YES otherArg:nil handler:^(NSString *respondsStr, NSError *error) {
         if (respondsStr) {
@@ -177,8 +180,9 @@
     NSDictionary *parameters = @{
                                  @"code":code,
                                  @"deviceId":UUID,
-                                 @"deviceExtra":@"",
-                                 @"appExtra":@""
+                                 @"blackbox":FMDeviceManager.sharedManager->getDeviceInfo(),
+                                 @"deviceExtra":[HHDeviceUtils deviceExtra],
+                                 @"appExtra":[HHDeviceUtils appExtra]
                                  };
     
     NSDictionary *otherArg = type == 2 ? @{@"appendUserInfo":@1} : nil;
@@ -253,6 +257,7 @@
             NSDictionary *dict = [respondsStr mj_JSONObject];
             HHReadConfigResponse *readConfig = [HHReadConfigResponse mj_objectWithKeyValues:dict[@"readConfig"]];
             [[HHUserManager sharedInstance] setReadConfig:readConfig];
+            
         } else {
             Log(error);
         }
@@ -261,7 +266,44 @@
     
 }
 
-
++ (void)requestBSJson:(void(^)(BOOL bs))callback {
+    
+    __block BOOL result = NO;
+    
+//    BOOL firstLoad = [(AppDelegate *)UIApplication.sharedApplication.delegate firstLoad];
+    ///写入version 下次判断升级用户
+    NSLog(@"%zd", [(AppDelegate *)UIApplication.sharedApplication.delegate isFirstLoadOrUpdate]);
+    
+    NSString *version = [[[NSBundle mainBundle] infoDictionary]
+                         objectForKey:@"CFBundleShortVersionString"];
+    [HHNetworkManager GET:[NSString stringWithFormat:@"http://file.cashtoutiao.com/package/ios/%@.json", version] parameters:nil handler:^(id err, id res) {
+        
+        @try {
+            if (res) {
+                
+#ifdef DEBUG
+                
+                
+#else
+                
+                 result = [[[res mj_JSONObject] objectForKey:@"simplified"] boolValue];
+#endif
+               
+            }
+            
+        } @catch (NSException *exception) {
+            
+        } @finally {
+            
+            G.$.bs = result;
+            callback(result);
+        }
+        
+    }];
+    
+    
+    
+}
 
 
 

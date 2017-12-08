@@ -36,7 +36,7 @@
 
 - (CGFloat)menuView:(WMMenuView *)menu itemMarginAtIndex:(NSInteger)index {
     
-    return 12;
+    return 20;
 }
 
 

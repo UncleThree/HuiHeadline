@@ -30,6 +30,8 @@
 @property (nonatomic, copy)NSString *channel;
 @property (nonatomic, copy)NSString *msg;
 
+@property (nonatomic, copy)NSString *blackBox;
+
 @property (nonatomic, strong)HHUserInfo *userInfo;
 
 @end

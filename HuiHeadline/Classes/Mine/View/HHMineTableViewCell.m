@@ -11,6 +11,8 @@
 
 @implementation HHMineTableViewCell
 
+#define HEIGHT_CELL 85
+
 {
     NSArray *array;
 }
@@ -19,27 +21,44 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        
+        if (G.$.bs) {
+            return self;
+        }
         CGFloat width = KWIDTH / 4;
-        CGFloat height = CGFLOAT(60);
-        CGFloat padding = CGFLOAT(20);
+        CGFloat height =  HEIGHT_CELL;
         array = @[@"商城兑换",@"我的订单",@"师徒邀请",@"收益明细"];
         for (int i = 0 ; i < array.count ; i++) {
             
             UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
             button.tag = i + 99;
-            button.frame = CGRectMake(width * i, padding, width, height);
+            button.frame = CGRectMake(width * i, 0, width, height);
+            button.center = CGPointMake(button.center.x, HEIGHT_CELL / 2.0);
             [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
             UIView *backView = [[HHMineImageAndLabelView alloc] initWithFrame:CGRectMake(0, 0, width, height) imageName:array[i] text:array[i] plumAward:NO];
             backView.userInteractionEnabled = NO;
             [button addSubview:backView];
             [self.contentView addSubview:button];
             
+            if (i == 2) {
+                
+                [self initImgV:backView];
+            }
         }
         
     }
     return self;
     
+}
+
+- (void)initImgV:(UIView *)superView {
+    
+    CGFloat height = 17;
+    UIImage *image = [UIImage imageNamed:@"高额奖励"];
+    CGFloat width = image.size.width / image.size.height * height;
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(centerX(superView), 8, width, height)];
+    imgView.image = image;
+    
+    [superView addSubview:imgView];
 }
 
 - (void)buttonClick:(UIButton *)button {
@@ -74,15 +93,19 @@
                     plumAward:(BOOL)plumAward{
     if (self = [super initWithFrame:frame]) {
         
-        CGFloat imgWidth = 25;
+        CGFloat imgWidth = 27;
+        CGFloat real_height = imgWidth + 18 + 10;
+        CGFloat y = (frame.size.height - real_height) / 2;
+        
         UIImage *image = [UIImage imageNamed:imageName];
-        self.imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, imgWidth, imgWidth)];
+        self.imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, y, imgWidth, imgWidth)];
         self.imgView.image = image;
         self.imgView.contentMode = UIViewContentModeScaleAspectFit;
-        self.imgView.center = CGPointMake(frame.size.width / 2, self.imgView.center.y);
+        self.imgView.center = CGPointMake(self.center.x, centerY(self.imgView));
+        
         [self addSubview:self.imgView];
         
-        self.label = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.imgView) + 10, frame.size.width, 20)];
+        self.label = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.imgView) + 10, frame.size.width, 18)];
         self.label.text = text;
         self.label.font = Font(15);
         self.label.textAlignment = 1;

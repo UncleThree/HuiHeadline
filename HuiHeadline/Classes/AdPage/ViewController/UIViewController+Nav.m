@@ -11,6 +11,7 @@
 @implementation UIViewController (Nav)
 - (UINavigationController*)myNavigationController
 {
+    
     UINavigationController* nav = nil;
     if ([self isKindOfClass:[UINavigationController class]]) {
         nav = (id)self;

@@ -74,7 +74,6 @@
         if (result) {
             
             self.titleArray = result;
-            self.titleFont = 16;
             self.titleColor = [UIColor whiteColor];
         }
     }];
@@ -144,6 +143,8 @@
         
         titleLabel.text = objArray[i];
         
+        titleLabel.font = Font(17);
+        
         [self.ccpScrollView addSubview:titleLabel];
         
     }
@@ -205,7 +206,7 @@
     
     for (UILabel *label in self.ccpScrollView.subviews) {
         
-        label.font = [UIFont systemFontOfSize: titleFont];;
+        label.font = [UIFont systemFontOfSize: titleFont];
         
     }
     
@@ -224,7 +225,8 @@
     CGPoint oldPoint = self.ccpScrollView.contentOffset;
     oldPoint.y += self.ccpScrollView.frame.size.height;
     
-    NSLog(@"%f", oldPoint.y / self.ccpScrollView.frame.size.height);
+    
+    
     if (oldPoint.y == self.ccpScrollView.frame.size.height*(self.titleArray.count + 1 ) && self.titleArray.count > 1) {
 
         [self.ccpScrollView setContentOffset:oldPoint animated:NO];

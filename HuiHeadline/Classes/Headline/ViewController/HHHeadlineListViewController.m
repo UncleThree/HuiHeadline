@@ -14,13 +14,14 @@
 #import "HHHeadlineNavController.h"
 #import "HHDeviceUtils.h"
 #import "Reachability.h"
+#import "HHAdAwardManager.h"
 
 @interface  HHHeadlineListViewController ()
 
 
 @property (nonatomic, strong)UIImageView *backgroundView;
 
-@property (nonatomic, strong)UITableView *tableView;
+
 
 @property (nonatomic, strong)NSCache *cache;
 
@@ -29,6 +30,10 @@
 
 
 @implementation  HHHeadlineListViewController
+
+{
+    BOOL exposuring;
+}
 
 - (void)viewDidLoad {
    
@@ -47,14 +52,25 @@
 
 
 - (void)viewDidAppear:(BOOL)animated {
+    
     [super viewDidAppear:animated];
     [self showNav:YES];
     
-    [(HHHeadlineNavController *)self.navigationController setAppear:YES];
+    if ([[self.navigationController class] isEqual:[HHHeadlineNavController class]]) {
+        
+        [(HHHeadlineNavController *)self.navigationController setAppear:YES];
+        [(HHHeadlineNavController *)self.navigationController checkHourAward];
+    }
     
-   
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    
+    [super viewDidDisappear:animated];
+    if ([[self.navigationController class] isEqual:[HHHeadlineNavController class]]) {
+        [(HHHeadlineNavController *)self.navigationController setAppear:NO];
+    }
+}
 
 - (void)requestData {
     
@@ -85,15 +101,18 @@
             [self.newsData addObjectsFromArray:result];
             
         }
-        [self.header endRefreshing];
-        [self.footer endRefreshing];
+        
         [self reloadData];
+        
+        
+        
+        
     }];
     
 }
 
 - (void)requestTopNews {
-    if (![self.type isEqualToString:@"头条"]) {
+    if (![self.type isEqualToString:@"头条"] || G.$.bs) {
         return;
     }
     [HHHeadlineNetwork requestForTopNews:^(NSError *error, id result) {
@@ -101,7 +120,7 @@
             Log(error);
         } else {
             if (result && [result isKindOfClass:[NSArray class]]) {
-                // data待处理
+                
                 NSLog(@"------置顶新闻数据------%zd",[(NSArray *)result count]);
                 [self.topData removeAllObjects];
                 [self.topData addObjectsFromArray:result];
@@ -122,7 +141,6 @@
 
 - (void)requestAdsWithRowTag:(NSInteger)tag {
     
-
     ///如果存在 直接刷新
     if (self.adData.count && self.adData.count - 1 >= (tag - 1) / 6 ) {
         [self.tableView reloadData];
@@ -134,10 +152,13 @@
     }
     ///加载新的广告
     [self.cache setObject:@(1) forKey:@(tag)];
+    NSLog(@"广告请求");
     [HHHeadlineNetwork requestForAdList:^(NSError *error, id result) {
         [self.cache setObject:@(0) forKey:@(tag)];
         if (error) {
+            
             Log(error);
+            
         } else {
             if (result && [result isKindOfClass:[NSArray class]]) {
 
@@ -175,7 +196,7 @@
 
     for (int i = 0; i < self.data.count; i++) {
         if ((i - 1) % 6 == 0 ) {
-            HHNewsModel *model = (id)[NSNull null];
+            HHAdModel *model = (HHAdModel *)[NSNull null];
             [self.data insertObject:model atIndex:i];
             [self requestAdsWithRowTag:i];
         }
@@ -184,9 +205,7 @@
 }
 
 
-- (void)handlerAdExposure:(HHAdModel *)adModel {
-
-    
+- (void)exposureMap:(HHAdModel *)adModel {
     if ([self.adMap.allKeys containsObject:adModel.type]) {
         
         NSInteger integer = [[self.adMap objectForKey:adModel.type] integerValue];
@@ -196,25 +215,61 @@
         [self.adMap setObject:@(1) forKey:adModel.type];
     }
     NSLog(@"%@",self.adMap);
-        
+    
     NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
     NSTimeInterval place = time - HHUserManager.sharedInstance.lastSychAdTime ;
-    if ((HHUserManager.sharedInstance.lastSychAdTime && place > 5 * 60) ||  [self getAllCount] >= 5 ) {
+    if (((HHUserManager.sharedInstance.lastSychAdTime && place > 5 * 60) ||  [self getAllCount] >= 5) && !exposuring) {
         
-        [HHHeadlineNetwork sychListAdExposureWithMap:self.adMap callback:^(id error, HHResponse *response) {
+        exposuring = YES;
+        [HHHeadlineNetwork sychListAdExposureWithMap:self.adMap callback:^(id error, HHSychAdExposureResponse *response) {
+            
             if (error) {
                 NSLog(@"%@",error);
             } else if (response.statusCode != 200) {
                 NSLog(@"%@",response.msg);
             } else {
                 NSLog(@"曝光成功");
+                
+                [self showAdAward:response];
             }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                exposuring = NO;
+            });
         }];
         HHUserManager.sharedInstance.lastSychAdTime = [[NSDate date] timeIntervalSince1970];
         [self.adMap removeAllObjects];
     }
+}
+
+- (void)handlerAdExposure:(HHAdModel *)adModel {
+
+    
+    [self exposureMap:adModel];
+    
+    
+    if (!adModel.listExporsed) {
+        
+        [HHHeadlineNetwork sychExposureList:adModel.exposureReportList];
+        adModel.listExporsed = YES;
+    }
     
 }
+
+- (void)showAdAward:(HHSychAdExposureResponse *)response
+{
+    
+    if (response.encourageInfoMap && response.encourageInfoMap.allKeys.count) {
+        
+        [[HHAdAwardManager sharedInstance] disposeEncourageInfoMap:response.encourageInfoMap];
+    } else {
+        
+        NSLog(@"%@",response.encourageInfoMap);
+    }
+    
+}
+
+
+
 
 - (NSInteger)getAllCount {
     
@@ -233,7 +288,10 @@
     [self insertAds];
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         [self.tableView reloadData];
+        [self.header endRefreshing];
+        [self.footer endRefreshing];
     });
     
 }
@@ -284,6 +342,13 @@
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     [self.view addSubview:self.tableView];
     
+    if (@available(iOS 11.0, *)) {
+        _tableView.estimatedRowHeight = 0;
+        _tableView.estimatedSectionFooterHeight = 0;
+        _tableView.estimatedSectionHeaderHeight = 0;
+        _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    }
+    
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.width.bottom.equalTo(self.view);
     }];
@@ -306,7 +371,8 @@
     self.header = self.tableView.mj_header;
     [(MJRefreshStateHeader *)self.header lastUpdatedTimeLabel].hidden = YES;
     [(MJRefreshStateHeader *)self.header setTitle:@"下拉刷新" forState:MJRefreshStateIdle];
-    [(MJRefreshStateHeader *)self.header setTitle:@"释放刷新" forState:MJRefreshStatePulling];
+    [(MJRefreshStateHeader *)self.header setTitle:@"释放更新" forState:MJRefreshStatePulling];
+    [(MJRefreshStateHeader *)self.header setTitle:@"加载中..." forState:MJRefreshStateRefreshing];
     
     
     self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(mjRefresh:)];

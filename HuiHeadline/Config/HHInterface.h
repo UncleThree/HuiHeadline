@@ -37,8 +37,23 @@
 
 
 //#define k_base_url @"http://192.168.0.114:8080/frontend"
+
+#ifdef DEBUG
+
+//#define k_base_url  @"http://192.168.0.140:8081/frontend" //jz
+
 //#define k_base_url @"http://192.168.0.247:9780/frontend"
+
 #define k_base_url @"http://api.cashtoutiao.com/frontend"
+
+#else
+
+#define k_base_url @"http://api.cashtoutiao.com/frontend"
+
+
+#endif
+
+
 
 
 
@@ -83,6 +98,7 @@
 //ad list
 #define k_ad_list_url @"http://ad.proxy.huisuoping.com/cash/v1/ad/request"
 
+
 //read
 
 #define k_readConfig_url  $(@"/read/config")
@@ -101,6 +117,34 @@
 #define k_get_income $(@"/read/income")
 
 #define k_sych_ad_exposure  $(@"/read/sych/list/ad/exposure")
+
+#define k_get_share_url $(@"/share/info")
+
+#define k_sych_ad_award $(@"/read/sych/list/ad/reward")
+
+//FMDevice
+
+#ifdef DEBUG
+
+
+//http://192.168.0.140:8080/frontend       http://192.168.0.247:9987/frontend7
+#define fm_news_action_url @"http://192.168.0.140:8080/frontend/event/collect/news/action"
+
+#define fm_news_activate_url @"http://192.168.0.140:8080/frontend/event/collect/activate"
+
+#else
+
+#define fm_news_action_url $(@"http://192.168.0.247:9987/frontend/event/collect/news/action")
+
+#define fm_news_activate_url $(@"http://192.168.0.247:9987/frontend/event/collect/activate")
+
+#endif
+
+
+
+//search
+
+#define k_search_hot @"http://dhhotnews.dftoutiao.com/hotwordsnews/getnews?platform=wap&qid=huitt"
 
 //credit
 
@@ -151,6 +195,12 @@
 
 #define k_user_daily_draw   $(@"/daily/task/draw")
 
+#define k_user_daily_complete  $(@"/daily/task/complete")
+
+//banner
+
+#define k_banner_info $(@"/banner/info")
+
 //invite
 
 #define k_invite_ui   @"http://cashtoutiao-all-file.oss-cn-shanghai.aliyuncs.com/app/entry/invited_get_money.json"
@@ -171,17 +221,14 @@
 
 #define k_invite  $(@"/invite") 
 
-#define k_appstore_link @"http://a.app.qq.com/o/simple.jsp?pkgname=com.cashtoutiao&ckey=CK1371494628908"
+#define k_appstore_link @"itms-apps://itunes.apple.com/cn/app/id1313670358?mt=8&action=write-review"
+
+#define k_ios_link @"http://a.app.qq.com/o/simple.jsp?pkgname=com.cashtoutiao&ckey=CK1371494628908"
 
 #define k_android_link @"http://website.cashtoutiao.com/qr/index.html"
 
 //product
 
-#define alipy_category 1002001
-
-#define wechat_category 1002002
-
-#define REAL_CAREFULLY_CHOSEN_DAILY_NECCESSARY 2001001
 
 #define k_product_list $(@"/product/list/by/category")
 
@@ -208,4 +255,7 @@
 
 //
 #define k_check_version $(@"/version/check")
+
+//message
+#define k_get_message $(@"/user/message/list")
 

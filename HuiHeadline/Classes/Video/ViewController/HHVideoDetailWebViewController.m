@@ -11,6 +11,7 @@
 #import "HHVideoDetailWebViewController+Award.h"
 #import "HHHeadlineListReadAwardViewController.h"
 #import "HHHeadlineListWebViewController.h"
+#import "HHAdAwardManager.h"
 
 @interface HHVideoDetailWebViewController () <WKNavigationDelegate, HHVideoDetalBottomViewDelegate>
 
@@ -47,12 +48,14 @@
     
     [HHUserManager.sharedInstance.videoTimer invalidate];
     HHUserManager.sharedInstance.videoTimer = nil;
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     
     [super viewDidAppear:animated];
     
+    [self startTimer];
     
     
 }
@@ -63,8 +66,11 @@
     
     [self initNavigation];
     [self initWebView];
-    [self initAwardImageView];
-    [self initBottomView];
+    if (!G.$.bs) {
+        [self initAwardImageView];
+        [self initBottomView];
+    }
+    
     
     [super viewDidLoad];
 }
@@ -89,6 +95,13 @@
 - (void)exposure:(HHAdModel *)adModel {
     
     [self handlerAdExposure:adModel];
+    
+    ///exposureReportList
+    if (!adModel.listExporsed) {
+        
+        [HHHeadlineNetwork sychExposureList:adModel.exposureReportList];
+        adModel.listExporsed = YES;
+    }
 }
 
 
@@ -183,9 +196,38 @@
     
     HHHeadlineListWebViewController *webVC = [[HHHeadlineListWebViewController alloc] init];
     webVC.URLString = ad.landingUrl;
-    webVC.hidesBottomBarWhenPushed = YES;
+    self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:webVC animated:YES];
-    webVC.hidesBottomBarWhenPushed = NO;
+    
+    [self adAward:ad];
+    
+}
+
+- (void)adAward:(HHAdModel *)ad {
+    
+    if (!ad.clicked) {
+        
+        [HHHeadlineNetwork sychClickList:ad.clickReportList];
+        ad.clicked = YES;
+        
+    }
+    
+    if (ad.AdAwards) {
+        
+        ListAdEncourageInfo *info = [[HHAdAwardManager sharedInstance] getEncourageInfoMap:ad.type];
+        if (info && info.token) {
+            
+            [HHHeadlineNetwork sychAdClickAwardWithToken:info.token channel:ad.type callback:^(id error, HHSychAdAwardResponse *response) {
+                
+                
+                if (response.statusCode == 200) {
+                    
+                    [[HHAdAwardManager sharedInstance] disposeEncourageInfoMap:@{ad.type:@{}}];
+                }
+            }];
+        }
+        
+    }
     
 }
 

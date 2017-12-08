@@ -12,6 +12,8 @@
 #import "HHMallBindAliViewController.h"
 #import "HHMallBindWechatViewController.h"
 #import "HHOrderDetailViewController.h"
+#import "HHMineBindPhoneViewController.h"
+#import "HHMineRebindPhoneViewController.h"
 
 @interface HHMallSegmentViewController () <UIScrollViewDelegate,HHMallTableViewDelegate>
 
@@ -29,10 +31,7 @@
 
 @implementation HHMallSegmentViewController
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    
-    return UIStatusBarStyleLightContent;
-}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     
@@ -46,8 +45,28 @@
         }
     }
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
+    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
 }
 
+
+- (void)viewDidAppear:(BOOL)animated {
+    
+    [super viewDidAppear:animated];
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    [super viewWillDisappear:animated];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+}
 
 
 - (void)viewDidLoad {
@@ -90,6 +109,8 @@
    
     [self initWechatView];
     
+    [self initCallVC];
+    
 }
 
 - (void)initaliVC {
@@ -99,7 +120,7 @@
     [self addChildViewController:self.aliVC];
     self.aliVC.view.frame = CGRectMake(0, 0, KWIDTH, H(self.view));
     [self.scrollView addSubview:self.aliVC.view];
-    self.aliVC.category = alipy_category;
+    self.aliVC.category = VIRTUAL_WITHDRAW_TO_ALIPAY;
 }
 
 - (void)initWechatView {
@@ -109,17 +130,17 @@
     [self addChildViewController:self.wechatVC];
     self.wechatVC.view.frame = CGRectMake(KWIDTH, 0, KWIDTH, H(self.view));
     [self.scrollView addSubview:self.wechatVC.view];
-    self.wechatVC.category = wechat_category;
+    self.wechatVC.category = VIRTUAL_WITHDRAW_TO_WECHAT_WALLET;
 }
 
-//- (void)initCallVC {
-//    HHMallViewController *callVC = [HHMallViewController new];
-//    [self addChildViewController:callVC];
-//    callVC.view.frame = CGRectMake(KWIDTH * 2, 0, KWIDTH, H(self.view));
-//    callVC.view.backgroundColor = [UIColor blueColor];
-//    [self.scrollView addSubview:callVC.view];
-//    self.callVC = callVC;
-//}
+- (void)initCallVC {
+    self.callVC = [HHMallViewController new];
+    self.callVC.delegate = self;
+    [self addChildViewController:self.callVC];
+    self.callVC.view.frame = CGRectMake(KWIDTH * 2, 0, KWIDTH, H(self.view));
+    [self.scrollView addSubview:self.callVC.view];
+    self.callVC.category = VIRTUAL_RECHARGE_PHONE_BILL;
+}
 
 - (void)initNavigation {
     self.view.backgroundColor = [UIColor whiteColor];
@@ -145,7 +166,7 @@
             [subView removeFromSuperview];
         }
     }
-    self.segment = [[UISegmentedControl alloc] initWithItems:@[@"支付宝",@"微信钱包"]];
+    self.segment = [[UISegmentedControl alloc] initWithItems:@[@"支付宝",@" 微信钱包 ",@"话费"]];
     CGFloat width = 200;
     
     self.segment.frame = CGRectMake((KWIDTH - width) / 2 , (H(self.navigationController.navigationBar) - H(self.segment)) / 2, width, 30);
@@ -178,7 +199,7 @@
 
 - (void)clickSetAccountCellCategory:(NSInteger)category {
     
-    if (category == alipy_category) {
+    if (category == VIRTUAL_WITHDRAW_TO_ALIPAY) {
         
         HHMallBindAliViewController *bindAliVC = [[HHMallBindAliViewController alloc] init];
         bindAliVC.alipayAccount = [HHUserManager sharedInstance].alipayAccount;
@@ -188,7 +209,7 @@
             [self initScrollView];
         };
         [self.navigationController pushViewController:bindAliVC animated:YES];
-    } else if (category == wechat_category) {
+    } else if (category == VIRTUAL_WITHDRAW_TO_WECHAT_WALLET) {
         
         HHMallBindWechatViewController *bindWxVC = [HHMallBindWechatViewController new];
         bindWxVC.weixinAccount = [HHUserManager sharedInstance].weixinAccount;
@@ -199,6 +220,27 @@
             [self.scrollView setContentOffset:CGPointMake(KWIDTH, 0) animated:NO];
         };
         [self.navigationController pushViewController:bindWxVC animated:YES];
+    } else if (category == VIRTUAL_RECHARGE_PHONE_BILL) {
+        
+        NSString *phone = HHUserManager.sharedInstance.currentUser.userInfo.phone;
+        UIViewController *vc = nil;
+        void (^callback)(NSString *phone) = ^(NSString *phone) {
+            [self initScrollView];
+            [self.scrollView setContentOffset:CGPointMake(KWIDTH * 2, 0) animated:NO];
+        };
+        if (phone) {
+            HHMineRebindPhoneViewController *rebindPhoneVC = [[HHMineRebindPhoneViewController alloc] init];
+            rebindPhoneVC.callback = callback;
+            vc = rebindPhoneVC;
+            
+        } else {
+            HHMineBindPhoneViewController *bindPhoneVC = [[HHMineBindPhoneViewController alloc] init];
+            bindPhoneVC.callback = callback;
+            vc = bindPhoneVC;
+        }
+        self.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        
     }
     
     
@@ -207,6 +249,8 @@
 
 
 - (void)alertSuccessActionWithOrderId:(NSInteger)orderId {
+    
+    
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"兑换成功！" message:@"" preferredStyle:(UIAlertControllerStyleAlert)];
     UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"查看详情" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
@@ -217,11 +261,18 @@
         [self.navigationController pushViewController:orderDetailVC animated:YES];
         
     }];
-    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"取消" style:(UIAlertActionStyleCancel) handler:^(UIAlertAction * _Nonnull action) {
+//    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"立即分享" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+//
+//
+//    }];
+    
+    UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"取消" style:(UIAlertActionStyleCancel) handler:^(UIAlertAction * _Nonnull action) {
         
     }];
+    
     [alert addAction:action1];
-    [alert addAction:action2];
+//    [alert addAction:action2];
+    [alert addAction:action3];
     
     [self.navigationController presentViewController:alert animated:YES completion:nil];
 }

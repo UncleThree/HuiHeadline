@@ -123,7 +123,7 @@
         make.top.equalTo(self.nickLabel.mas_bottom).with.offset(CGFLOAT(40));
         make.left.equalTo(self.view).with.offset(pad);
         make.right.equalTo(self.view).with.offset(-pad);
-        make.height.mas_equalTo(35);
+        make.height.mas_equalTo(40);
     }];
 }
 

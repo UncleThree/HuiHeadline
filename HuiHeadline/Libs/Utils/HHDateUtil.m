@@ -140,6 +140,14 @@
     
 }
 
++ (NSString *)ymd:(long)interval {
+    
+    NSDate *date =[NSDate dateWithTimeIntervalSince1970:interval / 1000];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *time = [formatter stringFromDate:date];
+    return time;
+}
 
 
 + (NSString *)creditTimeFormat:(long)time {

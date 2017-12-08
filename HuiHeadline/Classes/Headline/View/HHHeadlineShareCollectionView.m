@@ -62,7 +62,7 @@ static NSString *reuseHeaderIdentifier = @"HHNORMALHEADER";
             collectionViewFlowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
             collectionViewFlowLayout.minimumLineSpacing = 20;
             collectionViewFlowLayout.minimumInteritemSpacing = 0;
-            collectionViewFlowLayout.itemSize = CGSizeMake(KWIDTH  / 4.0 - 1 , 60.0);
+            collectionViewFlowLayout.itemSize = CGSizeMake(KWIDTH  / 4.0 - 1 , CGFLOAT_W(50) + 12 + 18);
             collectionViewFlowLayout.headerReferenceSize = CGSizeMake(KWIDTH, 30);
             collectionViewFlowLayout;
             
@@ -99,7 +99,7 @@ static NSString *reuseHeaderIdentifier = @"HHNORMALHEADER";
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     
     
-    return UIEdgeInsetsMake(10, 0, 0, 0);
+    return UIEdgeInsetsMake(22, 0, 0, 0);
 }
 
 

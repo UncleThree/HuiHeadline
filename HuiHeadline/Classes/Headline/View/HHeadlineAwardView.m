@@ -14,6 +14,8 @@
 
 @property (nonatomic, strong)UILabel *label;
 
+@property (nonatomic, strong)UILabel *taskLabel;
+
 @end
 
 @implementation HHeadlineAwardView
@@ -43,8 +45,8 @@
     
     self.label = ({
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
-        label.font = Font(25);
-        label.center = CGPointMake(self.center.x, self.center.y - KWIDTH / 35);
+        label.font = big_font(32);
+        label.center = CGPointMake(self.center.x, self.center.y - CGFLOAT_W(15));
         if (coins != 0) {
             label.text = [NSString stringWithFormat:@"%zd", coins];
         }
@@ -54,6 +56,17 @@
     });
     [self addSubview:self.imgV];
     [self addSubview:self.label];
+    if ([imageName isEqualToString:@"领取成功"]) {
+        [self.label removeFromSuperview];
+        self.taskLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MaxY(self.imgV) - 30, W(self.imgV), 20)];
+        
+        NSString *str = [NSString stringWithFormat:@"领取成功 +%zd",coins];
+        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:str attributes:@{KEY_FONT:Font(16),KEY_COLOR:HUIRED}];
+        [string addAttribute:KEY_COLOR value:RGB(254, 237, 56) range:[str rangeOfString:@"领取成功"]];
+        self.taskLabel.attributedText = string;
+        self.taskLabel.textAlignment = 1;
+        [self addSubview:self.taskLabel];
+    }
    
     
 }
